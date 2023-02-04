@@ -1,13 +1,13 @@
-use std::sync::{Arc, Mutex};
 use log::{debug, info, trace, warn};
-use serde::{Deserialize, Serialize};
-use std::thread;
-use std::time::{Duration};
-use sha256::digest;
-use rhiaqey_sdk::message::{MessageValue};
-use ureq::{AgentBuilder, Request};
+use rhiaqey_sdk::message::MessageValue;
 use rhiaqey_sdk::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
+use serde::{Deserialize, Serialize};
+use sha256::digest;
+use std::sync::{Arc, Mutex};
+use std::thread;
+use std::time::Duration;
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
+use ureq::{AgentBuilder, Request};
 
 fn default_interval() -> u64 {
     5000
@@ -47,7 +47,6 @@ pub struct ISSPosition {
 const ENDPOINT: &str = "http://api.open-notify.org/iss-now.json";
 
 impl ISSPosition {
-
     fn get_request(&self) -> Request {
         let settings = self.settings.lock().unwrap().clone();
 
@@ -70,8 +69,10 @@ impl ISSPosition {
     }
 
     fn prepare_message(&self, payload: ISSPositionResponse) -> ProducerMessage {
-        let tag = Some(digest(format!("{}-{}",
-              payload.iss_position.latitude, payload.iss_position.longitude)));
+        let tag = Some(digest(format!(
+            "{}-{}",
+            payload.iss_position.latitude, payload.iss_position.longitude
+        )));
 
         let timestamp = Some(payload.timestamp * 1000);
 
@@ -86,11 +87,9 @@ impl ISSPosition {
             tag,
         }
     }
-
 }
 
 impl Producer<ISSPositionSettings> for ISSPosition {
-
     fn setup(&mut self, settings: Option<ISSPositionSettings>) -> ProducerMessageReceiver {
         info!("setting up {}", Self::kind());
 
@@ -98,8 +97,7 @@ impl Producer<ISSPositionSettings> for ISSPosition {
         self.settings = Arc::new(Mutex::new(settings));
         debug!("settings parsed {:?}", self.settings);
 
-        let (sender, receiver) =
-            unbounded_channel::<ProducerMessage>();
+        let (sender, receiver) = unbounded_channel::<ProducerMessage>();
         self.sender = Some(sender);
 
         Ok(receiver)
@@ -115,17 +113,18 @@ impl Producer<ISSPositionSettings> for ISSPosition {
             match self.fetch_position() {
                 Ok(response) => {
                     trace!("we have our response {:?}", response);
-                    sender.send(self.prepare_message(response)).expect("failed to send message");
-                },
+                    sender
+                        .send(self.prepare_message(response))
+                        .expect("failed to send message");
+                }
                 Err(err) => warn!("error fetching feed: {}", err),
             }
 
-                thread::sleep(Duration::from_millis(interval));
-            }
+            thread::sleep(Duration::from_millis(interval));
+        }
     }
 
     fn kind() -> String {
         "iss_position".to_string()
     }
-
 }

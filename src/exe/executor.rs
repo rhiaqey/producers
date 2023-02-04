@@ -1,13 +1,13 @@
+use crate::exe::redis;
 use log::{debug, trace};
-use std::sync::{Arc};
 use rhiaqey_common::env::Env;
-use rhiaqey_sdk::producer::ProducerMessage;
 use rhiaqey_common::stream::{StreamMessage, StreamMessageDataType};
 use rhiaqey_sdk::channel::ChannelList;
+use rhiaqey_sdk::producer::ProducerMessage;
 use rustis::client::Client;
 use rustis::commands::{ConnectionCommands, PingOptions, StreamCommands, XAddOptions};
+use std::sync::Arc;
 use tokio::sync::Mutex;
-use crate::exe::redis;
 
 pub struct Executor {
     env: Arc<Env>,
@@ -15,7 +15,6 @@ pub struct Executor {
 }
 
 impl Executor {
-
     pub fn get_id(&self) -> String {
         self.env.id.clone()
     }
@@ -28,7 +27,9 @@ impl Executor {
         self.env.private_port
     }
 
-    pub fn get_channels(&self) -> ChannelList { self.env.channels.clone() }
+    pub fn get_channels(&self) -> ChannelList {
+        self.env.channels.clone()
+    }
 
     pub fn is_debug(&self) -> bool {
         self.env.debug
@@ -40,12 +41,17 @@ impl Executor {
 
     pub async fn setup(config: Env) -> Result<Executor, String> {
         let redis_connection = redis::connect(config.redis.clone()).await;
-        let result: String = redis_connection.clone().unwrap().ping(PingOptions::default().message("hello")).await.unwrap();
+        let result: String = redis_connection
+            .clone()
+            .unwrap()
+            .ping(PingOptions::default().message("hello"))
+            .await
+            .unwrap();
         if result != "hello" {
             return Err("ping failed".to_string());
         }
 
-        Ok(Executor{
+        Ok(Executor {
             env: Arc::from(config),
             redis: Arc::new(Mutex::new(redis_connection)),
         })
@@ -85,19 +91,24 @@ impl Executor {
 
             trace!(
                 "publishing message channel={}, max_len={}, topic={}, timestamp={:?}",
-                channel.name, channel.size, topic, stream_msg.timestamp,
+                channel.name,
+                channel.size,
+                topic,
+                stream_msg.timestamp,
             );
 
             if let Ok(data) = rmp_serde::encode::to_vec_named(&stream_msg) {
-                let id: String = self.redis.lock().await.as_mut().unwrap().xadd(
-                    topic,
-                    "*",
-                    [("raw", data.clone())],
-                    XAddOptions::default(),
-                ).await.unwrap();
+                let id: String = self
+                    .redis
+                    .lock()
+                    .await
+                    .as_mut()
+                    .unwrap()
+                    .xadd(topic, "*", [("raw", data.clone())], XAddOptions::default())
+                    .await
+                    .unwrap();
                 debug!("sent message {} to channel {}", id, channel.name);
             }
         }
     }
-
 }
