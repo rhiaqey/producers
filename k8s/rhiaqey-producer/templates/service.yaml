@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "rhiaqey-producer.fullname" . }}
+  labels:
+    {{- include "rhiaqey-producer.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "rhiaqey-producer.selectorLabels" . | nindent 4 }}
