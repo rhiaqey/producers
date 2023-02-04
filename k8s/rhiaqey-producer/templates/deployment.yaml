@@ -53,6 +53,10 @@ spec:
               path: /alive
               port: http
           env:
+            - name: ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
             - name: REDIS_ADDRESS
               value: "redis:6379"
             - name: REDIS_SENTINELS
