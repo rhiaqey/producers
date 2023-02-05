@@ -10,7 +10,7 @@ use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
 use ureq::{AgentBuilder, Request};
 
 fn default_interval() -> u64 {
-    5000
+    15000
 }
 
 fn default_timeout() -> u64 {
