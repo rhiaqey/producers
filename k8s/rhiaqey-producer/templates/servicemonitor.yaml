@@ -11,4 +11,4 @@ spec:
       {{- include "rhiaqey-producer.labels" . | nindent 6 }}
   endpoints:
     - port: http
-  {{- end -}}
+{{- end -}}
