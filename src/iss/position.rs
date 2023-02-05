@@ -93,7 +93,7 @@ impl Producer<ISSPositionSettings> for ISSPosition {
     fn setup(&mut self, settings: Option<ISSPositionSettings>) -> ProducerMessageReceiver {
         info!("setting up {}", Self::kind());
 
-        let settings = settings.expect("settings to be present");
+        let settings = settings.unwrap_or(ISSPositionSettings::default());
         self.settings = Arc::new(Mutex::new(settings));
         debug!("settings parsed {:?}", self.settings);
 
