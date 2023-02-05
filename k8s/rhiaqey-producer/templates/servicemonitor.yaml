@@ -1,0 +1,12 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "rhiaqey-producer.fullname" . }}
+  labels:
+    {{- include "rhiaqey-producer.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "rhiaqey-producer.labels" . | nindent 6 }}
+  endpoints:
+    - port: http
