@@ -17,8 +17,12 @@ fn default_timeout() -> u64 {
     5000
 }
 
+fn default_endpoint() -> String { "http://api.open-notify.org/iss-now.json".to_string() }
+
 #[derive(Default, Deserialize, Clone, Debug)]
 pub struct ISSPositionSettings {
+    #[serde(alias = "Endpoint", default="default_endpoint")]
+    pub endpoint: String,
     #[serde(alias = "Interval", default = "default_interval")]
     pub interval_in_millis: u64,
     #[serde(alias = "Timeout", default = "default_timeout")]
@@ -44,8 +48,6 @@ pub struct ISSPosition {
     settings: Arc<Mutex<ISSPositionSettings>>,
 }
 
-const ENDPOINT: &str = "http://api.open-notify.org/iss-now.json";
-
 impl ISSPosition {
     fn get_request(&self) -> Request {
         let settings = self.settings.lock().unwrap().clone();
@@ -54,7 +56,7 @@ impl ISSPosition {
             .timeout(Duration::from_millis(settings.timeout_in_millis))
             .build();
 
-        agent.get(ENDPOINT)
+        agent.get(settings.endpoint.as_str())
     }
 
     fn fetch_position(&self) -> Result<ISSPositionResponse, Box<dyn std::error::Error>> {
