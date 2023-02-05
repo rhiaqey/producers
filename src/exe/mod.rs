@@ -1,8 +1,10 @@
-pub mod executor;
+mod executor;
 mod redis;
 
-use hyper::service::{make_service_fn, service_fn};
-use hyper::{Body, Method, Request, Response, Server, StatusCode};
+use axum::http::StatusCode;
+use axum::response::{IntoResponse};
+use axum::Router;
+use axum::routing::get;
 use lazy_static::lazy_static;
 use log::{debug, info, warn};
 use prometheus::{register_gauge, Encoder, Gauge, TextEncoder};
@@ -21,48 +23,26 @@ lazy_static! {
             .expect("cannot create gauge metric for channels");
 }
 
-async fn private_routes(req: Request<Body>) -> Result<Response<Body>, hyper::Error> {
-    match (req.method(), req.uri().path()) {
-        (&Method::GET, "/alive") => {
-            let ready = unsafe { READY };
-            if ready {
-                Ok(Response::builder().status(200).body(Body::empty()).unwrap())
-            } else {
-                Ok(Response::builder().status(400).body(Body::empty()).unwrap())
-            }
-        }
-
-        (&Method::GET, "/ready") => {
-            let ready = unsafe { READY };
-            if ready {
-                Ok(Response::builder().status(200).body(Body::empty()).unwrap())
-            } else {
-                Ok(Response::builder().status(400).body(Body::empty()).unwrap())
-            }
-        }
-
-        (&Method::GET, "/metrics") => {
-            let encoder = TextEncoder::new();
-            let mut buffer = vec![];
-            let mf = prometheus::gather();
-            encoder.encode(&mf, &mut buffer).unwrap();
-            Ok(Response::builder()
-                .header(hyper::header::CONTENT_TYPE, encoder.format_type())
-                .body(Body::from(buffer))
-                .unwrap())
-        }
-
-        (&Method::GET, "/version") => {
-            const VERSION: &str = env!("CARGO_PKG_VERSION");
-            Ok(Response::new(Body::from(VERSION)))
-        }
-
-        _ => {
-            let mut not_found = Response::default();
-            *not_found.status_mut() = StatusCode::NOT_FOUND;
-            Ok(not_found)
-        }
+async fn get_ready() -> impl IntoResponse {
+    let ready = unsafe { READY };
+    if ready {
+        StatusCode::OK
+    } else {
+        StatusCode::BAD_REQUEST
     }
+}
+
+async fn get_metrics() -> impl IntoResponse {
+    let encoder = TextEncoder::new();
+    let mut buffer = vec![];
+    let mf = prometheus::gather();
+    encoder.encode(&mf, &mut buffer).unwrap();
+    buffer.into_response()
+}
+
+async fn get_version() -> &'static str {
+    const VERSION: &str = env!("CARGO_PKG_VERSION");
+    VERSION
 }
 
 pub async fn run<P: Producer<S> + Default + Send + 'static, S: DeserializeOwned + Default>() {
@@ -112,12 +92,17 @@ pub async fn run<P: Producer<S> + Default + Send + 'static, S: DeserializeOwned 
     });
 
     tokio::spawn(async move {
-        let addr = ([0, 0, 0, 0], port).into();
-        debug!("Listening on http://{}", addr);
-        let service =
-            make_service_fn(|_| async { Ok::<_, hyper::Error>(service_fn(private_routes)) });
-        let server = Server::bind(&addr).serve(service);
-        server.await
+        // create router
+        let app = Router::new()
+            .route("/alive", get(get_ready))
+            .route("/ready", get(get_ready))
+            .route("/metrics", get(get_metrics))
+            .route("/version", get(get_version));
+
+        // run it with hyper on localhost:3000
+        axum::Server::bind(&format!("0.0.0.0:{}", port).parse().unwrap())
+            .serve(app.into_make_service())
+            .await
     });
 
     info!("running producer {}", P::kind());

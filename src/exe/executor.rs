@@ -57,10 +57,6 @@ impl Executor {
         })
     }
 
-    pub async fn test(&self) {
-        debug!("testing...");
-    }
-
     pub async fn publish(&mut self, message: ProducerMessage) {
         trace!("publishing message");
 
