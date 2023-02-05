@@ -19,14 +19,24 @@ fn default_timeout() -> u64 {
 
 fn default_endpoint() -> String { "http://api.open-notify.org/iss-now.json".to_string() }
 
-#[derive(Default, Deserialize, Clone, Debug)]
+#[derive(Deserialize, Clone, Debug)]
 pub struct ISSPositionSettings {
-    #[serde(alias = "Endpoint", default="default_endpoint")]
+    #[serde(alias = "Endpoint", default = "default_endpoint")]
     pub endpoint: String,
     #[serde(alias = "Interval", default = "default_interval")]
     pub interval_in_millis: u64,
     #[serde(alias = "Timeout", default = "default_timeout")]
     pub timeout_in_millis: u64,
+}
+
+impl Default for ISSPositionSettings {
+    fn default() -> Self {
+        ISSPositionSettings {
+            endpoint: default_endpoint(),
+            interval_in_millis: default_interval(),
+            timeout_in_millis: default_timeout()
+        }
+    }
 }
 
 #[derive(Default, Serialize, Deserialize, Clone, Debug)]
@@ -52,9 +62,13 @@ impl ISSPosition {
     fn get_request(&self) -> Request {
         let settings = self.settings.lock().unwrap().clone();
 
+        debug!("settings found {:?}", settings);
+
         let agent = AgentBuilder::new()
             .timeout(Duration::from_millis(settings.timeout_in_millis))
             .build();
+
+        debug!("downloading from {}", settings.endpoint);
 
         agent.get(settings.endpoint.as_str())
     }
@@ -97,7 +111,6 @@ impl Producer<ISSPositionSettings> for ISSPosition {
 
         let settings = settings.unwrap_or(ISSPositionSettings::default());
         self.settings = Arc::new(Mutex::new(settings));
-        debug!("settings parsed {:?}", self.settings);
 
         let (sender, receiver) = unbounded_channel::<ProducerMessage>();
         self.sender = Some(sender);
