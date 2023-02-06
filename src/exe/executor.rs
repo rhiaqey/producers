@@ -1,4 +1,3 @@
-use crate::exe::redis;
 use log::{debug, trace};
 use rhiaqey_common::env::Env;
 use rhiaqey_common::stream::{StreamMessage, StreamMessageDataType};
@@ -8,6 +7,7 @@ use rustis::client::Client;
 use rustis::commands::{ConnectionCommands, PingOptions, StreamCommands, XAddOptions};
 use std::sync::Arc;
 use tokio::sync::Mutex;
+use rhiaqey_common::redis;
 
 pub struct Executor {
     env: Arc<Env>,

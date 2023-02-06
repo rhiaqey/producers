@@ -1347,13 +1347,14 @@ dependencies = [
 [[package]]
 name = "rhiaqey-common"
 version = "0.1.0"
-source = "git+https://github.com/rhiaqey/common.git#32fae4d88b443c33ec26b079a78f5b3e69677b6b"
+source = "git+https://github.com/rhiaqey/common.git#285401a56c07d5c245b974626ede0225c05df94d"
 dependencies = [
  "env_logger 0.9.3",
  "envy",
  "log",
  "rhiaqey-sdk",
  "rmp-serde",
+ "rustis",
  "serde",
  "serde_json",
  "uuid",
