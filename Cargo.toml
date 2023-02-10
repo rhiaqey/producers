@@ -31,7 +31,7 @@ async-trait = "0.1"
 futures = "0.3"
 lazy_static = "1.4"
 itertools = "0.10"
-rustis = { version ="0.7", features = [ "redis-json", "tokio-runtime" ] }
+rustis = { version = "0.8", features = [ "redis-json", "tokio-runtime" ] }
 tokio = { version = "1.21", features = ["full"] }
 axum = { version = "0.6" }
 hyper = { version = "0.14", features = ["full"] }

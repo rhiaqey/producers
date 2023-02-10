@@ -1,10 +1,11 @@
-# export RUST_BACKTRACE=full
+export RUST_BACKTRACE=full
 export RUST_LOG=trace
 export DEBUG=true
 export REDIS_PASSWORD=7tgbBSO2Yu
 #export REDIS_SENTINEL_MASTER=mymaster
 export REDIS_ADDRESS=localhost:6379
 export REDIS_SENTINEL_ADDRESSES=localhost:26379
+export PRIVATE_PORT=3002
 
 define CHANNELS
 [
@@ -24,8 +25,8 @@ export CHANNELS
 .PHONY: iss
 iss:
 	ID=1 \
-	NAME=iss-position \
-	NAMESPACE=iss \
+	NAME=iss-position-1 \
+	NAMESPACE=rhiaqey \
 		cargo +nightly run --bin iss_position
 
 .PHONY: build

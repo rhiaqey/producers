@@ -1,9 +1,11 @@
 mod executor;
 
+use std::sync::{Arc};
 use axum::http::StatusCode;
 use axum::response::{IntoResponse};
 use axum::Router;
 use axum::routing::get;
+use futures::StreamExt;
 use lazy_static::lazy_static;
 use log::{debug, info, warn};
 use prometheus::{register_gauge, Encoder, Gauge, TextEncoder};
@@ -11,6 +13,7 @@ use rhiaqey_common::env::parse_env;
 use rhiaqey_common::settings::parse_settings;
 use rhiaqey_sdk::producer::Producer;
 use serde::de::DeserializeOwned;
+use tokio::sync::Mutex;
 
 use crate::exe::executor::Executor;
 
@@ -63,7 +66,9 @@ pub async fn run<P: Producer<S> + Default + Send + 'static, S: DeserializeOwned 
     );
 
     let port = executor.get_private_port();
-    let channels = executor.get_channels();
+    let channels = executor.get_channels().await;
+    let channel_count = channels.len();
+    executor.set_channels(channels);
 
     let mut plugin = P::default();
     let settings = parse_settings::<S>();
@@ -71,7 +76,7 @@ pub async fn run<P: Producer<S> + Default + Send + 'static, S: DeserializeOwned 
         warn!("settings could not be found");
     }
 
-    TOTAL_CHANNELS.set(channels.len() as f64);
+    TOTAL_CHANNELS.set(channel_count as f64);
 
     let mut rx = match plugin.setup(settings) {
         Err(error) => {
@@ -80,16 +85,23 @@ pub async fn run<P: Producer<S> + Default + Send + 'static, S: DeserializeOwned 
         Ok(sender) => sender,
     };
 
+    let mut eggx = Arc::new(executor);
+
     tokio::spawn(async move {
-        debug!("start receiving messages");
+        eggx.listen_for_pubsub().await;
+    });
+/*
+    tokio::spawn(async move {
+        let sss = eggx.clone();
+        debug!("start receiving messages from intra-publishers");
         loop {
             if let Some(message) = rx.recv().await {
                 debug!("message about to send");
-                executor.publish(message).await;
+                sss.publish(message).await;
             }
         }
     });
-
+*/
     tokio::spawn(async move {
         // create router
         let app = Router::new()
