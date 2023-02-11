@@ -1,21 +1,17 @@
 mod executor;
+mod http;
 
-use std::sync::{Arc};
-use axum::http::StatusCode;
-use axum::response::{IntoResponse};
-use axum::Router;
-use axum::routing::get;
-use futures::StreamExt;
 use lazy_static::lazy_static;
-use log::{debug, info, warn};
-use prometheus::{register_gauge, Encoder, Gauge, TextEncoder};
+use log::{debug, info, trace, warn};
+use prometheus::{register_gauge, Gauge};
 use rhiaqey_common::env::parse_env;
 use rhiaqey_common::settings::parse_settings;
 use rhiaqey_sdk::producer::Producer;
 use serde::de::DeserializeOwned;
-use tokio::sync::Mutex;
+use futures::StreamExt;
 
 use crate::exe::executor::Executor;
+use crate::exe::http::start_http_server;
 
 static mut READY: bool = false;
 
@@ -23,28 +19,6 @@ lazy_static! {
     static ref TOTAL_CHANNELS: Gauge =
         register_gauge!("total_channels", "Total number of active channels.",)
             .expect("cannot create gauge metric for channels");
-}
-
-async fn get_ready() -> impl IntoResponse {
-    let ready = unsafe { READY };
-    if ready {
-        StatusCode::OK
-    } else {
-        StatusCode::BAD_REQUEST
-    }
-}
-
-async fn get_metrics() -> impl IntoResponse {
-    let encoder = TextEncoder::new();
-    let mut buffer = vec![];
-    let mf = prometheus::gather();
-    encoder.encode(&mf, &mut buffer).unwrap();
-    buffer.into_response()
-}
-
-async fn get_version() -> &'static str {
-    const VERSION: &str = env!("CARGO_PKG_VERSION");
-    VERSION
 }
 
 pub async fn run<P: Producer<S> + Default + Send + 'static, S: DeserializeOwned + Default>() {
@@ -65,10 +39,10 @@ pub async fn run<P: Producer<S> + Default + Send + 'static, S: DeserializeOwned 
         executor.is_debug()
     );
 
-    let port = executor.get_private_port();
     let channels = executor.get_channels().await;
-    let channel_count = channels.len();
-    executor.set_channels(channels);
+    let port = executor.get_private_port();
+    let channel_count = channels.len() as f64;
+    executor.set_channels(channels).await;
 
     let mut plugin = P::default();
     let settings = parse_settings::<S>();
@@ -76,51 +50,50 @@ pub async fn run<P: Producer<S> + Default + Send + 'static, S: DeserializeOwned 
         warn!("settings could not be found");
     }
 
-    TOTAL_CHANNELS.set(channel_count as f64);
+    TOTAL_CHANNELS.set(channel_count);
 
-    let mut rx = match plugin.setup(settings) {
+    let mut publisher_stream = match plugin.setup(settings) {
         Err(error) => {
             panic!("failed to setup producer: {error}");
         }
         Ok(sender) => sender,
     };
 
-    let mut eggx = Arc::new(executor);
+    tokio::spawn(async move {
+        plugin.start();
+    });
 
     tokio::spawn(async move {
-        eggx.listen_for_pubsub().await;
+        start_http_server(port).await.unwrap();
+        info!("running producer {}", P::kind());
     });
-/*
-    tokio::spawn(async move {
-        let sss = eggx.clone();
-        debug!("start receiving messages from intra-publishers");
-        loop {
-            if let Some(message) = rx.recv().await {
-                debug!("message about to send");
-                sss.publish(message).await;
+
+    let mut pubsub_stream = executor.create_pubsub_stream().await.unwrap();
+
+    unsafe {
+        READY = true;
+    }
+
+    loop {
+        tokio::select! {
+            Some(message) = publisher_stream.recv() => {
+                trace!("message received from plugin: {:?}", message);
+                executor.publish(message).await;
+            },
+            Some(pubsub_message) = pubsub_stream.next() => {
+                trace!("message received from pubsub: {:?}", pubsub_message);
+                if let Ok(message) = pubsub_message {
+                    executor.handle_pubsub_message(message).await;
+                }
             }
         }
-    });
-*/
-    tokio::spawn(async move {
-        // create router
-        let app = Router::new()
-            .route("/alive", get(get_ready))
-            .route("/ready", get(get_ready))
-            .route("/metrics", get(get_metrics))
-            .route("/version", get(get_version));
-
-        // run it with hyper on localhost:3000
-        axum::Server::bind(&format!("0.0.0.0:{}", port).parse().unwrap())
-            .serve(app.into_make_service())
-            .await
-    });
-
+    }
+/*
     info!("running producer {}", P::kind());
 
     unsafe {
         READY = true;
     }
 
-    plugin.start()
+    plugin.start()*/
 }

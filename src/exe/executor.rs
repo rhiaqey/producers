@@ -1,19 +1,19 @@
-use log::{debug, trace};
+use log::{debug, trace, warn};
 use rhiaqey_common::env::Env;
 use rhiaqey_common::stream::{StreamMessage, StreamMessageDataType};
 use rhiaqey_sdk::channel::{Channel, ChannelList};
 use rhiaqey_sdk::producer::ProducerMessage;
-use rustis::client::{Client, PubSubStream};
+use rustis::client::{Client, PubSubMessage, PubSubStream};
 use rustis::commands::{ConnectionCommands, PingOptions, PubSubCommands, StreamCommands, StringCommands, XAddOptions};
-use std::sync::Arc;
-use futures::StreamExt;
+use std::sync::{Arc};
 use rhiaqey_common::pubsub::{RPCMessage, RPCMessageType};
-use tokio::sync::Mutex;
+use tokio::sync::{Mutex,RwLock};
 use rhiaqey_common::redis;
+use rhiaqey_common::redis::RedisSettings;
 
 pub struct Executor {
     env: Arc<Env>,
-    channels: Vec<Channel>,
+    channels: Arc<RwLock<Vec<Channel>>>,
     redis: Arc<Mutex<Option<Client>>>,
 }
 
@@ -34,8 +34,9 @@ impl Executor {
         self.env.private_port
     }
 
-    pub fn set_channels(&mut self, channels: Vec<Channel>) {
-        self.channels = channels
+    pub async fn set_channels(&mut self, channels: Vec<Channel>) {
+        let mut locked_channels = self.channels.write().await;
+        *locked_channels = channels;
     }
 
     pub async fn get_channels(&self) -> Vec<Channel> {
@@ -46,8 +47,13 @@ impl Executor {
         channel_list.channels
     }
 
-    pub async fn setup(config: Env) -> Result<Executor, String> {
-        let redis_connection = redis::connect(config.redis.clone()).await;
+    async fn redis_connect(config: RedisSettings) -> Option<Client> {
+        let redis_connection = redis::connect(config).await;
+        if redis_connection.is_none() {
+            warn!("could not connect to redis server");
+            return None;
+        }
+
         let result: String = redis_connection
             .clone()
             .unwrap()
@@ -55,41 +61,56 @@ impl Executor {
             .await
             .unwrap();
         if result != "hello" {
-            return Err("ping failed".to_string());
+            warn!("redis ping failed");
+            return None
+        }
+
+        redis_connection
+    }
+
+    pub async fn setup(config: Env) -> Result<Executor, String> {
+        let redis_connection = Self::redis_connect(config.redis.clone()).await;
+        if redis_connection.is_none() {
+            return Err("failed to connect to redis".to_string());
         }
 
         Ok(Executor {
             env: Arc::from(config),
-            channels: vec!(),
+            channels: Arc::from(RwLock::new(vec!())),
             redis: Arc::new(Mutex::new(redis_connection)),
         })
     }
 
-    async fn handle_rpc_message(&self, message: RPCMessage) {
+    async fn handle_rpc_message(&mut self, message: RPCMessage) {
         match message.data {
             RPCMessageType::AssignChannels(channel_list) => {
                 debug!("assign channels {:?}", channel_list);
+                self.set_channels(channel_list.channels).await;
             }
         }
     }
 
-    pub async fn listen_for_pubsub(&self)  {
+    pub async fn handle_pubsub_message(&mut self, message: PubSubMessage) {
+        trace!("handle pubsub message");
+        if let Ok(data) = serde_json::from_slice::<RPCMessage>(message.payload.as_slice()) {
+            trace!("pubsub message contains an RPC message {:?}", data);
+            self.handle_rpc_message(data).await;
+        }
+    }
+
+    pub async fn create_pubsub_stream(&mut self) -> Option<PubSubStream> {
+        let client = Self::redis_connect(self.env.redis.clone()).await;
+        if client.is_none() {
+            return None
+        }
+
         let key = format!("{}:{}:streams:pubsub", self.env.namespace, self.env.name);
-        debug!("subscribing to {}", key);
-        let mut stream = self.redis.lock().await.as_mut().unwrap().subscribe(key).await.unwrap();
-        loop {
-            let message = stream.next().await;
-            if let Some(result) = message {
-                if let Ok(msg) = result {
-                    if let Ok(data) = serde_json::from_slice::<RPCMessage>(msg.payload.as_slice()) {
-                        self.handle_rpc_message(data).await;
-                    }
-                }
-            }
-        }
+        let stream = client.unwrap().subscribe(key.clone()).await.unwrap();
+
+        Some(stream)
     }
 
-    pub async fn publish(&mut self, message: ProducerMessage) {
+    pub async fn publish(&self, message: ProducerMessage) {
         trace!("publishing message");
 
         let mut stream_msg: StreamMessage = StreamMessage {
@@ -112,19 +133,19 @@ impl Executor {
             stream_msg.publisher_id = Some(self.env.id.clone());
         }
 
-        for channel in self.channels.iter() {
+        for channel in self.channels.read().await.iter() {
             stream_msg.channel = channel.name.to_string();
             stream_msg.size = Some(message.size.unwrap_or(channel.size));
-            // let topic = self.get_channel_topic(channel.name.to_string());
+            let topic = format!("{}:{}:streams:raw", self.env.namespace.as_str(), self.env.name.as_str());
 
             trace!(
-                "publishing message channel={}, max_len={}, timestamp={:?}",
+                "publishing message channel={}, max_len={}, topic={}, timestamp={:?}",
                 channel.name,
                 channel.size,
+                topic,
                 stream_msg.timestamp,
             );
 
-            /*
             if let Ok(data) = rmp_serde::encode::to_vec_named(&stream_msg) {
                 let id: String = self
                     .redis
@@ -136,7 +157,7 @@ impl Executor {
                     .await
                     .unwrap();
                 debug!("sent message {} to channel {}", id, channel.name);
-            }*/
+            }
         }
     }
 }

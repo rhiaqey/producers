@@ -38,5 +38,5 @@ hyper = { version = "0.14", features = ["full"] }
 tower = { version = "0.4" }
 
 [[bin]]
-name = "iss_position"
-src = "src/bin/iss_position.rs"
+name = "iss-position"
+src = "src/bin/iss-position.rs"

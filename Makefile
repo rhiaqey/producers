@@ -27,11 +27,11 @@ iss:
 	ID=1 \
 	NAME=iss-position-1 \
 	NAMESPACE=rhiaqey \
-		cargo +nightly run --bin iss_position
+		cargo +nightly run --bin iss-position
 
 .PHONY: build
 build:
-	cargo build
+	cargo +nightly build
 
 .PHONY: prod
 prod:
