@@ -146,17 +146,17 @@ impl Executor {
                 stream_msg.timestamp,
             );
 
-            if let Ok(data) = rmp_serde::encode::to_vec_named(&stream_msg) {
+            if let Ok(data) = serde_json::to_string(&stream_msg) {
                 let id: String = self
                     .redis
                     .lock()
                     .await
                     .as_mut()
                     .unwrap()
-                    .xadd(topic, "*", [("raw", data.clone())], XAddOptions::default())
+                    .xadd(topic.clone(), "*", [("raw", data.clone())], XAddOptions::default())
                     .await
                     .unwrap();
-                debug!("sent message {} to channel {}", id, channel.name);
+                debug!("sent message {} to channel {} in topic {}", id, channel.name, topic);
             }
         }
     }

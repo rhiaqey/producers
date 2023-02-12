@@ -1,7 +1,7 @@
 use axum::response::IntoResponse;
 use axum::Router;
 use axum::routing::get;
-use hyper::StatusCode;
+use hyper::{HeaderMap, StatusCode};
 use log::trace;
 use prometheus::{Encoder, TextEncoder};
 
@@ -14,7 +14,9 @@ async fn get_metrics() -> impl IntoResponse {
     let mut buffer = vec![];
     let mf = prometheus::gather();
     encoder.encode(&mf, &mut buffer).unwrap();
-    buffer.into_response()
+    let mut headers = HeaderMap::new();
+    headers.insert(hyper::header::CONTENT_TYPE, encoder.format_type().parse().unwrap());
+    (StatusCode::OK, headers, buffer.into_response())
 }
 
 async fn get_version() -> &'static str {
@@ -23,7 +25,6 @@ async fn get_version() -> &'static str {
 }
 
 pub async fn start_http_server(port: u16) -> hyper::Result<()> {
-    // create router
     let app = Router::new()
         .route("/alive", get(get_ready))
         .route("/ready", get(get_ready))
@@ -32,7 +33,6 @@ pub async fn start_http_server(port: u16) -> hyper::Result<()> {
 
     trace!("running http server @ 0.0.0.0:{}", port);
 
-    // run it with hyper on localhost:3000
     axum::Server::bind(&format!("0.0.0.0:{}", port).parse().unwrap())
         .serve(app.into_make_service())
         .await

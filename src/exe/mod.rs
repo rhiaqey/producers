@@ -13,8 +13,6 @@ use futures::StreamExt;
 use crate::exe::executor::Executor;
 use crate::exe::http::start_http_server;
 
-static mut READY: bool = false;
-
 lazy_static! {
     static ref TOTAL_CHANNELS: Gauge =
         register_gauge!("total_channels", "Total number of active channels.",)
@@ -61,18 +59,15 @@ pub async fn run<P: Producer<S> + Default + Send + 'static, S: DeserializeOwned 
 
     tokio::spawn(async move {
         plugin.start();
+        info!("running producer {}", P::kind());
     });
 
     tokio::spawn(async move {
         start_http_server(port).await.unwrap();
-        info!("running producer {}", P::kind());
+        info!("running http server @ port {}", port);
     });
 
     let mut pubsub_stream = executor.create_pubsub_stream().await.unwrap();
-
-    unsafe {
-        READY = true;
-    }
 
     loop {
         tokio::select! {
@@ -88,12 +83,4 @@ pub async fn run<P: Producer<S> + Default + Send + 'static, S: DeserializeOwned 
             }
         }
     }
-/*
-    info!("running producer {}", P::kind());
-
-    unsafe {
-        READY = true;
-    }
-
-    plugin.start()*/
 }
