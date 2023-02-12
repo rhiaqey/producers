@@ -1,7 +1,6 @@
-use axum::response::IntoResponse;
+use axum::{http::StatusCode, response::IntoResponse};
 use axum::Router;
 use axum::routing::get;
-use hyper::{HeaderMap, StatusCode};
 use log::trace;
 use prometheus::{Encoder, TextEncoder};
 
@@ -14,9 +13,9 @@ async fn get_metrics() -> impl IntoResponse {
     let mut buffer = vec![];
     let mf = prometheus::gather();
     encoder.encode(&mf, &mut buffer).unwrap();
-    let mut headers = HeaderMap::new();
-    headers.insert(hyper::header::CONTENT_TYPE, encoder.format_type().parse().unwrap());
-    (StatusCode::OK, headers, buffer.into_response())
+    (StatusCode::OK, [(
+        hyper::header::CONTENT_TYPE, encoder.format_type().to_string()
+    )], buffer.into_response())
 }
 
 async fn get_version() -> &'static str {
