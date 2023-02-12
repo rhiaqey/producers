@@ -1,15 +1,17 @@
 use log::{debug, trace, warn};
 use rhiaqey_common::env::Env;
+use rhiaqey_common::pubsub::{RPCMessage, RPCMessageData};
+use rhiaqey_common::redis::RedisSettings;
 use rhiaqey_common::stream::{StreamMessage, StreamMessageDataType};
+use rhiaqey_common::{redis, topics};
 use rhiaqey_sdk::channel::{Channel, ChannelList};
 use rhiaqey_sdk::producer::ProducerMessage;
 use rustis::client::{Client, PubSubMessage, PubSubStream};
-use rustis::commands::{ConnectionCommands, PingOptions, PubSubCommands, StreamCommands, StringCommands, XAddOptions};
-use std::sync::{Arc};
-use rhiaqey_common::pubsub::{RPCMessage, RPCMessageType};
-use tokio::sync::{Mutex,RwLock};
-use rhiaqey_common::redis;
-use rhiaqey_common::redis::RedisSettings;
+use rustis::commands::{
+    ConnectionCommands, PingOptions, PubSubCommands, StreamCommands, StringCommands, XAddOptions,
+};
+use std::sync::Arc;
+use tokio::sync::{Mutex, RwLock};
 
 pub struct Executor {
     env: Arc<Env>,
@@ -40,10 +42,27 @@ impl Executor {
     }
 
     pub async fn get_channels(&self) -> Vec<Channel> {
-        let key = format!("{}:channels", self.env.namespace);
-        let result: String = self.redis.lock().await.as_mut().unwrap().get(key.clone()).await.unwrap();
-        let channel_list: ChannelList = serde_json::from_str(result.as_str()).unwrap();
-        debug!("channels from {} retrieved {:?}", key, channel_list);
+        let channels_key =
+            topics::publisher_channels_key(self.env.namespace.clone(), self.env.name.clone());
+
+        let result: String = self
+            .redis
+            .lock()
+            .await
+            .as_mut()
+            .unwrap()
+            .get(channels_key.clone())
+            .await
+            .unwrap();
+
+        let channel_list: ChannelList =
+            serde_json::from_str(result.as_str()).unwrap_or(ChannelList::default());
+
+        debug!(
+            "channels from {} retrieved {:?}",
+            channels_key, channel_list
+        );
+
         channel_list.channels
     }
 
@@ -62,7 +81,7 @@ impl Executor {
             .unwrap();
         if result != "hello" {
             warn!("redis ping failed");
-            return None
+            return None;
         }
 
         redis_connection
@@ -76,14 +95,14 @@ impl Executor {
 
         Ok(Executor {
             env: Arc::from(config),
-            channels: Arc::from(RwLock::new(vec!())),
+            channels: Arc::from(RwLock::new(vec![])),
             redis: Arc::new(Mutex::new(redis_connection)),
         })
     }
 
     async fn handle_rpc_message(&mut self, message: RPCMessage) {
         match message.data {
-            RPCMessageType::AssignChannels(channel_list) => {
+            RPCMessageData::AssignChannels(channel_list) => {
                 debug!("assign channels {:?}", channel_list);
                 self.set_channels(channel_list.channels).await;
             }
@@ -98,21 +117,23 @@ impl Executor {
         }
     }
 
-    pub async fn create_pubsub_stream(&mut self) -> Option<PubSubStream> {
+    pub async fn create_hub_to_publishers_pubsub(&mut self) -> Option<PubSubStream> {
         let client = Self::redis_connect(self.env.redis.clone()).await;
         if client.is_none() {
-            return None
+            return None;
         }
 
-        let key = format!("{}:{}:streams:pubsub", self.env.namespace, self.env.name);
+        let key = topics::hub_to_publisher_pubsub_topic(
+            self.env.namespace.clone(),
+            self.env.name.clone(),
+        );
+
         let stream = client.unwrap().subscribe(key.clone()).await.unwrap();
 
         Some(stream)
     }
 
     pub async fn publish(&self, message: ProducerMessage) {
-        trace!("publishing message");
-
         let mut stream_msg: StreamMessage = StreamMessage {
             hub_id: None,
             publisher_id: None,
@@ -136,7 +157,11 @@ impl Executor {
         for channel in self.channels.read().await.iter() {
             stream_msg.channel = channel.name.to_string();
             stream_msg.size = Some(message.size.unwrap_or(channel.size));
-            let topic = format!("{}:{}:streams:raw", self.env.namespace.as_str(), self.env.name.as_str());
+
+            let topic = topics::publishers_to_hub_stream_topic(
+                self.env.namespace.clone(),
+                channel.name.clone(),
+            );
 
             trace!(
                 "publishing message channel={}, max_len={}, topic={}, timestamp={:?}",
@@ -153,10 +178,18 @@ impl Executor {
                     .await
                     .as_mut()
                     .unwrap()
-                    .xadd(topic.clone(), "*", [("raw", data.clone())], XAddOptions::default())
+                    .xadd(
+                        topic.clone(),
+                        "*",
+                        [("raw", data.clone())],
+                        XAddOptions::default(),
+                    )
                     .await
                     .unwrap();
-                debug!("sent message {} to channel {} in topic {}", id, channel.name, topic);
+                debug!(
+                    "sent message {} to channel {} in topic {}",
+                    id, channel.name, topic
+                );
             }
         }
     }

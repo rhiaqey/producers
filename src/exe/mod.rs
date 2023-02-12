@@ -1,6 +1,7 @@
 mod executor;
 mod http;
 
+use futures::StreamExt;
 use lazy_static::lazy_static;
 use log::{debug, info, trace, warn};
 use prometheus::{register_gauge, Gauge};
@@ -8,7 +9,6 @@ use rhiaqey_common::env::parse_env;
 use rhiaqey_common::settings::parse_settings;
 use rhiaqey_sdk::producer::Producer;
 use serde::de::DeserializeOwned;
-use futures::StreamExt;
 
 use crate::exe::executor::Executor;
 use crate::exe::http::start_http_server;
@@ -67,7 +67,7 @@ pub async fn run<P: Producer<S> + Default + Send + 'static, S: DeserializeOwned 
         info!("running http server @ port {}", port);
     });
 
-    let mut pubsub_stream = executor.create_pubsub_stream().await.unwrap();
+    let mut pubsub_stream = executor.create_hub_to_publishers_pubsub().await.unwrap();
 
     loop {
         tokio::select! {
