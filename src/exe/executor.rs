@@ -99,7 +99,7 @@ impl Executor {
     async fn handle_rpc_message(&mut self, message: RPCMessage) {
         match message.data {
             RPCMessageData::AssignChannels(channel_list) => {
-                debug!("assign channels {:?}", channel_list);
+                info!("received assign channels rpc {:?}", channel_list);
                 self.set_channels(channel_list.channels).await;
             }
             _ => {}
