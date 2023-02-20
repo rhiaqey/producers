@@ -75,7 +75,7 @@ pub async fn run<P: Producer<S> + Default + Send + 'static, S: DeserializeOwned 
                 executor.publish(message).await;
             },
             Some(pubsub_message) = pubsub_stream.next() => {
-                trace!("message received from pubsub: {:?}", pubsub_message);
+                trace!("message received from pubsub");
                 if let Ok(message) = pubsub_message {
                     executor.handle_pubsub_message(message).await;
                 }
