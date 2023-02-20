@@ -1,15 +1,13 @@
 use log::{debug, info, trace, warn};
 use rhiaqey_common::env::Env;
 use rhiaqey_common::pubsub::{RPCMessage, RPCMessageData};
-use rhiaqey_common::redis::RedisSettings;
+use rhiaqey_common::redis::connect_and_ping;
 use rhiaqey_common::stream::{StreamMessage, StreamMessageDataType};
-use rhiaqey_common::{redis, topics};
+use rhiaqey_common::topics;
 use rhiaqey_sdk::channel::{Channel, ChannelList};
 use rhiaqey_sdk::producer::ProducerMessage;
 use rustis::client::{Client, PubSubMessage, PubSubStream};
-use rustis::commands::{
-    ConnectionCommands, PingOptions, PubSubCommands, StreamCommands, StringCommands, XAddOptions,
-};
+use rustis::commands::{PubSubCommands, StreamCommands, StringCommands, XAddOptions};
 use std::sync::Arc;
 use tokio::sync::{Mutex, RwLock};
 
@@ -62,29 +60,8 @@ impl Executor {
         channel_list.channels
     }
 
-    async fn redis_connect(config: RedisSettings) -> Option<Client> {
-        let redis_connection = redis::connect(config).await;
-        if redis_connection.is_none() {
-            warn!("could not connect to redis server");
-            return None;
-        }
-
-        let result: String = redis_connection
-            .clone()
-            .unwrap()
-            .ping(PingOptions::default().message("hello"))
-            .await
-            .unwrap();
-        if result != "hello" {
-            warn!("redis ping failed");
-            return None;
-        }
-
-        redis_connection
-    }
-
     pub async fn setup(config: Env) -> Result<Executor, String> {
-        let redis_connection = Self::redis_connect(config.redis.clone()).await;
+        let redis_connection = connect_and_ping(config.redis.clone()).await;
         if redis_connection.is_none() {
             return Err("failed to connect to redis".to_string());
         }
@@ -115,8 +92,9 @@ impl Executor {
     }
 
     pub async fn create_hub_to_publishers_pubsub(&mut self) -> Option<PubSubStream> {
-        let client = Self::redis_connect(self.env.redis.clone()).await;
+        let client = connect_and_ping(self.env.redis.clone()).await;
         if client.is_none() {
+            warn!("failed to connect with ping");
             return None;
         }
 
