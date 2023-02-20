@@ -31,10 +31,9 @@ pub async fn run<P: Producer<S> + Default + Send + 'static, S: DeserializeOwned 
     };
 
     debug!(
-        "producer [id={},name={},debug={}] is ready",
+        "producer [id={},name={}] is ready",
         executor.get_id(),
-        executor.get_name(),
-        executor.is_debug()
+        executor.get_name()
     );
 
     let channels = executor.get_channels().await;

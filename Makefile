@@ -1,5 +1,5 @@
 export RUST_BACKTRACE=full
-export RUST_LOG=trace
+export RUST_LOG=info
 export DEBUG=true
 export REDIS_PASSWORD=7tgbBSO2Yu
 #export REDIS_SENTINEL_MASTER=mymaster
@@ -28,6 +28,13 @@ iss:
 	NAME=iss-position-1 \
 	NAMESPACE=rhiaqey \
 		cargo +nightly run --bin iss-position
+
+.PHONY: iss-prod
+iss-prod:
+	ID=1 \
+	NAME=iss-position-1 \
+	NAMESPACE=rhiaqey \
+		cargo +nightly run --release --bin iss-position
 
 .PHONY: build
 build:

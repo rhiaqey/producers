@@ -1,4 +1,4 @@
-use log::{debug, trace, warn};
+use log::{debug, info, trace, warn};
 use rhiaqey_common::env::Env;
 use rhiaqey_common::pubsub::{RPCMessage, RPCMessageData};
 use rhiaqey_common::redis::RedisSettings;
@@ -28,12 +28,8 @@ impl Executor {
         self.env.name.clone()
     }
 
-    pub fn is_debug(&self) -> bool {
-        self.env.debug
-    }
-
     pub fn get_private_port(&self) -> u16 {
-        self.env.private_port
+        self.env.private_port.unwrap()
     }
 
     pub async fn set_channels(&mut self, channels: Vec<Channel>) {
@@ -106,6 +102,7 @@ impl Executor {
                 debug!("assign channels {:?}", channel_list);
                 self.set_channels(channel_list.channels).await;
             }
+            _ => {}
         }
     }
 
@@ -150,9 +147,9 @@ impl Executor {
             timestamp: message.timestamp,
         };
 
-        if self.is_debug() {
-            stream_msg.publisher_id = Some(self.env.id.clone());
-        }
+        // if self.is_debug() {
+        stream_msg.publisher_id = Some(self.env.id.clone());
+        // }
 
         for channel in self.channels.read().await.iter() {
             stream_msg.channel = channel.name.to_string();
@@ -163,12 +160,9 @@ impl Executor {
                 channel.name.clone(),
             );
 
-            trace!(
+            info!(
                 "publishing message channel={}, max_len={}, topic={}, timestamp={:?}",
-                channel.name,
-                channel.size,
-                topic,
-                stream_msg.timestamp,
+                channel.name, channel.size, topic, stream_msg.timestamp,
             );
 
             if let Ok(data) = serde_json::to_string(&stream_msg) {
