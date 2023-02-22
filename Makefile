@@ -7,6 +7,7 @@ export REDIS_ADDRESS=localhost:6379
 export REDIS_SENTINEL_ADDRESSES=localhost:26379
 export PRIVATE_PORT=3003
 export PUBLIC_PORT=3004
+export NAMESPACE=rhiaqey
 
 define CHANNELS
 [
@@ -25,17 +26,23 @@ export CHANNELS
 
 .PHONY: iss
 iss:
-	ID=1 \
+	ID=pub1 \
 	NAME=iss-position-1 \
-	NAMESPACE=rhiaqey \
 		cargo +nightly run --bin iss-position
 
 .PHONY: iss-prod
 iss-prod:
-	ID=1 \
+	ID=pub1 \
 	NAME=iss-position-1 \
-	NAMESPACE=rhiaqey \
 		cargo +nightly run --release --bin iss-position
+
+.PHONY: ticker
+ticker:
+	ID=ticker1 \
+	NAME=ticker-1 \
+	PRIVATE_PORT=3005 \
+    PUBLIC_PORT=3006 \
+		cargo +nightly run --bin ticker
 
 .PHONY: build
 build:

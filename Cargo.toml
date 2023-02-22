@@ -40,3 +40,7 @@ tower = { version = "0.4" }
 [[bin]]
 name = "iss-position"
 src = "src/bin/iss-position.rs"
+
+[[bin]]
+name = "ticker"
+src = "src/bin/ticker.rs"

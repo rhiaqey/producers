@@ -9,24 +9,28 @@ use std::time::Duration;
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
 use ureq::{AgentBuilder, Request};
 
-fn default_interval() -> u64 {
-    15000
+fn default_interval() -> Option<u64> {
+    Some(15000)
 }
 
-fn default_timeout() -> u64 {
-    5000
+fn default_timeout() -> Option<u64> {
+    Some(5000)
 }
 
-fn default_endpoint() -> String { "http://api.open-notify.org/iss-now.json".to_string() }
+fn default_endpoint() -> Option<String> {
+    Some("http://api.open-notify.org/iss-now.json".to_string())
+}
 
 #[derive(Deserialize, Clone, Debug)]
 pub struct ISSPositionSettings {
     #[serde(alias = "Endpoint", default = "default_endpoint")]
-    pub endpoint: String,
+    pub endpoint: Option<String>,
+
     #[serde(alias = "Interval", default = "default_interval")]
-    pub interval_in_millis: u64,
+    pub interval_in_millis: Option<u64>,
+
     #[serde(alias = "Timeout", default = "default_timeout")]
-    pub timeout_in_millis: u64,
+    pub timeout_in_millis: Option<u64>,
 }
 
 impl Default for ISSPositionSettings {
@@ -34,7 +38,7 @@ impl Default for ISSPositionSettings {
         ISSPositionSettings {
             endpoint: default_endpoint(),
             interval_in_millis: default_interval(),
-            timeout_in_millis: default_timeout()
+            timeout_in_millis: default_timeout(),
         }
     }
 }
@@ -65,12 +69,12 @@ impl ISSPosition {
         debug!("settings found {:?}", settings);
 
         let agent = AgentBuilder::new()
-            .timeout(Duration::from_millis(settings.timeout_in_millis))
+            .timeout(Duration::from_millis(settings.timeout_in_millis.unwrap()))
             .build();
 
-        debug!("downloading from {}", settings.endpoint);
-
-        agent.get(settings.endpoint.as_str())
+        let endpoint = settings.endpoint.unwrap();
+        debug!("downloading from {}", endpoint.clone());
+        agent.get(endpoint.as_str())
     }
 
     fn fetch_position(&self) -> Result<ISSPositionResponse, Box<dyn std::error::Error>> {
@@ -121,7 +125,7 @@ impl Producer<ISSPositionSettings> for ISSPosition {
     fn start(&self) {
         info!("starting {}", Self::kind());
 
-        let interval = self.settings.lock().unwrap().interval_in_millis;
+        let interval = self.settings.lock().unwrap().interval_in_millis.unwrap();
         let sender = self.sender.clone().unwrap();
 
         loop {
