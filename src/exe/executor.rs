@@ -112,7 +112,7 @@ impl Executor {
         let mut stream_msg: StreamMessage = StreamMessage {
             hub_id: None,
             publisher_id: None,
-            msg_type: StreamMessageDataType::Data as u8,
+            data_type: StreamMessageDataType::Data as u8,
             channel: "".to_string(),
             tag: message.tag,
             key: message.key,

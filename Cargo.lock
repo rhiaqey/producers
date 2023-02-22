@@ -1329,7 +1329,7 @@ dependencies = [
 [[package]]
 name = "rhiaqey-common"
 version = "0.1.0"
-source = "git+https://github.com/rhiaqey/common.git#6406d27ce0ff4ffdfc166cdba9a1d0bbc530935d"
+source = "git+https://github.com/rhiaqey/common.git#5bea17bd5fa8b3d1b3117046fae44044232350b8"
 dependencies = [
  "env_logger",
  "envy",
