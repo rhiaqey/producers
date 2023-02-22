@@ -1,4 +1,4 @@
-name: ISS Position Docker
+name: ISS Position
 
 on:
   push:
