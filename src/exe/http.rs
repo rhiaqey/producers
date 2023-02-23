@@ -1,7 +1,7 @@
 use axum::routing::get;
 use axum::Router;
 use axum::{http::StatusCode, response::IntoResponse};
-use log::trace;
+use log::{info, trace};
 use prometheus::{Encoder, TextEncoder};
 
 async fn get_ready() -> impl IntoResponse {
@@ -35,7 +35,7 @@ pub async fn start_http_server(port: u16) -> hyper::Result<()> {
         .route("/metrics", get(get_metrics))
         .route("/version", get(get_version));
 
-    trace!("running http server @ 0.0.0.0:{}", port);
+    info!("running http server @ port {}", port);
 
     axum::Server::bind(&format!("0.0.0.0:{}", port).parse().unwrap())
         .serve(app.into_make_service())

@@ -61,10 +61,7 @@ pub async fn run<P: Producer<S> + Default + Send + 'static, S: DeserializeOwned 
         info!("running producer {}", P::kind());
     });
 
-    tokio::spawn(async move {
-        start_http_server(port).await.unwrap();
-        info!("running http server @ port {}", port);
-    });
+    tokio::spawn(async move { start_http_server(port).await });
 
     let mut pubsub_stream = executor.create_hub_to_publishers_pubsub().await.unwrap();
 
