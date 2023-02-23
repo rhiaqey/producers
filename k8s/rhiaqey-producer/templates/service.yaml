@@ -7,9 +7,9 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: 3001
-      targetPort: http
+    - port: {{ .Values.service.port }}
+      targetPort: http-private
       protocol: TCP
-      name: http
+      name: http-private
   selector:
     {{- include "rhiaqey-producer.selectorLabels" . | nindent 4 }}

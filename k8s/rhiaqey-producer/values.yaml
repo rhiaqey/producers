@@ -84,3 +84,8 @@ affinity: {}
 metrics:
   serviceMonitor:
     enabled: false
+
+publisher:
+  private_port: 4001
+  public_port: 4002
+  log_level: "info"
