@@ -50,7 +50,7 @@ impl Producer<TickerSettings> for Ticker {
     }
 
     fn start(&self) {
-        info!("starting {}", Ticker::kind());
+        info!("starting {}", Self::kind());
 
         let interval = self.settings.lock().unwrap().interval_in_millis.unwrap();
         let sender = self.sender.clone().unwrap();

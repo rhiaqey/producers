@@ -1,7 +1,7 @@
 use axum::routing::get;
 use axum::Router;
 use axum::{http::StatusCode, response::IntoResponse};
-use log::{info, trace};
+use log::info;
 use prometheus::{Encoder, TextEncoder};
 
 async fn get_ready() -> impl IntoResponse {
