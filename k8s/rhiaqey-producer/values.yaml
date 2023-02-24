@@ -89,3 +89,6 @@ publisher:
   private_port: 4001
   public_port: 4002
   log_level: "info"
+  redis:
+    address: "redis:6379"
+    sentinel_addresses: "redis:26379"
