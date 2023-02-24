@@ -3,7 +3,7 @@ mod http;
 
 use futures::StreamExt;
 use lazy_static::lazy_static;
-use log::{debug, trace, warn};
+use log::{debug, info, trace, warn};
 use prometheus::{register_gauge, Gauge};
 use rhiaqey_common::env::parse_env;
 use rhiaqey_common::settings::parse_settings;
@@ -125,6 +125,8 @@ pub async fn run_async<
     tokio::spawn(async move {
         let mut pubsub_stream = executor.create_hub_to_publishers_pubsub().await.unwrap();
 
+        debug!("stream is ready");
+
         loop {
             tokio::select! {
                 Some(message) = publisher_stream.recv() => {
@@ -140,6 +142,8 @@ pub async fn run_async<
             }
         }
     });
+
+    info!("starting plugin");
 
     plugin.start().await
 }

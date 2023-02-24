@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use log::{debug, info, trace, warn};
 use rhiaqey_sdk::message::MessageValue;
-use rhiaqey_sdk::producer::{AsyncProducer, Producer, ProducerMessage, ProducerMessageReceiver};
+use rhiaqey_sdk::producer::{AsyncProducer, ProducerMessage, ProducerMessageReceiver};
 use serde::{Deserialize, Serialize};
 use sha256::digest;
 use std::sync::{Arc, Mutex};
@@ -79,7 +79,7 @@ impl ISSPosition {
     }
 
     fn fetch_position(&self) -> Result<ISSPositionResponse, Box<dyn std::error::Error>> {
-        debug!("fetching feed");
+        info!("fetching position");
 
         let req = self.get_request();
         let res = req.call()?.into_json::<ISSPositionResponse>()?;
@@ -90,6 +90,8 @@ impl ISSPosition {
     }
 
     fn prepare_message(&self, payload: ISSPositionResponse) -> ProducerMessage {
+        debug!("preparing message from response");
+
         let tag = Some(digest(format!(
             "{}-{}",
             payload.iss_position.latitude, payload.iss_position.longitude
@@ -137,6 +139,7 @@ impl AsyncProducer<ISSPositionSettings> for ISSPosition {
                     sender
                         .send(self.prepare_message(response))
                         .expect("failed to send message");
+                    trace!("message sent");
                 }
                 Err(err) => warn!("error fetching feed: {}", err),
             }
