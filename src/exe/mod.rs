@@ -11,7 +11,7 @@ use rhiaqey_sdk::producer::Producer;
 use serde::de::DeserializeOwned;
 
 use crate::exe::executor::Executor;
-use crate::exe::http::start_http_server;
+use crate::exe::http::start_private_http_server;
 
 lazy_static! {
     static ref TOTAL_CHANNELS: Gauge =
@@ -56,11 +56,11 @@ pub async fn run<P: Producer<S> + Default + Send + 'static, S: DeserializeOwned 
         Ok(sender) => sender,
     };
 
+    tokio::spawn(async move { start_private_http_server(port).await });
+
     tokio::spawn(async move {
         plugin.start();
     });
-
-    tokio::spawn(async move { start_http_server(port).await });
 
     let mut pubsub_stream = executor.create_hub_to_publishers_pubsub().await.unwrap();
 

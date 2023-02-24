@@ -28,7 +28,7 @@ async fn get_version() -> &'static str {
     VERSION
 }
 
-pub async fn start_http_server(port: u16) -> hyper::Result<()> {
+pub async fn start_private_http_server(port: u16) -> hyper::Result<()> {
     let app = Router::new()
         .route("/alive", get(get_ready))
         .route("/ready", get(get_ready))
