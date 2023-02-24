@@ -1,6 +1,7 @@
+use async_trait::async_trait;
 use log::{debug, info, trace, warn};
 use rhiaqey_sdk::message::MessageValue;
-use rhiaqey_sdk::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
+use rhiaqey_sdk::producer::{AsyncProducer, Producer, ProducerMessage, ProducerMessageReceiver};
 use serde::{Deserialize, Serialize};
 use sha256::digest;
 use std::sync::{Arc, Mutex};
@@ -109,7 +110,8 @@ impl ISSPosition {
     }
 }
 
-impl Producer<ISSPositionSettings> for ISSPosition {
+#[async_trait]
+impl AsyncProducer<ISSPositionSettings> for ISSPosition {
     fn setup(&mut self, settings: Option<ISSPositionSettings>) -> ProducerMessageReceiver {
         info!("setting up {}", Self::kind());
 
@@ -122,7 +124,7 @@ impl Producer<ISSPositionSettings> for ISSPosition {
         Ok(receiver)
     }
 
-    fn start(&self) {
+    async fn start(&self) {
         info!("starting {}", Self::kind());
 
         let interval = self.settings.lock().unwrap().interval_in_millis.unwrap();
