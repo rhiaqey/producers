@@ -109,7 +109,7 @@ impl Executor {
     }
 
     pub async fn publish(&self, message: ProducerMessage) {
-        debug!("publishing message to the channels");
+        info!("publishing message to the channels");
 
         let mut stream_msg: StreamMessage = StreamMessage {
             hub_id: None,
