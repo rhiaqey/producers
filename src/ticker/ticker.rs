@@ -1,6 +1,7 @@
+use async_trait::async_trait;
 use log::info;
 use rhiaqey_sdk::message::MessageValue;
-use rhiaqey_sdk::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
+use rhiaqey_sdk::producer::{AsyncProducer, ProducerMessage, ProducerMessageReceiver};
 use serde::{Deserialize, Serialize};
 use std::sync::{Arc, Mutex};
 use std::thread;
@@ -36,7 +37,8 @@ pub struct TickerBody {
     timestamp: u64,
 }
 
-impl Producer<TickerSettings> for Ticker {
+#[async_trait]
+impl AsyncProducer<TickerSettings> for Ticker {
     fn setup(&mut self, settings: Option<TickerSettings>) -> ProducerMessageReceiver {
         info!("setting up {}", Ticker::kind());
 
@@ -49,7 +51,7 @@ impl Producer<TickerSettings> for Ticker {
         Ok(receiver)
     }
 
-    fn start(&self) {
+    async fn start(&self) {
         info!("starting {}", Self::kind());
 
         let interval = self.settings.lock().unwrap().interval_in_millis.unwrap();
