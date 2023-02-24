@@ -42,10 +42,10 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http-private
-              containerPort: {{ .Values.publisher.private_port }}
+              containerPort: {{ .Values.producer.private_port }}
               protocol: TCP
             - name: http-public
-              containerPort: {{ .Values.publisher.public_port }}
+              containerPort: {{ .Values.producer.public_port }}
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -69,15 +69,18 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: PUBLIC_PORT
-              value: {{ .Values.publisher.public_port | quote }}
+              value: {{ .Values.producer.public_port | quote }}
             - name: PRIVATE_PORT
-              value: {{ .Values.publisher.private_port | quote }}
+              value: {{ .Values.producer.private_port | quote }}
             - name: RUST_LOG
-              value: {{ .Values.publisher.log_level | quote }}
-            - name: REDIS_ADDRESS
-              value: {{ .Values.publisher.redis.address | quote }}
+              value: {{ .Values.producer.log_level | quote }}
+            {{ if .Values.producer.redis.sentinel_mode }}
             - name: REDIS_SENTINEL_ADDRESSES
-              value: {{ .Values.publisher.redis.sentinel_addresses | quote }}
+              value: {{ .Values.producer.redis.sentinel_addresses | quote }}
+            {{ else }}
+            - name: REDIS_ADDRESS
+              value: {{ .Values.producer.redis.address | quote }}
+            {{ end }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
