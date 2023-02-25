@@ -10,5 +10,5 @@ spec:
     matchLabels:
       {{- include "rhiaqey-producer.labels" . | nindent 6 }}
   endpoints:
-    - port: http
+    - port: http-private
 {{- end -}}
