@@ -1,10 +1,9 @@
 mod executor;
 mod http;
+mod metrics;
 
 use futures::StreamExt;
-use lazy_static::lazy_static;
 use log::{debug, info, trace, warn};
-use prometheus::{register_gauge, Gauge};
 use rhiaqey_common::env::parse_env;
 use rhiaqey_common::settings::parse_settings;
 use rhiaqey_sdk::producer::AsyncProducer;
@@ -12,12 +11,6 @@ use serde::de::DeserializeOwned;
 
 use crate::exe::executor::Executor;
 use crate::exe::http::start_private_http_server;
-
-lazy_static! {
-    static ref TOTAL_CHANNELS: Gauge =
-        register_gauge!("total_channels", "Total number of active channels.",)
-            .expect("cannot create gauge metric for channels");
-}
 
 pub async fn run_async<
     P: AsyncProducer<S> + Default + Send + 'static,
@@ -41,7 +34,6 @@ pub async fn run_async<
 
     let channels = executor.get_channels().await;
     let port = executor.get_private_port();
-    let channel_count = channels.len() as f64;
     executor.set_channels(channels).await;
 
     let mut plugin = P::default();
@@ -49,8 +41,6 @@ pub async fn run_async<
     if settings.is_none() {
         warn!("settings could not be found");
     }
-
-    TOTAL_CHANNELS.set(channel_count);
 
     let mut publisher_stream = match plugin.setup(settings) {
         Err(error) => {

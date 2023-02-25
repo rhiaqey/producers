@@ -1,3 +1,4 @@
+use crate::exe::metrics::TOTAL_CHANNELS;
 use log::{debug, info, trace, warn};
 use rhiaqey_common::env::Env;
 use rhiaqey_common::pubsub::{RPCMessage, RPCMessageData};
@@ -32,6 +33,7 @@ impl Executor {
 
     pub async fn set_channels(&mut self, channels: Vec<Channel>) {
         let mut locked_channels = self.channels.write().await;
+        TOTAL_CHANNELS.set(channels.len() as f64);
         *locked_channels = channels;
     }
 
