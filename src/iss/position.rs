@@ -1,13 +1,14 @@
 use async_trait::async_trait;
 use log::{debug, info, trace, warn};
 use rhiaqey_sdk::message::MessageValue;
-use rhiaqey_sdk::producer::{AsyncProducer, ProducerMessage, ProducerMessageReceiver};
+use rhiaqey_sdk::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
 use serde::{Deserialize, Serialize};
 use sha256::digest;
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
 use std::thread;
 use std::time::Duration;
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
+use tokio::sync::RwLock;
 use ureq::{AgentBuilder, Request};
 
 fn default_interval() -> Option<u64> {
@@ -60,13 +61,11 @@ pub struct ISSPositionResponse {
 #[derive(Default, Debug)]
 pub struct ISSPosition {
     sender: Option<UnboundedSender<ProducerMessage>>,
-    settings: Arc<Mutex<ISSPositionSettings>>,
+    settings: Arc<RwLock<ISSPositionSettings>>,
 }
 
 impl ISSPosition {
-    fn get_request(&self) -> Request {
-        let settings = self.settings.lock().unwrap().clone();
-
+    fn get_request(&self, settings: ISSPositionSettings) -> Request {
         debug!("settings found {:?}", settings);
 
         let agent = AgentBuilder::new()
@@ -78,10 +77,13 @@ impl ISSPosition {
         agent.get(endpoint.as_str())
     }
 
-    fn fetch_position(&self) -> Result<ISSPositionResponse, Box<dyn std::error::Error>> {
+    fn fetch_position(
+        &self,
+        settings: ISSPositionSettings,
+    ) -> Result<ISSPositionResponse, Box<dyn std::error::Error>> {
         info!("fetching position");
 
-        let req = self.get_request();
+        let req = self.get_request(settings);
         let res = req.call()?.into_json::<ISSPositionResponse>()?;
 
         debug!("iss position downloaded");
@@ -113,12 +115,12 @@ impl ISSPosition {
 }
 
 #[async_trait]
-impl AsyncProducer<ISSPositionSettings> for ISSPosition {
+impl Producer<ISSPositionSettings> for ISSPosition {
     fn setup(&mut self, settings: Option<ISSPositionSettings>) -> ProducerMessageReceiver {
         info!("setting up {}", Self::kind());
 
         let settings = settings.unwrap_or(ISSPositionSettings::default());
-        self.settings = Arc::new(Mutex::new(settings));
+        self.settings = Arc::new(RwLock::new(settings));
 
         let (sender, receiver) = unbounded_channel::<ProducerMessage>();
         self.sender = Some(sender);
@@ -126,14 +128,25 @@ impl AsyncProducer<ISSPositionSettings> for ISSPosition {
         Ok(receiver)
     }
 
-    async fn start(&self) {
+    async fn get_settings(&self) -> ISSPositionSettings {
+        self.settings.read().await.clone()
+    }
+
+    async fn set_settings(&mut self, settings: ISSPositionSettings) {
+        let mut locked_settings = self.settings.write().await;
+        *locked_settings = settings;
+    }
+
+    async fn start(&mut self) {
         info!("starting {}", Self::kind());
 
-        let interval = self.settings.lock().unwrap().interval_in_millis.unwrap();
         let sender = self.sender.clone().unwrap();
 
         loop {
-            match self.fetch_position() {
+            let settings = self.get_settings().await;
+            let interval = settings.interval_in_millis;
+
+            match self.fetch_position(settings) {
                 Ok(response) => {
                     trace!("we have our response {:?}", response);
                     sender
@@ -144,7 +157,7 @@ impl AsyncProducer<ISSPositionSettings> for ISSPosition {
                 Err(err) => warn!("error fetching feed: {}", err),
             }
 
-            thread::sleep(Duration::from_millis(interval));
+            thread::sleep(Duration::from_millis(interval.unwrap()));
         }
     }
 

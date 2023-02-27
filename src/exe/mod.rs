@@ -6,16 +6,13 @@ use futures::StreamExt;
 use log::{debug, info, trace, warn};
 use rhiaqey_common::env::parse_env;
 use rhiaqey_common::settings::parse_settings;
-use rhiaqey_sdk::producer::AsyncProducer;
+use rhiaqey_sdk::producer::Producer;
 use serde::de::DeserializeOwned;
 
 use crate::exe::executor::Executor;
 use crate::exe::http::start_private_http_server;
 
-pub async fn run_async<
-    P: AsyncProducer<S> + Default + Send + 'static,
-    S: DeserializeOwned + Default,
->() {
+pub async fn run<P: Producer<S> + Default + Send + 'static, S: DeserializeOwned + Default>() {
     env_logger::init();
     let env = parse_env();
 

@@ -1,12 +1,13 @@
 use async_trait::async_trait;
 use log::info;
 use rhiaqey_sdk::message::MessageValue;
-use rhiaqey_sdk::producer::{AsyncProducer, ProducerMessage, ProducerMessageReceiver};
+use rhiaqey_sdk::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
 use serde::{Deserialize, Serialize};
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
 use std::thread;
 use std::time::{Duration, SystemTime};
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
+use tokio::sync::RwLock;
 
 fn default_interval() -> Option<u64> {
     Some(1000)
@@ -29,7 +30,7 @@ impl Default for TickerSettings {
 #[derive(Default, Debug)]
 pub struct Ticker {
     sender: Option<UnboundedSender<ProducerMessage>>,
-    settings: Arc<Mutex<TickerSettings>>,
+    settings: Arc<RwLock<TickerSettings>>,
 }
 
 #[derive(Default, Serialize, Deserialize, Clone, Debug)]
@@ -38,12 +39,12 @@ pub struct TickerBody {
 }
 
 #[async_trait]
-impl AsyncProducer<TickerSettings> for Ticker {
+impl Producer<TickerSettings> for Ticker {
     fn setup(&mut self, settings: Option<TickerSettings>) -> ProducerMessageReceiver {
         info!("setting up {}", Ticker::kind());
 
         let settings = settings.unwrap_or(TickerSettings::default());
-        self.settings = Arc::new(Mutex::new(settings));
+        self.settings = Arc::new(RwLock::new(settings));
 
         let (sender, receiver) = unbounded_channel::<ProducerMessage>();
         self.sender = Some(sender);
@@ -51,13 +52,24 @@ impl AsyncProducer<TickerSettings> for Ticker {
         Ok(receiver)
     }
 
-    async fn start(&self) {
+    async fn get_settings(&self) -> TickerSettings {
+        self.settings.read().await.clone()
+    }
+
+    async fn set_settings(&mut self, settings: TickerSettings) {
+        let mut locked_settings = self.settings.write().await;
+        *locked_settings = settings;
+    }
+
+    async fn start(&mut self) {
         info!("starting {}", Self::kind());
 
-        let interval = self.settings.lock().unwrap().interval_in_millis.unwrap();
         let sender = self.sender.clone().unwrap();
 
         loop {
+            let settings = self.get_settings().await;
+            let interval = settings.interval_in_millis;
+
             let epoch = SystemTime::now()
                 .duration_since(SystemTime::UNIX_EPOCH)
                 .unwrap();
@@ -80,7 +92,7 @@ impl AsyncProducer<TickerSettings> for Ticker {
                 })
                 .unwrap();
 
-            thread::sleep(Duration::from_millis(interval));
+            thread::sleep(Duration::from_millis(interval.unwrap()));
         }
     }
 

@@ -81,6 +81,9 @@ impl Executor {
                 info!("received assign channels rpc {:?}", channel_list);
                 self.set_channels(channel_list.channels).await;
             }
+            RPCMessageData::UpdateSettings(settings) => {
+                info!("received request to update settings rpc {:?}", settings)
+            }
             _ => {}
         }
     }
