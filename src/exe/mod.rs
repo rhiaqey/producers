@@ -5,14 +5,17 @@ mod metrics;
 use futures::StreamExt;
 use log::{debug, info, trace, warn};
 use rhiaqey_common::env::parse_env;
-use rhiaqey_common::settings::parse_settings;
 use rhiaqey_sdk::producer::Producer;
 use serde::de::DeserializeOwned;
+use std::fmt::Debug;
 
 use crate::exe::executor::Executor;
 use crate::exe::http::start_private_http_server;
 
-pub async fn run<P: Producer<S> + Default + Send + 'static, S: DeserializeOwned + Default>() {
+pub async fn run<
+    P: Producer<S> + Default + Send + 'static,
+    S: DeserializeOwned + Default + Debug,
+>() {
     env_logger::init();
     let env = parse_env();
 
@@ -34,9 +37,11 @@ pub async fn run<P: Producer<S> + Default + Send + 'static, S: DeserializeOwned 
     executor.set_channels(channels).await;
 
     let mut plugin = P::default();
-    let settings = parse_settings::<S>();
+    let settings = executor.get_settings().await;
     if settings.is_none() {
         warn!("settings could not be found");
+    } else {
+        info!("setting retrieved successfully")
     }
 
     let mut publisher_stream = match plugin.setup(settings) {

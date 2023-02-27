@@ -9,6 +9,8 @@ use rhiaqey_sdk::channel::{Channel, ChannelList};
 use rhiaqey_sdk::producer::ProducerMessage;
 use rustis::client::{Client, PubSubMessage, PubSubStream};
 use rustis::commands::{PubSubCommands, StreamCommands, StringCommands, XAddOptions};
+use serde::de::DeserializeOwned;
+use std::fmt::Debug;
 use std::sync::Arc;
 use tokio::sync::{Mutex, RwLock};
 
@@ -60,6 +62,32 @@ impl Executor {
         );
 
         channel_list.channels
+    }
+
+    pub async fn get_settings<T: DeserializeOwned + Default + Debug>(&self) -> Option<T> {
+        let settings_key =
+            topics::publisher_settings_key(self.env.namespace.clone(), self.env.name.clone());
+
+        let settings_result = self
+            .redis
+            .lock()
+            .await
+            .as_mut()
+            .unwrap()
+            .get(settings_key.clone())
+            .await;
+
+        if settings_result.is_err() {
+            return None;
+        }
+
+        let result: String = settings_result.unwrap();
+
+        let settings: T = serde_json::from_str(result.as_str()).unwrap_or(T::default());
+
+        debug!("settings from {} retrieved {:?}", settings_key, settings);
+
+        Some(settings)
     }
 
     pub async fn setup(config: Env) -> Result<Executor, String> {
