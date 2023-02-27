@@ -1,7 +1,7 @@
 use crate::exe::metrics::TOTAL_CHANNELS;
 use log::{debug, info, trace, warn};
 use rhiaqey_common::env::Env;
-use rhiaqey_common::pubsub::{RPCMessage, RPCMessageData};
+use rhiaqey_common::pubsub::RPCMessage;
 use rhiaqey_common::redis::connect_and_ping;
 use rhiaqey_common::stream::{StreamMessage, StreamMessageDataType};
 use rhiaqey_common::topics;
@@ -103,24 +103,14 @@ impl Executor {
         })
     }
 
-    async fn handle_rpc_message(&mut self, message: RPCMessage) {
-        match message.data {
-            RPCMessageData::AssignChannels(channel_list) => {
-                info!("received assign channels rpc {:?}", channel_list);
-                self.set_channels(channel_list.channels).await;
-            }
-            RPCMessageData::UpdateSettings(settings) => {
-                info!("received request to update settings rpc {:?}", settings)
-            }
-            _ => {}
-        }
-    }
-
-    pub async fn handle_pubsub_message(&mut self, message: PubSubMessage) {
+    pub fn extract_pubsub_message(&mut self, message: PubSubMessage) -> Option<RPCMessage> {
         trace!("handle pubsub message");
         if let Ok(data) = serde_json::from_slice::<RPCMessage>(message.payload.as_slice()) {
             trace!("pubsub message contains an RPC message {:?}", data);
-            self.handle_rpc_message(data).await;
+            // self.handle_rpc_message(data).await;
+            Some(data)
+        } else {
+            None
         }
     }
 

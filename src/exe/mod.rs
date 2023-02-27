@@ -5,9 +5,12 @@ mod metrics;
 use futures::StreamExt;
 use log::{debug, info, trace, warn};
 use rhiaqey_common::env::parse_env;
+use rhiaqey_common::pubsub::RPCMessageData;
 use rhiaqey_sdk::producer::Producer;
 use serde::de::DeserializeOwned;
 use std::fmt::Debug;
+use std::sync::Arc;
+use tokio::sync::Mutex;
 
 use crate::exe::executor::Executor;
 use crate::exe::http::start_private_http_server;
@@ -51,30 +54,43 @@ pub async fn run<
         Ok(sender) => sender,
     };
 
+    let sync_plugin_1 = Arc::new(Mutex::new(plugin));
+    let sync_plugin_2 = sync_plugin_1.clone();
+
     tokio::spawn(async move { start_private_http_server(port).await });
 
-    tokio::spawn(async move {
-        let mut pubsub_stream = executor.create_hub_to_publishers_pubsub().await.unwrap();
+    tokio::spawn(async move { sync_plugin_1.lock().await.start().await });
 
-        debug!("stream is ready");
+    let mut pubsub_stream = executor.create_hub_to_publishers_pubsub().await.unwrap();
 
-        loop {
-            tokio::select! {
-                Some(message) = publisher_stream.recv() => {
-                    trace!("message received from plugin: {:?}", message);
-                    executor.publish(message).await;
-                },
-                Some(pubsub_message) = pubsub_stream.next() => {
-                    trace!("message received from pubsub");
-                    if let Ok(message) = pubsub_message {
-                        executor.handle_pubsub_message(message).await;
+    debug!("stream is ready");
+
+    loop {
+        tokio::select! {
+            Some(message) = publisher_stream.recv() => {
+                trace!("message received from plugin: {:?}", message);
+                executor.publish(message).await;
+            },
+            Some(pubsub_message) = pubsub_stream.next() => {
+                trace!("message received from pubsub");
+                if let Ok(message) = pubsub_message {
+                    if let Some(rpc_message) = executor.extract_pubsub_message(message) {
+                        match rpc_message.data {
+                            RPCMessageData::AssignChannels(channel_list) => {
+                                info!("received assign channels rpc {:?}", channel_list);
+                                executor.set_channels(channel_list.channels).await;
+                            }
+                            RPCMessageData::UpdateSettings(value) => {
+                                info!("received request to update settings rpc {:?}", value);
+                                if let Ok(settings) = value.decode::<S>() {
+                                    sync_plugin_2.lock().await.set_settings(settings).await;
+                                }
+                            }
+                            _ => {}
+                        }
                     }
                 }
             }
         }
-    });
-
-    info!("starting plugin");
-
-    plugin.start().await
+    }
 }
