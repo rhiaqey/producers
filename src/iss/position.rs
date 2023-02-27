@@ -65,25 +65,22 @@ pub struct ISSPosition {
 }
 
 impl ISSPosition {
-    fn get_request(&self, settings: ISSPositionSettings) -> Request {
-        debug!("settings found {:?}", settings);
+    async fn get_request(&self) -> Request {
+        let settings = self.settings.read().await;
+        let endpoint = settings.endpoint.as_ref().unwrap();
 
         let agent = AgentBuilder::new()
             .timeout(Duration::from_millis(settings.timeout_in_millis.unwrap()))
             .build();
 
-        let endpoint = settings.endpoint.unwrap();
         debug!("downloading from {}", endpoint.clone());
         agent.get(endpoint.as_str())
     }
 
-    fn fetch_position(
-        &self,
-        settings: ISSPositionSettings,
-    ) -> Result<ISSPositionResponse, Box<dyn std::error::Error>> {
+    async fn fetch_position(&self) -> Result<ISSPositionResponse, Box<dyn std::error::Error>> {
         info!("fetching position");
 
-        let req = self.get_request(settings);
+        let req = self.get_request().await;
         let res = req.call()?.into_json::<ISSPositionResponse>()?;
 
         debug!("iss position downloaded");
@@ -143,10 +140,10 @@ impl Producer<ISSPositionSettings> for ISSPosition {
         let sender = self.sender.clone().unwrap();
 
         loop {
-            let settings = self.get_settings().await;
+            let settings = self.settings.read().await;
             let interval = settings.interval_in_millis;
 
-            match self.fetch_position(settings) {
+            match self.fetch_position().await {
                 Ok(response) => {
                     trace!("we have our response {:?}", response);
                     sender

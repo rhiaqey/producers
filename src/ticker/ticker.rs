@@ -67,7 +67,7 @@ impl Producer<TickerSettings> for Ticker {
         let sender = self.sender.clone().unwrap();
 
         loop {
-            let settings = self.get_settings().await;
+            let settings = self.settings.read().await;
             let interval = settings.interval_in_millis;
 
             let epoch = SystemTime::now()
