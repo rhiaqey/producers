@@ -125,10 +125,6 @@ impl Producer<ISSPositionSettings> for ISSPosition {
         Ok(receiver)
     }
 
-    async fn get_settings(&self) -> ISSPositionSettings {
-        self.settings.read().await.clone()
-    }
-
     async fn set_settings(&mut self, settings: ISSPositionSettings) {
         let mut locked_settings = self.settings.write().await;
         *locked_settings = settings;

@@ -52,10 +52,6 @@ impl Producer<TickerSettings> for Ticker {
         Ok(receiver)
     }
 
-    async fn get_settings(&self) -> TickerSettings {
-        self.settings.read().await.clone()
-    }
-
     async fn set_settings(&mut self, settings: TickerSettings) {
         let mut locked_settings = self.settings.write().await;
         *locked_settings = settings;
