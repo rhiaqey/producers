@@ -9,8 +9,6 @@ use rhiaqey_common::pubsub::RPCMessageData;
 use rhiaqey_sdk::producer::Producer;
 use serde::de::DeserializeOwned;
 use std::fmt::Debug;
-use std::sync::Arc;
-use tokio::sync::Mutex;
 
 use crate::exe::executor::Executor;
 use crate::exe::http::start_private_http_server;
@@ -54,12 +52,9 @@ pub async fn run<
         Ok(sender) => sender,
     };
 
-    let sync_plugin_1 = Arc::new(Mutex::new(plugin));
-    let sync_plugin_2 = sync_plugin_1.clone();
-
     tokio::spawn(async move { start_private_http_server(port).await });
 
-    tokio::spawn(async move { sync_plugin_1.lock().await.start().await });
+    tokio::spawn(async move { plugin.start().await });
 
     let mut pubsub_stream = executor.create_hub_to_publishers_pubsub().await.unwrap();
 
@@ -82,8 +77,9 @@ pub async fn run<
                             }
                             RPCMessageData::UpdateSettings(value) => {
                                 info!("received request to update settings rpc {:?}", value);
-                                if let Ok(settings) = value.decode::<S>() {
-                                    sync_plugin_2.lock().await.set_settings(settings).await;
+                                if let Ok(_settings) = value.decode::<S>() {
+                                    // TODO: Properly set settings here
+                                    panic!("force restart");
                                 }
                             }
                             _ => {}
