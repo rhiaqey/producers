@@ -112,12 +112,16 @@ impl ISSPosition {
 }
 
 #[async_trait]
-impl Producer<ISSPositionSettings> for ISSPosition {
-    fn setup(&mut self, settings: Option<ISSPositionSettings>) -> ProducerMessageReceiver {
+impl Producer for ISSPosition {
+    fn setup(&mut self, settings: Option<String>) -> ProducerMessageReceiver {
         info!("setting up {}", Self::kind());
 
-        let settings = settings.unwrap_or(ISSPositionSettings::default());
-        self.settings = Arc::new(RwLock::new(settings));
+        self.settings = Arc::new(RwLock::new(match settings {
+            None => ISSPositionSettings::default(),
+            Some(result) => {
+                serde_json::from_str(result.as_str()).unwrap_or(ISSPositionSettings::default())
+            }
+        }));
 
         let (sender, receiver) = unbounded_channel::<ProducerMessage>();
         self.sender = Some(sender);
@@ -125,9 +129,10 @@ impl Producer<ISSPositionSettings> for ISSPosition {
         Ok(receiver)
     }
 
-    async fn set_settings(&mut self, settings: ISSPositionSettings) {
+    async fn set_settings(&mut self, settings: String) {
         let mut locked_settings = self.settings.write().await;
-        *locked_settings = settings;
+        *locked_settings =
+            serde_json::from_str(settings.as_str()).unwrap_or(ISSPositionSettings::default());
     }
 
     async fn start(&mut self) {

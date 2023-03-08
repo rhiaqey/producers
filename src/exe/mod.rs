@@ -7,16 +7,11 @@ use log::{debug, info, trace, warn};
 use rhiaqey_common::env::parse_env;
 use rhiaqey_common::pubsub::RPCMessageData;
 use rhiaqey_sdk::producer::Producer;
-use serde::de::DeserializeOwned;
-use std::fmt::Debug;
 
 use crate::exe::executor::Executor;
 use crate::exe::http::start_private_http_server;
 
-pub async fn run<
-    P: Producer<S> + Default + Send + 'static,
-    S: DeserializeOwned + Default + Debug,
->() {
+pub async fn run<P: Producer + Default + Send + 'static>() {
     env_logger::init();
     let env = parse_env();
 
@@ -77,10 +72,10 @@ pub async fn run<
                             }
                             RPCMessageData::UpdateSettings(value) => {
                                 info!("received request to update settings rpc {:?}", value);
-                                if let Ok(_settings) = value.decode::<S>() {
+                                /*if let Ok(_settings) = value.decode::<S>() {
                                     // TODO: Properly set settings here
                                     panic!("force restart");
-                                }
+                                }*/
                             }
                             _ => {}
                         }
