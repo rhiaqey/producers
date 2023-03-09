@@ -894,9 +894,9 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "libc"
-version = "0.2.139"
+version = "0.2.140"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "201de327520df007757c1f0adce6e827fe8562fbc28bfd9c15571c66ca1f5f79"
+checksum = "99227334921fae1a979cf0bfdfcc6b3e5ce376ef57e16fb6fb3ea2ed6095f80c"
 
 [[package]]
 name = "link-cplusplus"
@@ -1320,14 +1320,14 @@ dependencies = [
 [[package]]
 name = "rhiaqey-common"
 version = "0.1.0"
-source = "git+https://github.com/rhiaqey/common.git#211a576cf0ec8ee8642f2550eb7179af539d49ed"
+source = "git+https://github.com/rhiaqey/common.git#4e35d27d3fe9c5f5b5f356a604f14db00ff883fd"
 dependencies = [
  "env_logger",
  "envy",
  "log",
  "rhiaqey-sdk",
  "rmp-serde",
- "rustis",
+ "rustis 0.8.3",
  "serde",
  "serde_json",
  "uuid",
@@ -1354,7 +1354,7 @@ dependencies = [
  "rhiaqey-sdk",
  "rmp-serde",
  "rss",
- "rustis",
+ "rustis 0.9.0",
  "serde",
  "serde_json",
  "sha256",
@@ -1366,7 +1366,7 @@ dependencies = [
 [[package]]
 name = "rhiaqey-sdk"
 version = "0.1.0"
-source = "git+https://github.com/rhiaqey/sdk.git#d5609238b0ef76bbec01bfa4d2c42d37020f90da"
+source = "git+https://github.com/rhiaqey/sdk.git#34740f1974a1eea8631203df65e9c6bb93ef97b5"
 dependencies = [
  "async-trait",
  "serde",
@@ -1430,6 +1430,30 @@ name = "rustis"
 version = "0.8.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "db8d3de938874cbab27bac430bf08387fcce10b77d86c5c7684c93fd41c33f56"
+dependencies = [
+ "atoi",
+ "bytes",
+ "crc16",
+ "dtoa",
+ "fast-float",
+ "futures",
+ "itoa",
+ "log",
+ "memchr",
+ "rand",
+ "serde",
+ "smallvec",
+ "socket2",
+ "tokio",
+ "tokio-util",
+ "url",
+]
+
+[[package]]
+name = "rustis"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3256d492e49ff81f6bd593e32c1e8c3ac81b91958a910a0bd601c17c6ecf5199"
 dependencies = [
  "atoi",
  "bytes",
@@ -1543,9 +1567,9 @@ dependencies = [
 
 [[package]]
 name = "serde"
-version = "1.0.153"
+version = "1.0.154"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3a382c72b4ba118526e187430bb4963cd6d55051ebf13d9b25574d379cc98d20"
+checksum = "8cdd151213925e7f1ab45a9bbfb129316bd00799784b174b7cc7bcd16961c49e"
 dependencies = [
  "serde_derive",
 ]
@@ -1561,9 +1585,9 @@ dependencies = [
 
 [[package]]
 name = "serde_derive"
-version = "1.0.153"
+version = "1.0.154"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1ef476a5790f0f6decbc66726b6e5d63680ed518283e64c7df415989d880954f"
+checksum = "4fc80d722935453bcafdc2c9a73cd6fac4dc1938f0346035d84bf99fa9e33217"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1923,9 +1947,9 @@ checksum = "497961ef93d974e23eb6f433eb5fe1b7930b659f06d12dec6fc44a8f554c0bba"
 
 [[package]]
 name = "unicode-bidi"
-version = "0.3.10"
+version = "0.3.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d54675592c1dbefd78cbd98db9bacd89886e1ca50692a0692baefffdeb92dd58"
+checksum = "524b68aca1d05e03fdf03fcdce2c6c94b6daf6d16861ddaa7e4f2b6638a9052c"
 
 [[package]]
 name = "unicode-ident"
