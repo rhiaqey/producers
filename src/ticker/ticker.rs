@@ -7,7 +7,7 @@ use std::sync::Arc;
 use std::thread;
 use std::time::{Duration, SystemTime};
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
-use tokio::sync::{Mutex, RwLock};
+use tokio::sync::Mutex;
 
 fn default_interval() -> Option<u64> {
     Some(1000)

@@ -9,11 +9,8 @@ use rhiaqey_common::pubsub::RPCMessageData;
 use rhiaqey_sdk::producer::Producer;
 use serde::de::DeserializeOwned;
 use std::fmt::Debug;
-use std::sync::Arc;
-use tokio::sync::Mutex;
 
 use crate::exe::executor::Executor;
-use crate::exe::http::start_private_http_server;
 
 pub async fn run<
     P: Producer<S> + Default + Send + 'static,

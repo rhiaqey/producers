@@ -13,7 +13,6 @@ use rustis::commands::{PubSubCommands, StreamCommands, StringCommands, XAddOptio
 use serde::de::DeserializeOwned;
 use std::fmt::Debug;
 use std::sync::Arc;
-use std::thread;
 use tokio::sync::{Mutex, RwLock};
 
 pub struct Executor {
