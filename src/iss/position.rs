@@ -114,7 +114,7 @@ impl ISSPosition {
 #[async_trait]
 impl Producer for ISSPosition {
     fn setup(&mut self, settings: Option<String>) -> ProducerMessageReceiver {
-        info!("setting up {}", Self::kind());
+        info!("setting up {}", self.kind());
 
         self.settings = Arc::new(RwLock::new(match settings {
             None => ISSPositionSettings::default(),
@@ -136,7 +136,7 @@ impl Producer for ISSPosition {
     }
 
     async fn start(&mut self) {
-        info!("starting {}", Self::kind());
+        info!("starting {}", self.kind());
 
         let sender = self.sender.clone().unwrap();
 
@@ -159,7 +159,7 @@ impl Producer for ISSPosition {
         }
     }
 
-    fn kind() -> String {
+    fn kind(&self) -> String {
         "iss_position".to_string()
     }
 }

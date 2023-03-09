@@ -41,7 +41,7 @@ pub struct TickerBody {
 #[async_trait]
 impl Producer for Ticker {
     fn setup(&mut self, settings: Option<String>) -> ProducerMessageReceiver {
-        info!("setting up {}", Ticker::kind());
+        info!("setting up {}", self.kind());
 
         self.settings = Arc::new(RwLock::new(match settings {
             None => TickerSettings::default(),
@@ -63,7 +63,7 @@ impl Producer for Ticker {
     }
 
     async fn start(&mut self) {
-        info!("starting {}", Self::kind());
+        info!("starting {}", self.kind());
 
         let sender = self.sender.clone().unwrap();
 
@@ -97,7 +97,7 @@ impl Producer for Ticker {
         }
     }
 
-    fn kind() -> String {
+    fn kind(&self) -> String {
         "ticker".to_string()
     }
 }
