@@ -1,3 +1,4 @@
+use crate::exe::http::start_private_http_server;
 use crate::exe::metrics::TOTAL_CHANNELS;
 use log::{debug, info, trace, warn};
 use rhiaqey_common::env::Env;
@@ -12,6 +13,7 @@ use rustis::commands::{PubSubCommands, StreamCommands, StringCommands, XAddOptio
 use serde::de::DeserializeOwned;
 use std::fmt::Debug;
 use std::sync::Arc;
+use std::thread;
 use tokio::sync::{Mutex, RwLock};
 
 pub struct Executor {
@@ -189,5 +191,9 @@ impl Executor {
                 );
             }
         }
+    }
+
+    pub async fn start_private_http_server(&self, port: u16) {
+        tokio::spawn(async move { start_private_http_server(port).await });
     }
 }

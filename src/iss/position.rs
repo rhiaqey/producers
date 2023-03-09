@@ -8,7 +8,7 @@ use std::sync::Arc;
 use std::thread;
 use std::time::Duration;
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
-use tokio::sync::RwLock;
+use tokio::sync::{Mutex, RwLock};
 use ureq::{AgentBuilder, Request};
 
 fn default_interval() -> Option<u64> {
@@ -61,12 +61,11 @@ pub struct ISSPositionResponse {
 #[derive(Default, Debug)]
 pub struct ISSPosition {
     sender: Option<UnboundedSender<ProducerMessage>>,
-    settings: Arc<RwLock<ISSPositionSettings>>,
+    settings: Arc<Mutex<ISSPositionSettings>>,
 }
 
 impl ISSPosition {
-    async fn get_request(&self) -> Request {
-        let settings = self.settings.read().await;
+    async fn get_request(settings: ISSPositionSettings) -> Request {
         let endpoint = settings.endpoint.as_ref().unwrap();
 
         let agent = AgentBuilder::new()
@@ -77,10 +76,12 @@ impl ISSPosition {
         agent.get(endpoint.as_str())
     }
 
-    async fn fetch_position(&self) -> Result<ISSPositionResponse, Box<dyn std::error::Error>> {
+    async fn fetch_position(
+        settings: ISSPositionSettings,
+    ) -> Result<ISSPositionResponse, Box<dyn std::error::Error>> {
         info!("fetching position");
 
-        let req = self.get_request().await;
+        let req = Self::get_request(settings).await;
         let res = req.call()?.into_json::<ISSPositionResponse>()?;
 
         debug!("iss position downloaded");
@@ -88,7 +89,7 @@ impl ISSPosition {
         Ok(res)
     }
 
-    fn prepare_message(&self, payload: ISSPositionResponse) -> ProducerMessage {
+    fn prepare_message(payload: ISSPositionResponse) -> ProducerMessage {
         debug!("preparing message from response");
 
         let tag = Some(digest(format!(
@@ -112,16 +113,13 @@ impl ISSPosition {
 }
 
 #[async_trait]
-impl Producer for ISSPosition {
-    fn setup(&mut self, settings: Option<String>) -> ProducerMessageReceiver {
+impl Producer<ISSPositionSettings> for ISSPosition {
+    fn setup(&mut self, settings: Option<ISSPositionSettings>) -> ProducerMessageReceiver {
         info!("setting up {}", self.kind());
 
-        self.settings = Arc::new(RwLock::new(match settings {
-            None => ISSPositionSettings::default(),
-            Some(result) => {
-                serde_json::from_str(result.as_str()).unwrap_or(ISSPositionSettings::default())
-            }
-        }));
+        self.settings = Arc::new(Mutex::new(
+            settings.unwrap_or(ISSPositionSettings::default()),
+        ));
 
         let (sender, receiver) = unbounded_channel::<ProducerMessage>();
         self.sender = Some(sender);
@@ -129,34 +127,37 @@ impl Producer for ISSPosition {
         Ok(receiver)
     }
 
-    async fn set_settings(&mut self, settings: String) {
-        let mut locked_settings = self.settings.write().await;
-        *locked_settings =
-            serde_json::from_str(settings.as_str()).unwrap_or(ISSPositionSettings::default());
+    async fn set_settings(&mut self, settings: ISSPositionSettings) {
+        let mut locked_settings = self.settings.lock().await;
+        *locked_settings = settings;
+        debug!("new settings updated");
     }
 
     async fn start(&mut self) {
         info!("starting {}", self.kind());
 
         let sender = self.sender.clone().unwrap();
+        let settings = self.settings.clone();
 
-        loop {
-            let settings = self.settings.read().await;
-            let interval = settings.interval_in_millis;
+        tokio::task::spawn(async move {
+            loop {
+                let settings = settings.lock().await.clone();
+                let interval = settings.interval_in_millis;
 
-            match self.fetch_position().await {
-                Ok(response) => {
-                    trace!("we have our response {:?}", response);
-                    sender
-                        .send(self.prepare_message(response))
-                        .expect("failed to send message");
-                    trace!("message sent");
+                match Self::fetch_position(settings).await {
+                    Ok(response) => {
+                        trace!("we have our response {:?}", response);
+                        sender
+                            .send(Self::prepare_message(response))
+                            .expect("failed to send message");
+                        trace!("message sent");
+                    }
+                    Err(err) => warn!("error fetching feed: {}", err),
                 }
-                Err(err) => warn!("error fetching feed: {}", err),
-            }
 
-            thread::sleep(Duration::from_millis(interval.unwrap()));
-        }
+                thread::sleep(Duration::from_millis(interval.unwrap()));
+            }
+        });
     }
 
     fn kind(&self) -> String {
