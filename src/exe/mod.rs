@@ -32,12 +32,8 @@ pub async fn run<
         executor.get_name()
     );
 
-    let channels = executor.get_channels().await;
-    let port = executor.get_private_port();
-    executor.set_channels(channels).await;
-
     let mut plugin = P::default();
-    let settings = executor.get_settings::<S>().await;
+    let settings = executor.read_settings::<S>().await;
     if settings.is_none() {
         warn!("settings could not be found");
     } else {
@@ -53,7 +49,7 @@ pub async fn run<
 
     plugin.start().await;
 
-    executor.start_private_http_server(port).await;
+    executor.start_private_http_server().await;
 
     let mut pubsub_stream = executor.create_hub_to_publishers_pubsub().await.unwrap();
 

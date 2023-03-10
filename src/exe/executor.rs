@@ -40,7 +40,7 @@ impl Executor {
         *locked_channels = channels;
     }
 
-    pub async fn get_channels(&self) -> Vec<Channel> {
+    pub async fn read_channels(&self) -> Vec<Channel> {
         let channels_key =
             topics::publisher_channels_key(self.env.namespace.clone(), self.env.name.clone());
 
@@ -65,7 +65,7 @@ impl Executor {
         channel_list.channels
     }
 
-    pub async fn get_settings<T: DeserializeOwned + Default + Debug>(&self) -> Option<T> {
+    pub async fn read_settings<T: DeserializeOwned + Default + Debug>(&self) -> Option<T> {
         let settings_key =
             topics::publisher_settings_key(self.env.namespace.clone(), self.env.name.clone());
 
@@ -97,11 +97,16 @@ impl Executor {
             return Err("failed to connect to redis".to_string());
         }
 
-        Ok(Executor {
+        let mut executor = Executor {
             env: Arc::from(config),
             channels: Arc::from(RwLock::new(vec![])),
             redis: Arc::new(Mutex::new(redis_connection)),
-        })
+        };
+
+        let channels = executor.read_channels().await;
+        executor.set_channels(channels).await;
+
+        Ok(executor)
     }
 
     pub fn extract_pubsub_message(&mut self, message: PubSubMessage) -> Option<RPCMessage> {
@@ -192,7 +197,8 @@ impl Executor {
         }
     }
 
-    pub async fn start_private_http_server(&self, port: u16) {
+    pub async fn start_private_http_server(&self) {
+        let port = self.get_private_port();
         tokio::spawn(async move { start_private_http_server(port).await });
     }
 }
