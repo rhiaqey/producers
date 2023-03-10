@@ -49,7 +49,7 @@ pub async fn run<
 
     plugin.start().await;
 
-    executor.start_private_http_server().await;
+    executor.start().await;
 
     let mut pubsub_stream = executor.create_hub_to_publishers_pubsub().await.unwrap();
 

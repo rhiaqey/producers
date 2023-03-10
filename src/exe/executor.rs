@@ -197,7 +197,7 @@ impl Executor {
         }
     }
 
-    pub async fn start_private_http_server(&self) {
+    pub async fn start(&self) {
         let port = self.get_private_port();
         tokio::spawn(async move { start_private_http_server(port).await });
     }
