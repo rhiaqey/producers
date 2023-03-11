@@ -36,7 +36,6 @@ impl Executor {
 
     pub async fn set_channels(&mut self, channels: Vec<Channel>) {
         let mut locked_channels = self.channels.write().await;
-        TOTAL_CHANNELS.set(channels.len() as f64);
         *locked_channels = channels;
     }
 
@@ -104,7 +103,9 @@ impl Executor {
         };
 
         let channels = executor.read_channels().await;
+        let channel_count = channels.len() as f64;
         executor.set_channels(channels).await;
+        TOTAL_CHANNELS.set(channel_count);
 
         Ok(executor)
     }

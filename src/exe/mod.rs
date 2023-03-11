@@ -11,6 +11,7 @@ use serde::de::DeserializeOwned;
 use std::fmt::Debug;
 
 use crate::exe::executor::Executor;
+use crate::exe::metrics::TOTAL_CHANNELS;
 
 pub async fn run<
     P: Producer<S> + Default + Send + 'static,
@@ -68,7 +69,9 @@ pub async fn run<
                         match rpc_message.data {
                             RPCMessageData::AssignChannels(channel_list) => {
                                 info!("received assign channels rpc {:?}", channel_list);
+                                let channel_count = channel_list.channels.len() as f64;
                                 executor.set_channels(channel_list.channels).await;
+                                TOTAL_CHANNELS.set(channel_count);
                             }
                             RPCMessageData::UpdateSettings(value) => {
                                 if let Ok(settings) = value.decode::<S>() {
