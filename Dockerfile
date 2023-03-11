@@ -9,7 +9,7 @@ RUN apt-get update \
 WORKDIR /usr/src/
 COPY . .
 ENV RUST_BACKTRACE=1
-RUN cargo install --bin ${BINARY} --features "${FEATURES}" --path .
+RUN cargo install --bin ${BINARY} --features ${FEATURES} --path .
 
 FROM debian:bullseye-slim
 ARG BINARY
