@@ -56,4 +56,4 @@ prod:
 redis:
 	docker run -it --rm --name redis -p 6379:6379 \
 		-e ALLOW_EMPTY_PASSWORD=yes \
-		bitnami/redis:7.0.8
+		bitnami/redis:7.0.9
