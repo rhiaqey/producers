@@ -31,15 +31,15 @@ ureq = { version = "2.5", features = [ "json", "charset", "cookies", "native-tls
 sha256 = { version = "1.0", optional = true }
 
 [features]
-iss = ["dep:ureq", "dep:sha256"]
+iss = [ "dep:ureq", "dep:sha256" ]
 ticker = []
 
 [[bin]]
 name = "iss-position"
 src = "src/bin/iss-position.rs"
-required-features = ["iss"]
+required-features = [ "iss" ]
 
 [[bin]]
 name = "ticker"
 src = "src/bin/ticker.rs"
-required-features = ["ticker"]
+required-features = [ "ticker" ]

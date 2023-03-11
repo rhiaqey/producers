@@ -51,7 +51,7 @@ pub async fn run<
 
     plugin.start().await;
 
-    tokio::spawn(async move { start_private_http_server(port).await });
+    tokio::spawn(start_private_http_server(port));
 
     let mut pubsub_stream = executor.create_hub_to_publishers_pubsub().await.unwrap();
 
