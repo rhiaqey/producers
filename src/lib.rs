@@ -1,3 +1,7 @@
 pub mod exe;
-pub mod iss;
+
+#[cfg(feature = "ticker")]
 pub mod ticker;
+
+#[cfg(feature = "iss")]
+pub mod iss;

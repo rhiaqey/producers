@@ -28,13 +28,13 @@ export CHANNELS
 iss:
 	ID=pub1 \
 	NAME=iss-position-1 \
-		cargo +nightly run --bin iss-position
+		cargo +nightly run --bin iss-position --features="iss"
 
 .PHONY: iss-prod
 iss-prod:
 	ID=pub1 \
 	NAME=iss-position-1 \
-		cargo +nightly run --release --bin iss-position
+		cargo +nightly run --release --bin iss-position --features="iss"
 
 .PHONY: ticker
 ticker:
@@ -42,7 +42,7 @@ ticker:
 	NAME=ticker-1 \
 	PRIVATE_PORT=3005 \
     PUBLIC_PORT=3006 \
-		cargo +nightly run --bin ticker
+		cargo +nightly run --bin ticker --features="ticker"
 
 .PHONY: build
 build:
