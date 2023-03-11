@@ -22,15 +22,10 @@ rmp-serde = "1.1"
 env_logger = "0.10"
 log = "0.4"
 sha256 = "1.0"
-rss = { version = "2.0", features = [ "serde" ] }
-base64 = { version = "0.21" }
-chrono = { version = "0.4" }
 prometheus = { version = "0.13", features = [ "process" ] }
-reqwest = { version = "0.11", features = ["json"] }
 async-trait = "0.1"
 futures = "0.3"
 lazy_static = "1.4"
-itertools = "0.10"
 rustis = { version = "0.8", features = [ "redis-json", "tokio-runtime" ] }
 tokio = { version = "1.21", features = ["full", "rt", "rt-multi-thread"] }
 axum = { version = "0.6" }
