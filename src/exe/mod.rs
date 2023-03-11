@@ -1,16 +1,16 @@
-mod executor;
 mod http;
 mod metrics;
 
+use crate::exe::http::start_private_http_server;
 use futures::StreamExt;
 use log::{debug, info, trace, warn};
 use rhiaqey_common::env::parse_env;
+use rhiaqey_common::executor::Executor;
 use rhiaqey_common::pubsub::RPCMessageData;
 use rhiaqey_sdk::producer::Producer;
 use serde::de::DeserializeOwned;
 use std::fmt::Debug;
 
-use crate::exe::executor::Executor;
 use crate::exe::metrics::TOTAL_CHANNELS;
 
 pub async fn run<
@@ -34,6 +34,7 @@ pub async fn run<
     );
 
     let mut plugin = P::default();
+    let port = executor.get_private_port();
     let settings = executor.read_settings::<S>().await;
     if settings.is_none() {
         warn!("settings could not be found");
@@ -50,7 +51,7 @@ pub async fn run<
 
     plugin.start().await;
 
-    executor.start().await;
+    tokio::spawn(async move { start_private_http_server(port).await });
 
     let mut pubsub_stream = executor.create_hub_to_publishers_pubsub().await.unwrap();
 
