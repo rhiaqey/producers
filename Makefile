@@ -45,7 +45,7 @@ ticker:
 		cargo +nightly run --bin ticker --features=ticker
 
 .PHONY: ticker-prod
-ticker:
+ticker-prod:
 	ID=ticker1 \
 	NAME=ticker-1 \
 	PRIVATE_PORT=3005 \
