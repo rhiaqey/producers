@@ -39,7 +39,7 @@ pub async fn run<
     if settings.is_none() {
         warn!("settings could not be found");
     } else {
-        info!("setting retrieved successfully")
+        info!("setting loaded successfully")
     }
 
     let mut publisher_stream = match plugin.setup(settings) {
