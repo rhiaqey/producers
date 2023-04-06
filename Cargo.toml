@@ -7,9 +7,11 @@ edition = "2021"
 
 [profile.release]
 lto = true
+debug = false
 strip = "debuginfo"
 overflow-checks = true
 panic = "abort"
+codegen-units = 1
 
 [dependencies]
 rhiaqey-sdk = { git = "https://github.com/rhiaqey/sdk.git" }
@@ -22,7 +24,7 @@ prometheus = { version = "0.13", features = [ "process" ] }
 async-trait = "0.1"
 futures = "0.3"
 lazy_static = "1.4"
-rustis = { version = "0.8", features = [ "redis-json", "tokio-runtime" ] }
+rustis = { version = "0.10", features = [ "redis-json", "tokio-runtime" ] }
 tokio = { version = "1.27", features = [ "full", "rt", "rt-multi-thread" ] }
 axum = { version = "0.6" }
 hyper = { version = "0.14", features = [ "full" ] }
