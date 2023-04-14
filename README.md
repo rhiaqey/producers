@@ -2,5 +2,9 @@
 
 Early development stage ( mostly for educational purposes )
 
-## ISS Position
 ## Ticker
+![Ticker](https://github.com/rhiaqey/producers/actions/workflows/ticker.yml/badge.svg)
+
+## ISS Position
+![ISS Position](https://github.com/rhiaqey/producers/actions/workflows/iss-position.yml/badge.svg)
+
