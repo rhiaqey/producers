@@ -35,17 +35,10 @@ pub async fn run<
 
     let mut plugin = P::default();
     let port = executor.get_private_port();
-    let settings = executor.read_settings::<S>().await;
-    if settings.is_none() {
-        warn!("settings could not be found");
-    } else {
-        info!("setting loaded successfully")
-    }
+    let settings = executor.read_settings::<S>().await.unwrap_or(S::default());
 
-    let mut publisher_stream = match plugin.setup(settings) {
-        Err(error) => {
-            panic!("failed to setup producer: {error}");
-        }
+    let mut publisher_stream = match plugin.setup(Some(settings)) {
+        Err(error) => panic!("failed to setup producer: {error}"),
         Ok(sender) => sender,
     };
 
@@ -76,11 +69,12 @@ pub async fn run<
                                 executor.set_channels(channel_list.channels).await;
                                 TOTAL_CHANNELS.set(channel_count);
                             }
-                            RPCMessageData::UpdateSettings(value) => {
-                                if let Ok(settings) = value.decode::<S>() {
-                                    debug!("received request to update settings rpc {:?}", settings);
+                            RPCMessageData::UpdateSettings() => {
+                                if let Ok(settings) = executor.read_settings::<S>().await {
                                     plugin.set_settings(settings).await;
                                     trace!("settings updated correctly");
+                                } else {
+                                    warn!("failed to read settings");
                                 }
                             }
                             _ => {}
