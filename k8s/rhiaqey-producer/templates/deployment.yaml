@@ -72,15 +72,22 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            - name: SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "rhiaqey-producer.fullname" . }}-secret
-                  key: secret
             - name: PUBLIC_PORT
               value: {{ .Values.producer.public_port | quote }}
             - name: PRIVATE_PORT
               value: {{ .Values.producer.private_port | quote }}
+            - name: PRIVATE_PORT
+              value: {{ .Values.producer.private_port | quote }}
+            - name: PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.producer.keys.name }}
+                  key: {{ .Values.producer.keys.private }}
+            - name: PUBLIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.producer.keys.name }}
+                  key: {{ .Values.producer.keys.public }}
             - name: RUST_LOG
               value: {{ .Values.producer.log_level | quote }}
             {{ if .Values.producer.redis.sentinel_mode }}
