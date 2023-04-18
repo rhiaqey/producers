@@ -104,7 +104,7 @@ impl ISSPosition {
         ProducerMessage {
             key: String::from("iss/position"),
             value: MessageValue::Json(json),
-            category: Some("default".to_string()),
+            category: None, // will be treated as default
             size: None,
             timestamp,
             tag,

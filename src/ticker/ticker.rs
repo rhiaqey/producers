@@ -84,7 +84,7 @@ impl Producer<TickerSettings> for Ticker {
                         tag: Some(format!("{now}")),
                         key: String::from("timestamp"),
                         value: MessageValue::Json(json),
-                        category: None,
+                        category: None, // will be treated as default
                         size: None,
                         timestamp: Option::from(now as u64),
                     })
