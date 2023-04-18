@@ -100,8 +100,6 @@ impl Producer<PingerSettings> for Pinger {
                     tag = Some(format!("ping-{}", epoch.as_millis()));
                 }
 
-                debug!("SETTINGS {:?}", settings);
-
                 let json = serde_json::to_value(PingerBody {
                     data: String::from("ping"),
                 })
