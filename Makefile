@@ -101,6 +101,22 @@ ticker-prod:
     PUBLIC_PORT=3006 \
 		cargo +nightly run --release --bin ticker --features=ticker
 
+.PHONY: pinger
+pinger:
+	ID=pinger1 \
+	NAME=pinger-1 \
+	PRIVATE_PORT=3005 \
+    PUBLIC_PORT=3006 \
+		cargo +nightly run --bin pinger --features=pinger
+
+.PHONY: pinger-prod
+pinger-prod:
+	ID=pinger1 \
+	NAME=pinger-1 \
+	PRIVATE_PORT=3005 \
+    PUBLIC_PORT=3006 \
+		cargo +nightly run --release --bin pinger --features=pinger
+
 .PHONY: build
 build:
 	cargo +nightly build
