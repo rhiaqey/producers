@@ -1,4 +1,4 @@
-name: Pinger
+name: RSS
 
 on:
   push:
@@ -10,7 +10,7 @@ env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
-  IMAGE_NAME: rhiaqey/pinger
+  IMAGE_NAME: rhiaqey/rss
 
 jobs:
   Build:
@@ -68,8 +68,8 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            BINARY=pinger
-            FEATURES=pinger
+            BINARY=rss
+            FEATURES=rss
 
       # Sign the resulting Docker image digest except on PRs.
       # This will only write to the public Rekor transparency log when the Docker

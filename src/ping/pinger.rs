@@ -122,6 +122,6 @@ impl Producer<PingerSettings> for Pinger {
     }
 
     fn kind(&self) -> String {
-        "pinger".to_string()
+        String::from("pinger")
     }
 }

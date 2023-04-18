@@ -8,6 +8,8 @@ Early development stage ( mostly for educational purposes )
 ## Pinger
 ![Pinger](https://github.com/rhiaqey/producers/actions/workflows/pinger.yml/badge.svg)
 
+## RSS
+![RSS](https://github.com/rhiaqey/producers/actions/workflows/rss.yml/badge.svg)
 
 ## ISS Position
 ![ISS Position](https://github.com/rhiaqey/producers/actions/workflows/iss-position.yml/badge.svg)

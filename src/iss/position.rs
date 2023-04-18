@@ -161,6 +161,6 @@ impl Producer<ISSPositionSettings> for ISSPosition {
     }
 
     fn kind(&self) -> String {
-        "iss_position".to_string()
+        String::from("iss_position")
     }
 }

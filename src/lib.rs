@@ -8,3 +8,6 @@ pub mod ping;
 
 #[cfg(feature = "iss")]
 pub mod iss;
+
+#[cfg(feature = "rss")]
+pub mod rss;

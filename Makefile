@@ -1,5 +1,5 @@
 export RUST_BACKTRACE=full
-export RUST_LOG=debug
+export RUST_LOG=rhiaqey=trace
 export DEBUG=true
 export REDIS_PASSWORD=7tgbBSO2Yu
 #export REDIS_SENTINEL_MASTER=mymaster
@@ -105,17 +105,33 @@ ticker-prod:
 pinger:
 	ID=pinger1 \
 	NAME=pinger-1 \
-	PRIVATE_PORT=3005 \
-    PUBLIC_PORT=3006 \
+	PRIVATE_PORT=3007 \
+    PUBLIC_PORT=3008 \
 		cargo +nightly run --bin pinger --features=pinger
 
 .PHONY: pinger-prod
 pinger-prod:
 	ID=pinger1 \
 	NAME=pinger-1 \
-	PRIVATE_PORT=3005 \
-    PUBLIC_PORT=3006 \
+	PRIVATE_PORT=3007 \
+    PUBLIC_PORT=3008 \
 		cargo +nightly run --release --bin pinger --features=pinger
+
+.PHONY: rss
+rss:
+	ID=rss1 \
+	NAME=rss-1 \
+	PRIVATE_PORT=3009 \
+    PUBLIC_PORT=3010 \
+		cargo +nightly run --bin rss --features=rss
+
+.PHONY: rss-prod
+rss-prod:
+	ID=rss1 \
+	NAME=rss-1 \
+	PRIVATE_PORT=3009 \
+    PUBLIC_PORT=3010 \
+		cargo +nightly run --release --bin rss --features=rss
 
 .PHONY: build
 build:

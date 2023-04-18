@@ -96,6 +96,6 @@ impl Producer<TickerSettings> for Ticker {
     }
 
     fn kind(&self) -> String {
-        "ticker".to_string()
+        String::from("ticker")
     }
 }
