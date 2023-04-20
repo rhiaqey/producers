@@ -161,8 +161,6 @@ impl RSS {
                 let timestamp =
                     Self::build_timestamp(x.pub_date.clone().expect("a valid XML timestamp"));
 
-                trace!("found rss entry {}: {}", timestamp, title);
-
                 let tag = sha256::digest(format!("{title}-{timestamp}"));
                 let data = RSSResponse::create(None, Some(x)).to_json().unwrap();
 
@@ -251,17 +249,16 @@ impl Producer<RSSSettings> for RSS {
                             let items = channel.items.clone();
 
                             if let Ok(message) = Self::prepare_channel(channel) {
-                                // sender.send(message).expect("message failed to sent")
+                                debug!("sending message {:?}", message.clone());
+                                sender.send(message).expect("message failed to sent");
                             }
 
                             if let Ok(items) = Self::prepare_items(items) {
                                 debug!("downloaded {} items", items.len());
-                                'tt: for message in items {
+                                for message in items {
                                     sender
                                         .send(message.clone())
                                         .expect("message failed to sent");
-                                    // debug!("sending message item {:?}", message);
-                                    // break 'tt;
                                 }
                             }
                         }
