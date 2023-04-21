@@ -139,4 +139,8 @@ build:
 
 .PHONY: prod
 prod:
-	cargo +nightly build --release
+	cargo +nightly build --release --bin rss --features=rss
+	cargo +nightly build --release --bin pinger --features=pinger
+	cargo +nightly build --release --bin ticker --features=ticker
+	cargo +nightly build --release --bin iss-position --features=iss
+	ls -lah target/release

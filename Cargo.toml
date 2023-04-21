@@ -29,17 +29,18 @@ tokio = { version = "1.27", features = [ "full", "rt", "rt-multi-thread" ] }
 axum = { version = "0.6" }
 hyper = { version = "0.14", features = [ "full" ] }
 tower = { version = "0.4" }
-ureq = { version = "2.5", features = [ "json", "charset", "cookies", "native-tls", "gzip", "brotli" ], optional = true }
 sha256 = { version = "1.0", optional = true }
 rss = { version = "2.0", features = [ "serde" ], optional = true }
 reqwest = { version = "0.11", optional = true }
 chrono = { version = "0.4", optional = true }
+quick-xml = { version = "0.28", optional = true }
 
 [features]
-iss = ["dep:ureq", "dep:sha256"]
+iss = ["dep:reqwest", "dep:sha256"]
 ticker = []
 pinger = []
 rss = ["dep:reqwest", "dep:rss", "dep:sha256", "dep:chrono"]
+xml = ["dep:quick-xml"]
 
 [[bin]]
 name = "iss-position"

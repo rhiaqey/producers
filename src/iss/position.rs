@@ -1,5 +1,8 @@
 use async_trait::async_trait;
+use futures::TryFutureExt;
 use log::{debug, info, trace, warn};
+use reqwest::Response;
+use rhiaqey_common::error::RhiaqeyError;
 use rhiaqey_sdk::message::MessageValue;
 use rhiaqey_sdk::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
 use serde::{Deserialize, Serialize};
@@ -9,7 +12,6 @@ use std::thread;
 use std::time::Duration;
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
 use tokio::sync::Mutex;
-use ureq::{AgentBuilder, Request};
 
 fn default_interval() -> Option<u64> {
     Some(15000)
@@ -19,14 +21,14 @@ fn default_timeout() -> Option<u64> {
     Some(5000)
 }
 
-fn default_endpoint() -> Option<String> {
+fn default_url() -> Option<String> {
     Some("http://api.open-notify.org/iss-now.json".to_string())
 }
 
 #[derive(Deserialize, Clone, Debug)]
 pub struct ISSPositionSettings {
-    #[serde(alias = "Endpoint", default = "default_endpoint")]
-    pub endpoint: Option<String>,
+    #[serde(alias = "Url", default = "default_url")]
+    pub url: Option<String>,
 
     #[serde(alias = "Interval", default = "default_interval")]
     pub interval_in_millis: Option<u64>,
@@ -38,7 +40,7 @@ pub struct ISSPositionSettings {
 impl Default for ISSPositionSettings {
     fn default() -> Self {
         ISSPositionSettings {
-            endpoint: default_endpoint(),
+            url: default_url(),
             interval_in_millis: default_interval(),
             timeout_in_millis: default_timeout(),
         }
@@ -65,28 +67,41 @@ pub struct ISSPosition {
 }
 
 impl ISSPosition {
-    async fn get_request(settings: ISSPositionSettings) -> Request {
-        let endpoint = settings.endpoint.as_ref().unwrap();
+    async fn send_request(settings: ISSPositionSettings) -> Result<Response, RhiaqeyError> {
+        info!("fetching iss position");
 
-        let agent = AgentBuilder::new()
-            .timeout(Duration::from_millis(settings.timeout_in_millis.unwrap()))
-            .build();
+        let client = reqwest::Client::new();
+        let timeout = settings
+            .timeout_in_millis
+            .unwrap_or(default_timeout().unwrap());
 
-        debug!("downloading from {}", endpoint.clone());
-        agent.get(endpoint.as_str())
+        if settings.url.is_none() {
+            return Err(RhiaqeyError {
+                code: None,
+                message: String::from("url is not configured properly"),
+                error: None,
+            });
+        }
+
+        client
+            .get(settings.url.unwrap())
+            .timeout(Duration::from_millis(timeout))
+            .send()
+            .map_err(|x| x.into())
+            .await
     }
 
     async fn fetch_position(
         settings: ISSPositionSettings,
-    ) -> Result<ISSPositionResponse, Box<dyn std::error::Error>> {
-        info!("fetching position");
+    ) -> Result<ISSPositionResponse, RhiaqeyError> {
+        info!("downloading iss position");
 
-        let req = Self::get_request(settings).await;
-        let res = req.call()?.into_json::<ISSPositionResponse>()?;
-
+        let res = Self::send_request(settings).await?;
+        let text = res.text().await?;
+        let position = serde_json::from_str::<ISSPositionResponse>(text.as_str())?;
         debug!("iss position downloaded");
 
-        Ok(res)
+        Ok(position)
     }
 
     fn prepare_message(payload: ISSPositionResponse) -> ProducerMessage {
@@ -144,15 +159,17 @@ impl Producer<ISSPositionSettings> for ISSPosition {
                 let settings = settings.lock().await.clone();
                 let interval = settings.interval_in_millis;
 
-                match Self::fetch_position(settings).await {
-                    Ok(response) => {
-                        trace!("we have our response {:?}", response);
-                        sender
-                            .send(Self::prepare_message(response))
-                            .expect("failed to send message");
-                        trace!("message sent");
+                if settings.url.is_some() {
+                    match Self::fetch_position(settings).await {
+                        Ok(response) => {
+                            trace!("we have our response {:?}", response);
+                            sender
+                                .send(Self::prepare_message(response))
+                                .expect("failed to send message");
+                            trace!("message sent");
+                        }
+                        Err(err) => warn!("error fetching feed: {}", err),
                     }
-                    Err(err) => warn!("error fetching feed: {}", err),
                 }
 
                 thread::sleep(Duration::from_millis(interval.unwrap()));
