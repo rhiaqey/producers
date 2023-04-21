@@ -133,6 +133,22 @@ rss-prod:
     PUBLIC_PORT=3010 \
 		cargo +nightly run --release --bin rss --features=rss
 
+.PHONY: ecb
+ecb:
+	ID=ecb1 \
+	NAME=ecb-1 \
+	PRIVATE_PORT=3011 \
+    PUBLIC_PORT=3012 \
+		cargo +nightly run --bin ecb-daily --features=ecb
+
+.PHONY: ecb-prod
+ecb-prod:
+	ID=ecb1 \
+	NAME=ecb-1 \
+	PRIVATE_PORT=3011 \
+    PUBLIC_PORT=3012 \
+		cargo +nightly run --release --bin ecb-daily --features=ecb
+
 .PHONY: build
 build:
 	cargo +nightly build

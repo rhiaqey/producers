@@ -11,3 +11,6 @@ pub mod iss;
 
 #[cfg(feature = "rss")]
 pub mod rss;
+
+#[cfg(feature = "ecb")]
+pub mod ecb;
