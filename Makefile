@@ -77,13 +77,13 @@ export PRIVATE_KEY
 iss:
 	ID=pub1 \
 	NAME=iss-position-1 \
-		cargo +nightly run --bin iss-position --features=iss
+		cargo run --bin iss-position --features=iss
 
 .PHONY: iss-prod
 iss-prod:
 	ID=pub1 \
 	NAME=iss-position-1 \
-		cargo +nightly run --release --bin iss-position --features=iss
+		cargo run --release --bin iss-position --features=iss
 
 .PHONY: ticker
 ticker:
@@ -91,7 +91,7 @@ ticker:
 	NAME=ticker-1 \
 	PRIVATE_PORT=3005 \
     PUBLIC_PORT=3006 \
-		cargo +nightly run --bin ticker --features=ticker
+		cargo run --bin ticker --features=ticker
 
 .PHONY: ticker-prod
 ticker-prod:
@@ -99,7 +99,7 @@ ticker-prod:
 	NAME=ticker-1 \
 	PRIVATE_PORT=3005 \
     PUBLIC_PORT=3006 \
-		cargo +nightly run --release --bin ticker --features=ticker
+		cargo run --release --bin ticker --features=ticker
 
 .PHONY: pinger
 pinger:
@@ -107,7 +107,7 @@ pinger:
 	NAME=pinger-1 \
 	PRIVATE_PORT=3007 \
     PUBLIC_PORT=3008 \
-		cargo +nightly run --bin pinger --features=pinger
+		cargo run --bin pinger --features=pinger
 
 .PHONY: pinger-prod
 pinger-prod:
@@ -115,7 +115,7 @@ pinger-prod:
 	NAME=pinger-1 \
 	PRIVATE_PORT=3007 \
     PUBLIC_PORT=3008 \
-		cargo +nightly run --release --bin pinger --features=pinger
+		cargo run --release --bin pinger --features=pinger
 
 .PHONY: rss
 rss:
@@ -123,7 +123,7 @@ rss:
 	NAME=rss-1 \
 	PRIVATE_PORT=3009 \
     PUBLIC_PORT=3010 \
-		cargo +nightly run --bin rss --features=rss
+		cargo run --bin rss --features=rss
 
 .PHONY: rss-prod
 rss-prod:
@@ -131,7 +131,7 @@ rss-prod:
 	NAME=rss-1 \
 	PRIVATE_PORT=3009 \
     PUBLIC_PORT=3010 \
-		cargo +nightly run --release --bin rss --features=rss
+		cargo run --release --bin rss --features=rss
 
 .PHONY: ecb
 ecb:
@@ -139,7 +139,7 @@ ecb:
 	NAME=ecb-1 \
 	PRIVATE_PORT=3011 \
     PUBLIC_PORT=3012 \
-		cargo +nightly run --bin ecb-daily --features=ecb
+		cargo run --bin ecb-daily --features=ecb
 
 .PHONY: ecb-prod
 ecb-prod:
@@ -147,16 +147,16 @@ ecb-prod:
 	NAME=ecb-1 \
 	PRIVATE_PORT=3011 \
     PUBLIC_PORT=3012 \
-		cargo +nightly run --release --bin ecb-daily --features=ecb
+		cargo run --release --bin ecb-daily --features=ecb
 
 .PHONY: build
 build:
-	cargo +nightly build
+	cargo build
 
 .PHONY: prod
 prod:
-	cargo +nightly build --release --bin rss --features=rss
-	cargo +nightly build --release --bin pinger --features=pinger
-	cargo +nightly build --release --bin ticker --features=ticker
-	cargo +nightly build --release --bin iss-position --features=iss
+	cargo build --release --bin rss --features=rss
+	cargo build --release --bin pinger --features=pinger
+	cargo build --release --bin ticker --features=ticker
+	cargo build --release --bin iss-position --features=iss
 	ls -lah target/release
