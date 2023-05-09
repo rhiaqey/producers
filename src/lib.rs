@@ -14,3 +14,6 @@ pub mod rss;
 
 #[cfg(feature = "ecb")]
 pub mod ecb;
+
+#[cfg(feature = "yahoo")]
+pub mod yahoo;

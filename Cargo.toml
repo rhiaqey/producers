@@ -37,11 +37,13 @@ rss = { version = "2.0", features = [ "serde" ], optional = true }
 reqwest = { version = "0.11", optional = true }
 chrono = { version = "0.4", optional = true }
 quick-xml = { version = "0.28", features = ["async-tokio", "serialize", "encoding"], optional = true }
+tokio-tungstenite = { version  = "0.18", optional = true }
 
 [features]
 iss = ["dep:reqwest", "dep:sha256"]
 ticker = []
 pinger = []
+yahoo = ["dep:tokio-tungstenite"]
 rss = ["dep:reqwest", "dep:rss", "dep:sha256", "dep:chrono"]
 ecb = ["dep:reqwest", "dep:quick-xml", "dep:chrono", "dep:sha256"]
 
@@ -69,3 +71,8 @@ required-features = [ "rss" ]
 name = "ecb-daily"
 src = "src/bin/ecb-daily.rs"
 required-features = [ "ecb" ]
+
+[[bin]]
+name = "yahoo"
+src = "src/bin/yahoo.rs"
+required-features = [ "yahoo" ]

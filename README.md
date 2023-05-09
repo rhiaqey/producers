@@ -5,6 +5,9 @@ Early development stage ( mostly for educational purposes )
 ## Ticker
 ![Ticker](https://github.com/rhiaqey/producers/actions/workflows/ticker.yml/badge.svg)
 
+## Yahoo
+![Yahoo](https://github.com/rhiaqey/producers/actions/workflows/yahoo.yml/badge.svg)
+
 ## Pinger
 ![Pinger](https://github.com/rhiaqey/producers/actions/workflows/pinger.yml/badge.svg)
 

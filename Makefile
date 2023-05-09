@@ -73,6 +73,18 @@ endef
 
 export PRIVATE_KEY
 
+.PHONY: yahoo
+yahoo:
+	ID=pub1 \
+	NAME=yahoo-1 \
+		cargo run --bin yahoo --features=yahoo
+
+.PHONY: yahoo-prod
+yahoo-prod:
+	ID=pub1 \
+	NAME=yahoo-1 \
+		cargo run --release --bin yahoo --features=yahoo
+
 .PHONY: iss
 iss:
 	ID=pub1 \
@@ -150,13 +162,22 @@ ecb-prod:
 		cargo run --release --bin ecb-daily --features=ecb
 
 .PHONY: build
-build:
-	cargo build
+build: prod
 
 .PHONY: prod
 prod:
-	cargo build --release --bin rss --features=rss
-	cargo build --release --bin pinger --features=pinger
-	cargo build --release --bin ticker --features=ticker
-	cargo build --release --bin iss-position --features=iss
+	cargo build --release --bin rss 			--features=rss
+	cargo build --release --bin pinger 			--features=pinger
+	cargo build --release --bin ticker 			--features=ticker
+	cargo build --release --bin iss-position 	--features=iss
+	cargo build --release --bin yahoo 			--features=yahoo
 	ls -lah target/release
+
+.PHONY: dev
+dev:
+	cargo build --bin rss 			--features=rss
+	cargo build --bin pinger 		--features=pinger
+	cargo build --bin ticker 		--features=ticker
+	cargo build --bin iss-position 	--features=iss
+	cargo build --bin yahoo 		--features=yahoo
+	ls -lah target/debug
