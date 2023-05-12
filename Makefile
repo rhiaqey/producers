@@ -75,13 +75,13 @@ export PRIVATE_KEY
 
 .PHONY: yahoo
 yahoo:
-	ID=pub1 \
+	ID=yahoo-1 \
 	NAME=yahoo-1 \
 		cargo run --bin yahoo --features=yahoo
 
 .PHONY: yahoo-prod
 yahoo-prod:
-	ID=pub1 \
+	ID=yahoo-1 \
 	NAME=yahoo-1 \
 		cargo run --release --bin yahoo --features=yahoo
 
