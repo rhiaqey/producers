@@ -1,4 +1,3 @@
-use crate::yahoo::realtime::PricingData;
 use async_trait::async_trait;
 use base64::{engine::general_purpose, Engine as _};
 use futures::stream::SplitSink;
@@ -17,6 +16,11 @@ use tokio::sync::Mutex;
 use tokio_tungstenite::{
     connect_async, tungstenite::protocol::Message, MaybeTlsStream, WebSocketStream,
 };
+use yahoo_definitions::PricingData;
+
+mod yahoo_definitions {
+    include!(concat!(env!("OUT_DIR"), "/yahoo_realtime.rs"));
+}
 
 // https://github.com/fbriden/yahoo-finance-rs/blob/master/src/streaming.rs
 

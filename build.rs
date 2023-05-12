@@ -1,8 +1,15 @@
 use std::io::Result;
 
 fn main() -> Result<()> {
+    // https://docs.rs/prost-build-config/latest/prost_build_config/
     let mut prost_build = prost_build::Config::new();
     prost_build.protoc_arg("--experimental_allow_proto3_optional");
-    prost_build.compile_protos(&["src/yahoo/realtime.proto"], &["src"])?;
+    prost_build.type_attribute(
+        "PricingData",
+        "#[derive(serde::Serialize, serde::Deserialize)]",
+    );
+    prost_build
+        .default_package_filename("yahoo_realtime")
+        .compile_protos(&["src/yahoo/realtime.proto"], &["src"])?;
     Ok(())
 }
