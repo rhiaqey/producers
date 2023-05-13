@@ -166,18 +166,18 @@ build: prod
 
 .PHONY: prod
 prod:
-	cargo build --release --bin rss 			--features=rss
-	cargo build --release --bin pinger 			--features=pinger
-	cargo build --release --bin ticker 			--features=ticker
-	cargo build --release --bin iss-position 	--features=iss
-	cargo build --release --bin yahoo 			--features=yahoo
+	cargo build --release --bin rss 			--features=rss		-j 64
+	cargo build --release --bin pinger 			--features=pinger	-j 64
+	cargo build --release --bin ticker 			--features=ticker	-j 64
+	cargo build --release --bin iss-position 	--features=iss		-j 64
+	cargo build --release --bin yahoo 			--features=yahoo	-j 64
 	ls -lah target/release
 
 .PHONY: dev
 dev:
-	cargo build --bin rss 			--features=rss
-	cargo build --bin pinger 		--features=pinger
-	cargo build --bin ticker 		--features=ticker
-	cargo build --bin iss-position 	--features=iss
-	cargo build --bin yahoo 		--features=yahoo
+	cargo build --bin rss 			--features=rss		-j 64
+	cargo build --bin pinger 		--features=pinger	-j 64
+	cargo build --bin ticker 		--features=ticker	-j 64
+	cargo build --bin iss-position 	--features=iss		-j 64
+	cargo build --bin yahoo 		--features=yahoo	-j 64
 	ls -lah target/debug

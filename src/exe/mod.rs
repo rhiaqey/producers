@@ -7,7 +7,7 @@ use log::{debug, info, trace, warn};
 use rhiaqey_common::env::parse_env;
 use rhiaqey_common::executor::{Executor, ExecutorPublishOptions};
 use rhiaqey_common::pubsub::RPCMessageData;
-use rhiaqey_sdk::producer::Producer;
+use rhiaqey_sdk_rs::producer::Producer;
 use serde::de::DeserializeOwned;
 use std::fmt::Debug;
 

@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use log::{debug, info};
-use rhiaqey_sdk::message::MessageValue;
-use rhiaqey_sdk::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
+use rhiaqey_sdk_rs::message::MessageValue;
+use rhiaqey_sdk_rs::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use std::thread;
