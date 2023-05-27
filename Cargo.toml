@@ -60,6 +60,11 @@ src = "src/bin/iss-position.rs"
 required-features = [ "iss" ]
 
 [[bin]]
+name = "iss-astros"
+src = "src/bin/iss-astros.rs"
+required-features = [ "iss" ]
+
+[[bin]]
 name = "ticker"
 src = "src/bin/ticker.rs"
 required-features = [ "ticker" ]
