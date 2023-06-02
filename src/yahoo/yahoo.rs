@@ -73,6 +73,8 @@ impl Producer<YahooSettings> for Yahoo {
             ))
             .unwrap();
 
+            trace!("unsubscribing {}", unsubscription_message.clone());
+
             self.writer
                 .as_mut()
                 .unwrap()
@@ -85,6 +87,8 @@ impl Producer<YahooSettings> for Yahoo {
             let subscription_message =
                 serde_json::to_string(&YahooStreamAction::Subscribe(settings.symbols.clone()))
                     .unwrap();
+
+            trace!("subscribing {}", subscription_message.clone());
 
             self.writer
                 .as_mut()
@@ -168,7 +172,7 @@ impl Producer<YahooSettings> for Yahoo {
         let subscription_message =
             serde_json::to_string(&YahooStreamAction::Subscribe(settings.symbols.clone())).unwrap();
 
-        debug!("sending sub message {}", subscription_message);
+        trace!("subscribing {}", subscription_message.clone());
 
         ws_sender
             .send(Message::text(subscription_message))
