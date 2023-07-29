@@ -28,16 +28,16 @@ async-trait = "0.1"
 futures = "0.3"
 lazy_static = "1.4"
 rustis = { version = "0.11", features = [ "redis-json", "tokio-runtime" ] }
-tokio = { version = "1.28", features = [ "full", "rt", "rt-multi-thread" ] }
+tokio = { version = "1.29", features = [ "full", "rt", "rt-multi-thread" ] }
 axum = { version = "0.6" }
 hyper = { version = "0.14", features = [ "full" ] }
 tower = { version = "0.4" }
-sha256 = { version = "1.1", optional = true }
+sha256 = { version = "1.2", optional = true }
 rss = { version = "2.0", features = [ "serde" ], optional = true }
 reqwest = { version = "0.11", optional = true }
 chrono = { version = "0.4", optional = true }
-quick-xml = { version = "0.29", features = ["async-tokio", "serialize", "encoding"], optional = true }
-tokio-tungstenite = { version  = "0.19", features = ["native-tls"], optional = true }
+quick-xml = { version = "0.30", features = ["async-tokio", "serialize", "encoding"], optional = true }
+tokio-tungstenite = { version  = "0.20", features = ["native-tls"], optional = true }
 base64 = { version = "0.21", optional = true }
 protobuf = { version = "3.2", features = ["bytes"] }
 prost = "0.11"
