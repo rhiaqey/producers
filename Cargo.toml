@@ -40,7 +40,7 @@ quick-xml = { version = "0.30", features = ["async-tokio", "serialize", "encodin
 tokio-tungstenite = { version  = "0.20", features = ["native-tls"], optional = true }
 base64 = { version = "0.21", optional = true }
 protobuf = { version = "3.2", features = ["bytes"] }
-prost = "0.11"
+prost = "0.12"
 prost-types = "0.12"
 
 [build-dependencies]
