@@ -1231,22 +1231,12 @@ dependencies = [
 
 [[package]]
 name = "prost"
-version = "0.11.9"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0b82eaa1d779e9a4bc1c3217db8ffbeabaae1dca241bf70183242128d48681cd"
-dependencies = [
- "bytes",
- "prost-derive 0.11.9",
-]
-
-[[package]]
-name = "prost"
 version = "0.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "aa8473a65b88506c106c28ae905ca4a2b83a2993640467a41bb3080627ddfd2c"
 dependencies = [
  "bytes",
- "prost-derive 0.12.0",
+ "prost-derive",
 ]
 
 [[package]]
@@ -1263,25 +1253,12 @@ dependencies = [
  "once_cell",
  "petgraph",
  "prettyplease",
- "prost 0.12.0",
+ "prost",
  "prost-types",
  "regex",
  "syn 2.0.28",
  "tempfile",
  "which",
-]
-
-[[package]]
-name = "prost-derive"
-version = "0.11.9"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e5d2d8d10f3c6ded6da8b05b5fb3b8a5082514344d56c9f871412d29b4e075b4"
-dependencies = [
- "anyhow",
- "itertools",
- "proc-macro2",
- "quote",
- "syn 1.0.109",
 ]
 
 [[package]]
@@ -1303,7 +1280,7 @@ version = "0.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cebe0a918c97f86c217b0f76fd754e966f8b9f41595095cf7d74cb4e59d730f6"
 dependencies = [
- "prost 0.12.0",
+ "prost",
 ]
 
 [[package]]
@@ -1462,7 +1439,7 @@ dependencies = [
 [[package]]
 name = "rhiaqey-common"
 version = "0.1.0"
-source = "git+https://github.com/rhiaqey/common.git#07900d0386c3880a2b0863de1eb44da4a0617a73"
+source = "git+https://github.com/rhiaqey/common.git#1f38d16d3dc42b1afc50d03c0fd393d9a94e0df3"
 dependencies = [
  "env_logger",
  "envy",
@@ -1474,7 +1451,7 @@ dependencies = [
  "rmp-serde",
  "rsa",
  "rss",
- "rustis",
+ "rustis 0.12.0",
  "serde",
  "serde_json",
  "sha2",
@@ -1495,7 +1472,7 @@ dependencies = [
  "lazy_static",
  "log",
  "prometheus",
- "prost 0.12.0",
+ "prost",
  "prost-build",
  "prost-types",
  "protobuf 3.2.0",
@@ -1504,7 +1481,7 @@ dependencies = [
  "rhiaqey-common",
  "rhiaqey-sdk-rs",
  "rss",
- "rustis",
+ "rustis 0.11.1",
  "serde",
  "serde_json",
  "sha256",
@@ -1593,6 +1570,31 @@ name = "rustis"
 version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f7b6a32fafd07d978c66d3e29f3758d72bc0e812df9342e2dd7e5d75cb0d5679"
+dependencies = [
+ "atoi",
+ "bytes",
+ "crc16",
+ "dtoa",
+ "fast-float",
+ "futures-channel",
+ "futures-util",
+ "itoa",
+ "log",
+ "memchr",
+ "rand",
+ "serde",
+ "smallvec",
+ "socket2 0.4.9",
+ "tokio",
+ "tokio-util",
+ "url",
+]
+
+[[package]]
+name = "rustis"
+version = "0.12.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "00f9fd795f5459a681b631284cd2ef839fc263583c2783324b1944a3ccccdf5e"
 dependencies = [
  "atoi",
  "bytes",
