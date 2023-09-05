@@ -1451,7 +1451,7 @@ dependencies = [
  "rmp-serde",
  "rsa",
  "rss",
- "rustis 0.12.0",
+ "rustis",
  "serde",
  "serde_json",
  "sha2",
@@ -1481,7 +1481,7 @@ dependencies = [
  "rhiaqey-common",
  "rhiaqey-sdk-rs",
  "rss",
- "rustis 0.11.1",
+ "rustis",
  "serde",
  "serde_json",
  "sha256",
@@ -1564,31 +1564,6 @@ name = "rustc-demangle"
 version = "0.1.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d626bb9dae77e28219937af045c257c28bfd3f69333c512553507f5f9798cb76"
-
-[[package]]
-name = "rustis"
-version = "0.11.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f7b6a32fafd07d978c66d3e29f3758d72bc0e812df9342e2dd7e5d75cb0d5679"
-dependencies = [
- "atoi",
- "bytes",
- "crc16",
- "dtoa",
- "fast-float",
- "futures-channel",
- "futures-util",
- "itoa",
- "log",
- "memchr",
- "rand",
- "serde",
- "smallvec",
- "socket2 0.4.9",
- "tokio",
- "tokio-util",
- "url",
-]
 
 [[package]]
 name = "rustis"
