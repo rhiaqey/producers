@@ -130,10 +130,12 @@ impl ECBDaily {
 
         let res = Self::send_request(settings).await?;
         let text = res.text().await?;
-        let daily = from_str(text.as_str())?;
-        debug!("ecb daily downloaded");
 
-        Ok(daily)
+        from_str(&text).map_err(|err| RhiaqeyError{
+            code: None,
+            message: err.to_string(),
+            error: Some(Box::new(err))
+        })
     }
 
     fn prepare_daily_rates(payload: ECBDailyResponse) -> Vec<ProducerMessage> {
@@ -143,7 +145,7 @@ impl ECBDaily {
 
         payload.cube.cube.iter().for_each(|x| {
             if let Ok(tms) =
-                Utc.datetime_from_str(format!("{} 00:00:00", x.time).as_str(), "%Y-%m-%d %H:%M:%S")
+                DateTime::parse_from_str(format!("{} 00:00:00", x.time).as_str(), "%Y-%m-%d %H:%M:%S")
             {
                 x.cube.iter().for_each(|y| {
                     let rate = ECBDailyRate {
