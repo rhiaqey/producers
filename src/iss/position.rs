@@ -186,10 +186,12 @@ impl Producer<ISSPositionSettings> for ISSPosition {
             "properties": {
                 "Interval": {
                     "type": "integer",
+                    "examples": [ 5000 ],
                     "minimum": 1000
                 },
                 "Timeout": {
                     "type": "integer",
+                    "examples": [ 15000 ],
                     "minimum": 1000
                 }
             },
