@@ -184,6 +184,10 @@ impl Producer<ISSPositionSettings> for ISSPosition {
             "description": "ISS position settings",
             "type": "object",
             "properties": {
+                "Url": {
+                    "type": "string",
+                    "examples": [ "http://api.open-notify.org/iss-now.json" ],
+                },
                 "Interval": {
                     "type": "integer",
                     "examples": [ 5000 ],

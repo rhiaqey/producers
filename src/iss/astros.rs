@@ -175,7 +175,29 @@ impl Producer<ISSAstrosSettings> for ISSAstros {
     }
 
     fn schema() -> Value {
-        json!({})
+        json!({
+            "$id": "https://example.com/iss-astros-settings.schema.json",
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "description": "ISS astronauts settings",
+            "type": "object",
+            "properties": {
+                "Url": {
+                    "type": "string",
+                    "examples": [ "http://api.open-notify.org/astros.json" ],
+                },
+                "Interval": {
+                    "type": "integer",
+                    "examples": [ 5000 ],
+                    "minimum": 1000
+                },
+                "Timeout": {
+                    "type": "integer",
+                    "examples": [ 15000 ],
+                    "minimum": 1000
+                }
+            },
+            "required": [ "Interval", "Timeout" ]
+        })
     }
 
     fn kind() -> String {
