@@ -178,7 +178,23 @@ impl Producer<ISSPositionSettings> for ISSPosition {
     }
 
     fn schema() -> Value {
-        json!({})
+        json!({
+            "$id": "https://example.com/iss-position-settings.schema.json",
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "description": "ISS position settings",
+            "type": "object",
+            "properties": {
+                "Interval": {
+                    "type": "integer",
+                    "minimum": 1000
+                },
+                "Timeout": {
+                    "type": "integer",
+                    "minimum": 1000
+                }
+            },
+            "required": [ "Interval", "Timeout" ]
+        })
     }
 
     fn kind() -> String {
