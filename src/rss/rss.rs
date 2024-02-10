@@ -268,9 +268,10 @@ impl Producer<RSSSettings> for RSS {
                     warn!("no initial url found in settings");
                 }
 
-                thread::sleep(Duration::from_millis(
+                tokio::time::sleep(Duration::from_millis(
                     interval.unwrap_or(default_interval().unwrap()),
-                ));
+                ))
+                .await;
             }
         });
     }

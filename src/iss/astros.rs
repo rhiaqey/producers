@@ -169,7 +169,7 @@ impl Producer<ISSAstrosSettings> for ISSAstros {
                     }
                 }
 
-                thread::sleep(Duration::from_millis(interval.unwrap()));
+                tokio::time::sleep(Duration::from_millis(interval.unwrap())).await;
             }
         });
     }

@@ -131,10 +131,10 @@ impl ECBDaily {
         let res = Self::send_request(settings).await?;
         let text = res.text().await?;
 
-        from_str(&text).map_err(|err| RhiaqeyError{
+        from_str(&text).map_err(|err| RhiaqeyError {
             code: None,
             message: err.to_string(),
-            error: Some(Box::new(err))
+            error: Some(Box::new(err)),
         })
     }
 
@@ -144,9 +144,10 @@ impl ECBDaily {
         let mut messages: Vec<ProducerMessage> = vec![];
 
         payload.cube.cube.iter().for_each(|x| {
-            if let Ok(tms) =
-                DateTime::parse_from_str(format!("{} 00:00:00", x.time).as_str(), "%Y-%m-%d %H:%M:%S")
-            {
+            if let Ok(tms) = DateTime::parse_from_str(
+                format!("{} 00:00:00", x.time).as_str(),
+                "%Y-%m-%d %H:%M:%S",
+            ) {
                 x.cube.iter().for_each(|y| {
                     let rate = ECBDailyRate {
                         symbol: format!("EUR{}", y.currency),
@@ -220,7 +221,7 @@ impl Producer<ECBDailySettings> for ECBDaily {
                     }
                 }
 
-                thread::sleep(Duration::from_millis(interval.unwrap()));
+                tokio::time::sleep(Duration::from_millis(interval.unwrap())).await;
             }
         });
     }

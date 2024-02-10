@@ -90,7 +90,7 @@ impl Producer<TickerSettings> for Ticker {
                     })
                     .unwrap();
 
-                thread::sleep(Duration::from_millis(interval.unwrap()));
+                tokio::time::sleep(Duration::from_millis(interval.unwrap())).await;
             }
         });
     }

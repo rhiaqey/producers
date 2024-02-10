@@ -172,7 +172,7 @@ impl Producer<ISSPositionSettings> for ISSPosition {
                     }
                 }
 
-                thread::sleep(Duration::from_millis(interval.unwrap()));
+                tokio::time::sleep(Duration::from_millis(interval.unwrap())).await;
             }
         });
     }

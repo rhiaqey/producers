@@ -116,7 +116,7 @@ impl Producer<PingerSettings> for Pinger {
                     })
                     .unwrap();
 
-                thread::sleep(Duration::from_millis(interval.unwrap()));
+                tokio::time::sleep(Duration::from_millis(interval.unwrap())).await;
             }
         });
     }
