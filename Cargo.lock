@@ -1604,8 +1604,8 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-common"
-version = "0.1.0"
-source = "git+https://github.com/rhiaqey/common.git#332763baf1eda1d294ccf403422d5a87ac5d2a7c"
+version = "0.1.1"
+source = "git+https://github.com/rhiaqey/common.git#33d892154958845e546eb2a8ca484e188d83048a"
 dependencies = [
  "env_logger",
  "envy",
@@ -1657,8 +1657,8 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-sdk-rs"
-version = "0.1.0"
-source = "git+https://github.com/rhiaqey/sdk-rs.git#4ce8970fb9e4c6f445214e5c5734f40f7b4ec41d"
+version = "0.1.1"
+source = "git+https://github.com/rhiaqey/sdk-rs.git#abce043afa0ff64ae4a00a8551259931088956fd"
 dependencies = [
  "async-trait",
  "serde",

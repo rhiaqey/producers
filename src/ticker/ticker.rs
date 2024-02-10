@@ -3,8 +3,8 @@ use log::{debug, info};
 use rhiaqey_sdk_rs::message::MessageValue;
 use rhiaqey_sdk_rs::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
 use serde::{Deserialize, Serialize};
+use serde_json::{json, Value};
 use std::sync::Arc;
-use std::thread;
 use std::time::{Duration, SystemTime};
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
 use tokio::sync::Mutex;
@@ -41,7 +41,7 @@ pub struct TickerBody {
 #[async_trait]
 impl Producer<TickerSettings> for Ticker {
     fn setup(&mut self, settings: Option<TickerSettings>) -> ProducerMessageReceiver {
-        info!("setting up {}", self.kind());
+        info!("setting up {}", Self::kind());
 
         self.settings = Arc::new(Mutex::new(settings.unwrap_or(TickerSettings::default())));
 
@@ -58,7 +58,7 @@ impl Producer<TickerSettings> for Ticker {
     }
 
     async fn start(&mut self) {
-        info!("starting {}", self.kind());
+        info!("starting {}", Self::kind());
 
         let sender = self.sender.clone().unwrap();
         let settings = self.settings.clone();
@@ -95,7 +95,11 @@ impl Producer<TickerSettings> for Ticker {
         });
     }
 
-    fn kind(&self) -> String {
+    fn schema() -> Value {
+        json!({})
+    }
+
+    fn kind() -> String {
         String::from("ticker")
     }
 }

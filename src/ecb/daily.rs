@@ -8,8 +8,8 @@ use rhiaqey_common::error::RhiaqeyError;
 use rhiaqey_sdk_rs::message::MessageValue;
 use rhiaqey_sdk_rs::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
 use serde::{Deserialize, Serialize};
+use serde_json::{json, Value};
 use std::sync::Arc;
-use std::thread;
 use std::time::Duration;
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
 use tokio::sync::Mutex;
@@ -179,7 +179,7 @@ impl ECBDaily {
 #[async_trait]
 impl Producer<ECBDailySettings> for ECBDaily {
     fn setup(&mut self, settings: Option<ECBDailySettings>) -> ProducerMessageReceiver {
-        info!("setting up {}", self.kind());
+        info!("setting up {}", Self::kind());
 
         self.settings = Arc::new(Mutex::new(settings.unwrap_or(ECBDailySettings::default())));
 
@@ -196,7 +196,7 @@ impl Producer<ECBDailySettings> for ECBDaily {
     }
 
     async fn start(&mut self) {
-        info!("starting {}", self.kind());
+        info!("starting {}", Self::kind());
 
         let sender = self.sender.clone().unwrap();
         let settings = self.settings.clone();
@@ -226,7 +226,11 @@ impl Producer<ECBDailySettings> for ECBDaily {
         });
     }
 
-    fn kind(&self) -> String {
+    fn schema() -> Value {
+        json!({})
+    }
+
+    fn kind() -> String {
         String::from("ecb_daily")
     }
 }

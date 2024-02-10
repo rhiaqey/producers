@@ -7,6 +7,7 @@ use log::{debug, info, trace, warn};
 use rhiaqey_sdk_rs::message::MessageValue;
 use rhiaqey_sdk_rs::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
 use serde::{Deserialize, Serialize};
+use serde_json::{json, Value};
 use std::collections::HashSet;
 use std::sync::Arc;
 use std::time::SystemTime;
@@ -54,7 +55,7 @@ enum YahooStreamAction {
 #[async_trait]
 impl Producer<YahooSettings> for Yahoo {
     fn setup(&mut self, settings: Option<YahooSettings>) -> ProducerMessageReceiver {
-        info!("setting up {}", self.kind());
+        info!("setting up {}", Self::kind());
 
         self.settings = Arc::new(Mutex::new(settings.unwrap_or(YahooSettings::default())));
 
@@ -105,7 +106,7 @@ impl Producer<YahooSettings> for Yahoo {
     }
 
     async fn start(&mut self) {
-        info!("starting {}", self.kind());
+        info!("starting {}", Self::kind());
 
         let sender = self.sender.clone().unwrap();
         let settings = self.settings.lock().await.clone();
@@ -182,7 +183,11 @@ impl Producer<YahooSettings> for Yahoo {
         self.writer = Some(Arc::new(Mutex::new(ws_sender)));
     }
 
-    fn kind(&self) -> String {
+    fn schema() -> Value {
+        json!({})
+    }
+
+    fn kind() -> String {
         String::from("yahoo")
     }
 }
