@@ -199,7 +199,7 @@ impl Producer<ISSPositionSettings> for ISSPosition {
                     "minimum": 1000
                 }
             },
-            "required": [ "Interval", "Timeout" ]
+            "required": []
         })
     }
 

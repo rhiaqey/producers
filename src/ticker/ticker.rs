@@ -96,7 +96,20 @@ impl Producer<TickerSettings> for Ticker {
     }
 
     fn schema() -> Value {
-        json!({})
+        json!({
+            "$id": "https://example.com/iss-position-settings.schema.json",
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "description": "ISS position settings",
+            "type": "object",
+            "properties": {
+                "Interval": {
+                    "type": "integer",
+                    "examples": [ 5000 ],
+                    "minimum": 1000
+                }
+            },
+            "required": []
+        })
     }
 
     fn kind() -> String {
