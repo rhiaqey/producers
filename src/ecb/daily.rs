@@ -228,9 +228,7 @@ impl Producer<ECBDailySettings> for ECBDaily {
 
     fn schema() -> Value {
         json!({
-            "$id": "https://example.com/daily-ecb-settings.schema.json",
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "description": "Daily ECB Rates settings",
+            "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "object",
             "properties": {
                 "Url": {
