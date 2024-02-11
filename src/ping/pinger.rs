@@ -122,7 +122,29 @@ impl Producer<PingerSettings> for Pinger {
     }
 
     fn schema() -> Value {
-        json!({})
+        json!({
+            "$id": "https://example.com/pinger-settings.schema.json",
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "description": "Pinger settings",
+            "type": "object",
+            "properties": {
+                "UpdateTags": {
+                    "type": "boolean",
+                    "examples": [ false ],
+                },
+                "UpdateTimestamp": {
+                    "type": "boolean",
+                    "examples": [ false ],
+                },
+                "Interval": {
+                    "type": "integer",
+                    "examples": [ 15000 ],
+                    "minimum": 1000
+                }
+            },
+            "required": [],
+            "additionalProperties": false
+        })
     }
 
     fn kind() -> String {

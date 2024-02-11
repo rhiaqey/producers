@@ -276,7 +276,38 @@ impl Producer<RSSSettings> for RSS {
     }
 
     fn schema() -> Value {
-        json!({})
+        json!({
+            "$id": "https://example.com/rss-settings.schema.json",
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "description": "RSS settings",
+            "type": "object",
+            "properties": {
+                "Url": {
+                    "type": "https://financial-feed/rss.xml",
+                    "examples": [ "username" ],
+                },
+                "Username": {
+                    "type": "string",
+                    "examples": [ "username" ],
+                },
+                "Password": {
+                    "type": "string",
+                    "examples": [ "password" ],
+                },
+                "Interval": {
+                    "type": "integer",
+                    "examples": [ 15000 ],
+                    "minimum": 1000
+                },
+                "Timeout": {
+                    "type": "integer",
+                    "examples": [ 15000 ],
+                    "minimum": 1000
+                }
+            },
+            "required": [],
+            "additionalProperties": false
+        })
     }
 
     fn kind() -> String {

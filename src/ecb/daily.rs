@@ -227,7 +227,30 @@ impl Producer<ECBDailySettings> for ECBDaily {
     }
 
     fn schema() -> Value {
-        json!({})
+        json!({
+            "$id": "https://example.com/daily-ecb-settings.schema.json",
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "description": "Daily ECB Rates settings",
+            "type": "object",
+            "properties": {
+                "Url": {
+                    "type": "string",
+                    "examples": [ "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml" ]
+                },
+                "Interval": {
+                    "type": "integer",
+                    "examples": [ 5000 ],
+                    "minimum": 1000
+                },
+                "Timeout": {
+                    "type": "integer",
+                    "examples": [ 5000 ],
+                    "minimum": 1000
+                }
+            },
+            "required": [],
+            "additionalProperties": false
+        })
     }
 
     fn kind() -> String {

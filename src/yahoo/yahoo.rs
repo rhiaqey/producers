@@ -200,7 +200,8 @@ impl Producer<YahooSettings> for Yahoo {
                     }
                 }
             },
-            "required": []
+            "required": [],
+            "additionalProperties": false
         })
     }
 

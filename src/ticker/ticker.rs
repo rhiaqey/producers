@@ -97,9 +97,9 @@ impl Producer<TickerSettings> for Ticker {
 
     fn schema() -> Value {
         json!({
-            "$id": "https://example.com/iss-position-settings.schema.json",
+            "$id": "https://example.com/ticker-settings.schema.json",
             "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "description": "ISS position settings",
+            "description": "Ticker settings",
             "type": "object",
             "properties": {
                 "Interval": {
@@ -108,7 +108,8 @@ impl Producer<TickerSettings> for Ticker {
                     "minimum": 1000
                 }
             },
-            "required": []
+            "required": [],
+            "additionalProperties": false
         })
     }
 

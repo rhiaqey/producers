@@ -199,7 +199,8 @@ impl Producer<ISSPositionSettings> for ISSPosition {
                     "minimum": 1000
                 }
             },
-            "required": []
+            "required": [],
+            "additionalProperties": false
         })
     }
 

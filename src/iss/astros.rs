@@ -196,7 +196,8 @@ impl Producer<ISSAstrosSettings> for ISSAstros {
                     "minimum": 1000
                 }
             },
-            "required": []
+            "required": [],
+            "additionalProperties": false
         })
     }
 
