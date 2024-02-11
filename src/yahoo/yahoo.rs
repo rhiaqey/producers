@@ -184,7 +184,24 @@ impl Producer<YahooSettings> for Yahoo {
     }
 
     fn schema() -> Value {
-        json!({})
+        json!({
+            "$id": "https://example.com/yahoo-settings.schema.json",
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "description": "Yahoo settings",
+            "type": "object",
+            "properties": {
+                "Url": {
+                    "type": "string"
+                },
+                "Symbols": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": []
+        })
     }
 
     fn kind() -> String {
