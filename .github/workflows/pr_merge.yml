@@ -94,3 +94,5 @@ jobs:
           echo "What about ${{ needs.Setup.outputs.git_tag }} and ${{ needs.Setup.outputs.git_branch }}"
           git status
           cat Cargo.toml
+          cargo tag patch
+          cat Cargo.toml
