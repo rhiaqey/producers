@@ -88,6 +88,9 @@ jobs:
       GIT_BRANCH: ${{ needs.Setup.outputs.git_branch }}
     steps:
       - uses: actions/checkout@v4
+      - uses: baptiste0928/cargo-install@v3
+        with:
+          crate: cargo-tag
       - run: |
           echo "Do we have access to git tag $GIT_TAG and branch $GIT_BRANCH"
           echo "Or should we access via env ${{ env.GIT_TAG }} and ${{ env.GIT_BRANCH }}"
