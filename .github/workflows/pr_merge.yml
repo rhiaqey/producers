@@ -93,3 +93,4 @@ jobs:
           echo "Or should we access via env ${{ env.GIT_TAG }} and ${{ env.GIT_BRANCH }}"
           echo "What about ${{ needs.Setup.outputs.git_tag }} and ${{ needs.Setup.outputs.git_branch }}"
           git status
+          cat Cargo.toml
