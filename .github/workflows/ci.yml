@@ -17,8 +17,7 @@ jobs:
   Setup:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - uses: actions/cache@v3
         with:
@@ -46,7 +45,13 @@ jobs:
     strategy:
       matrix:
         producers: [
-          {binary: "ecb-daily", features: "ecb"}
+          {binary: "ecb-daily", features: "ecb"},
+          {binary: "iss-astros", features: "iss"},
+          {binary: "iss-position", features: "iss"},
+          {binary: "pinger", features: "pinger"},
+          {binary: "rss", features: "rss"},
+          {binary: "ticker", features: "ticker"},
+          {binary: "yahoo", features: "yahoo"}
         ]
     steps:
       - uses: actions/checkout@v4
