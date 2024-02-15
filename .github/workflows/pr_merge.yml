@@ -25,19 +25,13 @@ jobs:
       git_branch: ${{ steps.extract_branch.outputs.GIT_BRANCH }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install protoc
-        uses: arduino/setup-protoc@v3
-
-      - name: Install cargo-tag
-        uses: baptiste0928/cargo-install@v3
+      - uses: actions/checkout@v4
+      - uses: arduino/setup-protoc@v3
+      - uses: baptiste0928/cargo-install@v3
         with:
           crate: cargo-tag
 
-      - name: Prepare tag
-        id: prepare_tag
+      - id: prepare_tag
         run: |
           cargo tag patch
           GIT_TAG="$(cargo tag current)"
@@ -46,26 +40,20 @@ jobs:
           echo "Found $GIT_TAG tag"
           git tag -d $GIT_TAG
 
-      - name: Extract git branch
-        id: extract_branch
+      - id: extract_branch
         run: |
           # Short name for current branch. For PRs, use target branch (base ref)
           GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}
           echo "GIT_BRANCH=$GIT_BRANCH" >> $GITHUB_ENV
           echo "GIT_BRANCH=$GIT_BRANCH" >> $GITHUB_OUTPUT
 
-      - name: Log into registry
+      - uses: docker/login-action@v3
         if: github.event_name != 'pull_request'
-        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Extract metadata (tags, labels) for Docker
-      # https://github.com/docker/metadata-action
-      - name: Extract Docker metadata
-        id: meta
-        uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81
+      - uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81
         with:
           images: ${{ env.IMAGE_NAME }}
 
@@ -78,6 +66,7 @@ jobs:
       GIT_BRANCH: ${{ needs.Setup.outputs.git_branch }}
     steps:
       - uses: actions/checkout@v4
+      - uses: arduino/setup-protoc@v3
       - uses: baptiste0928/cargo-install@v3
         with:
           crate: cargo-tag
