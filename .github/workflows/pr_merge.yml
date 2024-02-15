@@ -41,10 +41,14 @@ jobs:
       - name: Install Protoc
         uses: arduino/setup-protoc@v3
 
+      - name: Install cargo-tag from crates.io
+        uses: baptiste0928/cargo-install@v3
+        with:
+          crate: cargo-tag
+
       - name: Prepare tag
         id: prepare_tag
         run: |
-          cargo install cargo-tag --force
           cargo tag patch
           GIT_TAG="$(cargo tag current)"
           echo "GIT_TAG=$GIT_TAG" >> $GITHUB_ENV
