@@ -1,15 +1,10 @@
 name: PR Merge
 
-#on:
-#  push:
-#    branches:
-#      - master
-
 on:
   push:
-  pull_request:
     branches:
       - master
+      - adopt-new-ci
 
 env:
   CI: true
@@ -27,7 +22,7 @@ jobs:
 
     outputs:
       git_tag: $${{ steps.prepare_tag.outputs.GIT_TAG }}
-      git_branch: $${{ steps.prepare_tag.outputs.GIT_BRANCH }}
+      git_branch: $${{ steps.extract_branch.outputs.GIT_BRANCH }}
 
     steps:
       - name: Checkout
