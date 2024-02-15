@@ -42,7 +42,7 @@ jobs:
   CI:
     runs-on: ubuntu-latest
     needs:
-      - CI
+      - Setup
     strategy:
       matrix:
         producers: [
