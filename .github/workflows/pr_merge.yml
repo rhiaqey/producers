@@ -8,7 +8,6 @@ on:
 
 env:
   CI: true
-  IMAGE_NAME: rhiaqey/hub
   CARGO_TERM_COLOR: always
   CARGO_TAG_NAME: "GitHub Actions"
   CARGO_TAG_EMAIL: "github-actions@users.noreply.github.com"
@@ -53,18 +52,21 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81
-        with:
-          images: ${{ env.IMAGE_NAME }}
-
-  ECBDaily:
+  Publish:
     runs-on: ubuntu-latest
     needs:
       - Setup
-    env:
-      IMAGE_NAME: rhiaqey/ecb-daily
-      BINARY: ecb-daily
-      FEATURES: ecb
+    strategy:
+      matrix:
+        producers: [
+          {image: "rhiaqey/ecb-daily", binary: "ecb-daily", features: "ecb"},
+          {image: "rhiaqey/iss-astros", binary: "iss-astros", features: "iss"},
+          {image: "rhiaqey/iss-position", binary: "iss-position", features: "iss"},
+          {image: "rhiaqey/pinger", binary: "pinger", features: "pinger"},
+          {image: "rhiaqey/rss", binary: "rss", features: "rss"},
+          {image: "rhiaqey/ticker", binary: "ticker", features: "ticker"},
+          {image: "rhiaqey/yahoo", binary: "yahoo", features: "yahoo"}
+        ]
     steps:
       - uses: actions/checkout@v4
       - uses: arduino/setup-protoc@v3
@@ -75,7 +77,7 @@ jobs:
       - id: meta
         uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81
         with:
-          images: ${{ env.IMAGE_NAME }}
+          images: ${{ matrix.producers.image }}
       - uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -85,8 +87,16 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ env.IMAGE_NAME }}:${{ needs.Setup.outputs.git_tag }},${{ env.IMAGE_NAME }}:latest
+          tags: ${{ matrix.producers.image }}:${{ needs.Setup.outputs.git_tag }},${{ matrix.producers.image }}:latest
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            BINARY=${{ env.BINARY }}
-            FEATURES=${{ env.FEATURES }}
+            BINARY=${{ matrix.producers.binary }}
+            FEATURES=${{ matrix.producers.features }}
+
+  Commit:
+    runs-on: ubuntu-latest
+    needs:
+      - Publish
+    steps:
+      - run: |
+          echo "We can commit to git here"
