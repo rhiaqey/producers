@@ -21,8 +21,8 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      git_tag: $${{ steps.prepare_tag.outputs.GIT_TAG }}
-      git_branch: $${{ steps.extract_branch.outputs.GIT_BRANCH }}
+      git_tag: ${{ steps.prepare_tag.outputs.GIT_TAG }}
+      git_branch: ${{ steps.extract_branch.outputs.GIT_BRANCH }}
 
     steps:
       - name: Checkout
@@ -38,10 +38,10 @@ jobs:
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: Install Protoc
+      - name: Install protoc
         uses: arduino/setup-protoc@v3
 
-      - name: Install cargo-tag from crates.io
+      - name: Install cargo-tag
         uses: baptiste0928/cargo-install@v3
         with:
           crate: cargo-tag
@@ -92,3 +92,4 @@ jobs:
           echo "Do we have access to git tag $GIT_TAG and branch $GIT_BRANCH"
           echo "Or should we access via env ${{ env.GIT_TAG }} and ${{ env.GIT_BRANCH }}"
           echo "What about ${{ needs.Setup.outputs.git_tag }} and ${{ needs.Setup.outputs.git_branch }}"
+          git status
