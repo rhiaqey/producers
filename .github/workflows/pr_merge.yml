@@ -43,6 +43,7 @@ jobs:
 
       - name: Prepare tag
         id: prepare_tag
+        continue-on-error: true
         run: |
           cargo install --list | grep cargo-tag
 
