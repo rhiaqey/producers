@@ -44,6 +44,8 @@ jobs:
       - name: Prepare tag
         id: prepare_tag
         run: |
+          cargo install --list | grep cargo-tag
+
           if cargo install --list | grep cargo-tag; then
             echo cargo tag already found installed
           else
