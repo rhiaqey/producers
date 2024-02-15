@@ -64,6 +64,6 @@ jobs:
       - Setup
     steps:
       - uses: actions/checkout@v4
-      - uses: |
+      - run: |
           echo "Do we have access to git tag $GIT_TAG and branch $GIT_BRANCH"
           echo "Or should we access via env ${{ env.GIT_TAG }} and ${{ env.GIT_BRANCH }}
