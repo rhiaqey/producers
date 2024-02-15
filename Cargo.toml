@@ -52,6 +52,7 @@ pinger = []
 yahoo = ["dep:tokio-tungstenite", "dep:base64"]
 rss = ["dep:reqwest", "dep:rss", "dep:sha256", "dep:chrono"]
 ecb = ["dep:reqwest", "dep:quick-xml", "dep:chrono", "dep:sha256"]
+all = ["ecb", "rss", "yahoo", "pinger", "ticker", "iss"]
 
 [[bin]]
 name = "iss-position"
