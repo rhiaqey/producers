@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - adopt-new-ci
 
 env:
   CI: true
@@ -97,6 +96,40 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - Publish
+    env:
+      GIT_TAG: ${{ needs.Setup.outputs.git_tag }}
+      GIT_BRANCH: ${{ needs.Setup.outputs.git_branch }}
     steps:
-      - run: |
-          echo "We can commit to git here"
+      - name: Commit and push
+        run: |
+          echo "Current branch $GIT_BRANCH"
+
+          git config user.name "$CARGO_TAG_NAME"
+          git config user.email "$CARGO_TAG_EMAIL"
+
+          git add .
+          git commit -m "Release $GIT_TAG
+
+          [skip ci]
+          "
+
+          git tag $GIT_TAG
+          git push origin $GIT_TAG
+          git push origin $GIT_BRANCH
+
+#      - name: Push Charts to GHCR
+#        if: ${{ github.event_name != 'pull_request' }}
+#        run: |
+#          mkdir charts
+#          for pkg in k8s/*; do
+#            if [ -z "${pkg:-}" ]; then
+#              break
+#            fi
+#            helm package "${pkg}" -d charts
+#          done
+#          for pkg in charts/*; do
+#            if [ -z "${pkg:-}" ]; then
+#              break
+#            fi
+#            helm push "${pkg}" oci://ghcr.io/${GITHUB_REPOSITORY_OWNER}/charts
+#          done

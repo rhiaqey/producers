@@ -45,13 +45,13 @@ jobs:
     strategy:
       matrix:
         producers: [
-          {binary: "ecb-daily", features: "ecb"},
-          {binary: "iss-astros", features: "iss"},
-          {binary: "iss-position", features: "iss"},
-          {binary: "pinger", features: "pinger"},
-          {binary: "rss", features: "rss"},
-          {binary: "ticker", features: "ticker"},
-          {binary: "yahoo", features: "yahoo"}
+          {image: "rhiaqey/ecb-daily", binary: "ecb-daily", features: "ecb"},
+          {image: "rhiaqey/iss-astros", binary: "iss-astros", features: "iss"},
+          {image: "rhiaqey/iss-position", binary: "iss-position", features: "iss"},
+          {image: "rhiaqey/pinger", binary: "pinger", features: "pinger"},
+          {image: "rhiaqey/rss", binary: "rss", features: "rss"},
+          {image: "rhiaqey/ticker", binary: "ticker", features: "ticker"},
+          {image: "rhiaqey/yahoo", binary: "yahoo", features: "yahoo"}
         ]
     steps:
       - uses: actions/checkout@v4
@@ -59,6 +59,7 @@ jobs:
         with:
           context: .
           push: false
+          tags: ${{ matrix.producers.image }}:latest
           build-args: |
             BINARY=${{ matrix.producers.binary }}
             FEATURES=${{ matrix.producers.features }}
