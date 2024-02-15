@@ -1,0 +1,69 @@
+name: PR Merge
+
+#on:
+#  push:
+#    branches:
+#      - master
+
+on:
+  push:
+  pull_request:
+    branches:
+      - master
+
+env:
+  CI: true
+  IMAGE_NAME: rhiaqey/hub
+  CARGO_TERM_COLOR: always
+  CARGO_TAG_NAME: "GitHub Actions"
+  CARGO_TAG_EMAIL: "github-actions@users.noreply.github.com"
+
+permissions:
+  contents: write
+
+jobs:
+  Setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare tag
+        run: |
+          cargo install cargo-tag
+          cargo tag patch
+          GIT_TAG="$(cargo tag current)"
+          echo "GIT_TAG=$GIT_TAG" >> $GITHUB_ENV
+          echo "Found $GIT_TAG tag"
+          git tag -d $GIT_TAG
+
+      - name: Extract git branch
+        run: |
+          # Short name for current branch. For PRs, use target branch (base ref)
+          GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}
+          echo "GIT_BRANCH=$GIT_BRANCH" >> $GITHUB_ENV
+
+      - name: Log into registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Extract metadata (tags, labels) for Docker
+      # https://github.com/docker/metadata-action
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81
+        with:
+          images: ${{ env.IMAGE_NAME }}
+
+  ECBDaily:
+    runs-on: ubuntu-latest
+    needs:
+      - CI
+    steps:
+      - uses: actions/checkout@v4
+      - uses: |
+          echo "Do we have access to git tag $GIT_TAG and branch $GIT_BRANCH"
+          echo "Or should we access via env ${{ env.GIT_TAG }} and ${{ env.GIT_BRANCH }}
