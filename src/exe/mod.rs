@@ -38,7 +38,7 @@ pub async fn run<
     let settings = executor.read_settings::<S>().await.unwrap_or(S::default());
 
     let mut publisher_stream = match plugin.setup(Some(settings)) {
-        Err(error) => panic!("failed to setup producer: {error}"),
+        Err(error) => panic!("failed to setup publisher: {error}"),
         Ok(sender) => sender,
     };
 
@@ -65,8 +65,9 @@ pub async fn run<
     let mut pubsub_stream = executor.create_hub_to_publishers_pubsub().await.unwrap();
     let channel_count = executor.get_channel_count().await as f64;
     TOTAL_CHANNELS.set(channel_count);
+    debug!("channel count is {channel_count}");
 
-    debug!("stream is ready");
+    info!("stream is ready");
 
     loop {
         tokio::select! {
