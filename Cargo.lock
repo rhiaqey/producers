@@ -1710,7 +1710,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producers"
-version = "1.0.6"
+version = "1.0.7"
 dependencies = [
  "async-trait",
  "axum",
