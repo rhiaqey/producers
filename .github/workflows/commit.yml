@@ -12,24 +12,12 @@ env:
   CI: true
   CARGO_TERM_COLOR: always
 
-permissions:
-  contents: write
-
 jobs:
   Setup:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Install Protoc
         uses: arduino/setup-protoc@v3
@@ -47,17 +35,20 @@ jobs:
     strategy:
       matrix:
         producers: [
-          {image: "rhiaqey/ecb-daily", binary: "ecb-daily", features: "ecb"},
-          {image: "rhiaqey/iss-astros", binary: "iss-astros", features: "iss"},
-          {image: "rhiaqey/iss-position", binary: "iss-position", features: "iss"},
-          {image: "rhiaqey/pinger", binary: "pinger", features: "pinger"},
-          {image: "rhiaqey/rss", binary: "rss", features: "rss"},
-          {image: "rhiaqey/ticker", binary: "ticker", features: "ticker"},
-          {image: "rhiaqey/yahoo", binary: "yahoo", features: "yahoo"}
+          { image: "rhiaqey/ecb-daily", binary: "ecb-daily", features: "ecb" },
+          { image: "rhiaqey/iss-astros", binary: "iss-astros", features: "iss" },
+          { image: "rhiaqey/iss-position", binary: "iss-position", features: "iss" },
+          { image: "rhiaqey/pinger", binary: "pinger", features: "pinger" },
+          { image: "rhiaqey/rss", binary: "rss", features: "rss" },
+          { image: "rhiaqey/ticker", binary: "ticker", features: "ticker" },
+          { image: "rhiaqey/yahoo", binary: "yahoo", features: "yahoo" }
         ]
     steps:
-      - uses: actions/checkout@v4
-      - uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build docker image for ${{ matrix.gateways.binary }}
+        uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56
         with:
           context: .
           push: false
