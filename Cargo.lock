@@ -79,9 +79,9 @@ dependencies = [
 
 [[package]]
 name = "anstream"
-version = "0.6.12"
+version = "0.6.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "96b09b5178381e0874812a9b157f7fe84982617e48f71f4e3235482775e5b540"
+checksum = "d96bd03f33fe50a863e394ee9718a706f988b9079b20c3784fb726e7678b62fb"
 dependencies = [
  "anstyle",
  "anstyle-parse",
@@ -1686,7 +1686,7 @@ dependencies = [
 [[package]]
 name = "rhiaqey-common"
 version = "0.1.1"
-source = "git+https://github.com/rhiaqey/common.git#a51bbcbdd67111ef9454c66fd086ec21f7524ebf"
+source = "git+https://github.com/rhiaqey/common.git#9f5ded25ef80a7dedbc34ec399c2c644faa74f27"
 dependencies = [
  "aes-gcm-siv",
  "env_logger",

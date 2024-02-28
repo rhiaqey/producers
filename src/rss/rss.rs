@@ -3,7 +3,6 @@ use chrono::DateTime;
 use futures::TryFutureExt;
 use log::{debug, info, trace, warn};
 use reqwest::Response;
-use rhiaqey_common::error::RhiaqeyError;
 use rhiaqey_sdk_rs::message::MessageValue;
 use rhiaqey_sdk_rs::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
 use serde::{Deserialize, Serialize};
@@ -47,8 +46,8 @@ impl RSSResponse {
     fn create(channel: Option<rss::Channel>, item: Option<rss::Item>) -> RSSResponse {
         RSSResponse { channel, item }
     }
-    fn to_json(&self) -> Result<Value, RhiaqeyError> {
-        serde_json::to_value(self).map_err(|x| x.into())
+    fn to_json(&self) -> Result<Value, String> {
+        serde_json::to_value(self).map_err(|x| x.to_string())
     }
 }
 
@@ -77,7 +76,7 @@ pub struct RSS {
 }
 
 impl RSS {
-    async fn send_request(settings: RSSSettings) -> Result<Response, RhiaqeyError> {
+    async fn send_request(settings: RSSSettings) -> Result<Response, String> {
         info!("fetching feed");
 
         let client = reqwest::Client::new();
@@ -86,11 +85,7 @@ impl RSS {
             .unwrap_or(default_timeout().unwrap());
 
         if settings.url.is_none() {
-            return Err(RhiaqeyError {
-                code: None,
-                message: String::from("url is not configured properly"),
-                error: None,
-            });
+            return Err(String::from("url is not configured properly"));
         }
 
         if let Some(username) = settings.username {
@@ -99,7 +94,7 @@ impl RSS {
                 .timeout(Duration::from_millis(timeout))
                 .basic_auth(username, settings.password)
                 .send()
-                .map_err(|x| x.into())
+                .map_err(|x| x.to_string())
                 .await;
         }
 
@@ -107,17 +102,17 @@ impl RSS {
             .get(settings.url.unwrap())
             .timeout(Duration::from_millis(timeout))
             .send()
-            .map_err(|x| x.into())
+            .map_err(|x| x.to_string())
             .await
     }
 
-    async fn fetch_feed(settings: RSSSettings) -> Result<rss::Channel, RhiaqeyError> {
+    async fn fetch_feed(settings: RSSSettings) -> Result<rss::Channel, String> {
         info!("downloading rss feed");
 
         let res = Self::send_request(settings).await?;
-        let text = res.text().await?;
+        let text = res.text().await.map_err(|x| x.to_string())?;
         let data = text.as_bytes();
-        let channel = rss::Channel::read_from(data)?;
+        let channel = rss::Channel::read_from(data).map_err(|x| x.to_string())?;
         debug!("channel {} downloaded", channel.title);
 
         Ok(channel)
@@ -134,7 +129,7 @@ impl RSS {
             .timestamp_millis()
     }
 
-    fn prepare_items(mut items: Vec<rss::Item>) -> Result<Vec<ProducerMessage>, RhiaqeyError> {
+    fn prepare_items(mut items: Vec<rss::Item>) -> Result<Vec<ProducerMessage>, String> {
         items.sort_by(|a, b| {
             let timestamp_a =
                 Self::build_timestamp(a.pub_date.clone().expect("a valid XML timestamp"));
@@ -177,7 +172,7 @@ impl RSS {
         Ok(result)
     }
 
-    fn prepare_channel(mut channel: rss::Channel) -> Result<ProducerMessage, RhiaqeyError> {
+    fn prepare_channel(mut channel: rss::Channel) -> Result<ProducerMessage, String> {
         debug!("preparing channel {}", channel.title);
 
         let tag = sha256::digest(format!("{}-{}", channel.title, channel.link));

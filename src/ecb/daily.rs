@@ -4,7 +4,6 @@ use futures::TryFutureExt;
 use log::{debug, info, trace, warn};
 use quick_xml::de::from_str;
 use reqwest::Response;
-use rhiaqey_common::error::RhiaqeyError;
 use rhiaqey_sdk_rs::message::MessageValue;
 use rhiaqey_sdk_rs::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
 use serde::{Deserialize, Serialize};
@@ -99,7 +98,7 @@ pub struct ECBDailyRate {
 }
 
 impl ECBDaily {
-    async fn send_request(settings: ECBDailySettings) -> Result<Response, RhiaqeyError> {
+    async fn send_request(settings: ECBDailySettings) -> Result<Response, String> {
         info!("fetching ecb daily");
 
         let client = reqwest::Client::new();
@@ -108,34 +107,25 @@ impl ECBDaily {
             .unwrap_or(default_timeout().unwrap());
 
         if settings.url.is_none() {
-            return Err(RhiaqeyError {
-                code: None,
-                message: String::from("url is not configured properly"),
-                error: None,
-            });
+            return Err(String::from("url is not configured properly"));
         }
 
         client
             .get(settings.url.unwrap())
             .timeout(Duration::from_millis(timeout))
             .send()
-            .map_err(|x| x.into())
+            .map_err(|x| x.to_string())
             .await
     }
 
     async fn fetch_daily_rates(
         settings: ECBDailySettings,
-    ) -> Result<ECBDailyResponse, RhiaqeyError> {
+    ) -> Result<ECBDailyResponse, String> {
         info!("downloading daily rates");
 
         let res = Self::send_request(settings).await?;
-        let text = res.text().await?;
-
-        from_str(&text).map_err(|err| RhiaqeyError {
-            code: None,
-            message: err.to_string(),
-            error: Some(Box::new(err)),
-        })
+        let text = res.text().await.map_err(|x| x.to_string())?;
+        from_str(&text).map_err(|x| x.to_string())
     }
 
     fn prepare_daily_rates(payload: ECBDailyResponse) -> Vec<ProducerMessage> {
