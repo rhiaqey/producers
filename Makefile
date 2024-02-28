@@ -182,12 +182,12 @@ build: prod
 
 .PHONY: prod
 prod:
-	cargo build --release --features=all -j 64
+	cargo build --release --all-features -j 64
 	ls -lah target/release
 
 .PHONY: dev
 dev:
-	cargo build --release --features=all -j 64
+	cargo build --all-features -j 64
 	ls -lah target/debug
 
 .PHONY: redis
