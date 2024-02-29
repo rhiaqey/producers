@@ -8,6 +8,7 @@ use std::sync::Arc;
 use std::time::{Duration, SystemTime};
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
 use tokio::sync::Mutex;
+use rhiaqey_sdk_rs::settings::Settings;
 
 fn default_interval() -> Option<u64> {
     Some(1000)
@@ -25,6 +26,10 @@ impl Default for TickerSettings {
             interval_in_millis: default_interval(),
         }
     }
+}
+
+impl Settings for TickerSettings {
+    //
 }
 
 #[derive(Default, Debug)]

@@ -18,6 +18,7 @@ use tokio_tungstenite::{
     connect_async, tungstenite::protocol::Message, MaybeTlsStream, WebSocketStream,
 };
 use yahoo_definitions::PricingData;
+use rhiaqey_sdk_rs::settings::Settings;
 
 mod yahoo_definitions {
     include!(concat!(env!("OUT_DIR"), "/yahoo_realtime.rs"));
@@ -36,6 +37,10 @@ pub struct YahooSettings {
 
     #[serde(alias = "Symbols")]
     symbols: HashSet<String>,
+}
+
+impl Settings for YahooSettings {
+    //
 }
 
 #[derive(Default, Debug)]

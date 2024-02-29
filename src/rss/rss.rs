@@ -12,6 +12,7 @@ use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
 use tokio::sync::RwLock;
+use rhiaqey_sdk_rs::settings::Settings;
 
 fn default_url() -> Option<String> {
     None
@@ -67,6 +68,10 @@ pub struct RSSSettings {
 
     #[serde(alias = "Timeout", default = "default_timeout")]
     pub timeout_in_millis: Option<u64>,
+}
+
+impl Settings for RSSSettings {
+    //
 }
 
 #[derive(Default, Debug)]

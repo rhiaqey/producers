@@ -11,6 +11,7 @@ use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
 use tokio::sync::Mutex;
+use rhiaqey_sdk_rs::settings::Settings;
 
 fn default_interval() -> Option<u64> {
     Some(15000)
@@ -44,6 +45,10 @@ impl Default for ISSPositionSettings {
             timeout_in_millis: default_timeout(),
         }
     }
+}
+
+impl Settings for ISSPositionSettings {
+    //
 }
 
 #[derive(Default, Serialize, Deserialize, Clone, Debug)]
