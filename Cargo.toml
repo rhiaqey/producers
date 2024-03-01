@@ -18,29 +18,30 @@ codegen-units = 1
 
 [dependencies]
 rhiaqey-sdk-rs = { git = "https://github.com/rhiaqey/sdk-rs.git" }
-rhiaqey-common = { git = "https://github.com/rhiaqey/common.git", features = [ "reqwest", "rss", "quick-xml" ] }
-serde = { version = "1.0", features = [ "derive" ]}
+rhiaqey-common = { git = "https://github.com/rhiaqey/common.git", features = ["reqwest", "rss", "quick-xml"] }
+serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 env_logger = "0.11"
 log = "0.4"
-prometheus = { version = "0.13", features = [ "process" ] }
+prometheus = { version = "0.13", features = ["process"] }
 async-trait = "0.1"
 futures = "0.3"
 lazy_static = "1.4"
-rustis = { version = "0.12", features = [ "redis-json", "tokio-runtime" ] }
-tokio = { version = "1.36", features = [ "full", "rt", "rt-multi-thread" ] }
+rustis = { version = "0.12", features = ["redis-json", "tokio-runtime"] }
+tokio = { version = "1.36", features = ["full", "rt", "rt-multi-thread"] }
 axum = { version = "0.7" }
-hyper = { version = "1.2", features = [ "full" ] }
+hyper = { version = "1.2", features = ["full"] }
 sha256 = { version = "1.5", optional = true }
-rss = { version = "2.0", features = [ "serde" ], optional = true }
+rss = { version = "2.0", features = ["serde"], optional = true }
 reqwest = { version = "0.11", optional = true }
 chrono = { version = "0.4", optional = true }
 quick-xml = { version = "0.31", features = ["async-tokio", "serialize", "encoding"], optional = true }
-tokio-tungstenite = { version  = "0.21", features = ["native-tls"], optional = true }
+tokio-tungstenite = { version = "0.21", features = ["native-tls"], optional = true }
 base64 = { version = "0.21", optional = true }
 protobuf = { version = "3.4", features = ["bytes"] }
 prost = "0.12"
 prost-types = "0.12"
+openssl = { version = "0.10", features = ["vendored"] }
 
 [build-dependencies]
 prost-build = { version = "0.12" }
@@ -56,34 +57,34 @@ ecb = ["dep:reqwest", "dep:quick-xml", "dep:chrono", "dep:sha256"]
 [[bin]]
 name = "iss-position"
 src = "src/bin/iss-position.rs"
-required-features = [ "iss" ]
+required-features = ["iss"]
 
 [[bin]]
 name = "iss-astros"
 src = "src/bin/iss-astros.rs"
-required-features = [ "iss" ]
+required-features = ["iss"]
 
 [[bin]]
 name = "ticker"
 src = "src/bin/ticker.rs"
-required-features = [ "ticker" ]
+required-features = ["ticker"]
 
 [[bin]]
 name = "pinger"
 src = "src/bin/pinger.rs"
-required-features = [ "pinger" ]
+required-features = ["pinger"]
 
 [[bin]]
 name = "rss"
 src = "src/bin/rss.rs"
-required-features = [ "rss" ]
+required-features = ["rss"]
 
 [[bin]]
 name = "ecb-daily"
 src = "src/bin/ecb-daily.rs"
-required-features = [ "ecb" ]
+required-features = ["ecb"]
 
 [[bin]]
 name = "yahoo"
 src = "src/bin/yahoo.rs"
-required-features = [ "yahoo" ]
+required-features = ["yahoo"]

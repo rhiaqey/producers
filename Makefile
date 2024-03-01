@@ -209,3 +209,14 @@ sentinel2:
 		-e ALLOW_EMPTY_PASSWORD=yes \
 		-e REDIS_MASTER_HOST=localhost \
 		bitnami/redis-sentinel:7.2.4
+
+.PHONY: docker-multi
+docker-multi:
+	docker buildx build \
+		--platform linux/arm64 \
+		--build-arg BINARY=iss-astros \
+		--build-arg FEATURES=iss \
+		-t rhiaqey/iss-astros:dev \
+		--progress=plain \
+		--no-cache \
+		.
