@@ -107,12 +107,6 @@ iss-astros-prod:
 	NAME=iss-astros-1 \
 		cargo run --release --bin iss-astros --features=iss
 
-.PHONY: iss-prod
-iss-prod:
-	ID=pub1 \
-	NAME=iss-position-1 \
-		cargo run --release --bin iss-position --features=iss
-
 .PHONY: ticker
 ticker:
 	ID=ticker1 \
