@@ -12,10 +12,7 @@ use rhiaqey_sdk_rs::settings::Settings;
 
 use crate::exe::metrics::TOTAL_CHANNELS;
 
-pub async fn run<
-    P: Producer<S> + Default + Send + 'static,
-    S: Settings,
->() {
+pub async fn run<P: Producer<S> + Default + Send + 'static, S: Settings>() {
     env_logger::init();
     let env = parse_env();
 
@@ -72,8 +69,9 @@ pub async fn run<
         tokio::select! {
             Some(message) = publisher_stream.recv() => {
                 trace!("message received from plugin: {:?}", message);
-                if let Err(err) = executor.publish(message, ExecutorPublishOptions::default()).await {
-                    warn!("error publishing message: {}", err);
+                match executor.publish(message, ExecutorPublishOptions::default()).await {
+                    Ok(size) => debug!("published to {size} channels"),
+                    Err(err) => warn!("error publishing message: {}", err)
                 }
             },
             Some(pubsub_message) = pubsub_stream.next() => {
