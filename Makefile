@@ -1,10 +1,11 @@
+export REDIS_PASSWORD=welcome
+export REDIS_ADDRESS=localhost:6379
+export REDIS_SENTINEL_MASTER=mymaster
+export REDIS_SENTINEL_ADDRESSES=localhost:26379
+
 export RUST_BACKTRACE=full
 export RUST_LOG=rhiaqey=trace
 export DEBUG=true
-export REDIS_PASSWORD=7tgbBSO2Yu
-#export REDIS_SENTINEL_MASTER=mymaster
-export REDIS_ADDRESS=localhost:6379
-export REDIS_SENTINEL_ADDRESSES=localhost:26379
 export PRIVATE_PORT=3003
 export PUBLIC_PORT=3004
 export NAMESPACE=rhiaqey

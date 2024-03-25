@@ -31,7 +31,10 @@ pub async fn run<P: Producer<S> + Default + Send + 'static, S: Settings>() {
 
     let mut plugin = P::default();
     let port = executor.get_private_port();
-    let settings = executor.read_settings::<S>().await.unwrap_or(S::default());
+    let settings = executor
+        .read_settings_async::<S>()
+        .await
+        .unwrap_or(S::default());
 
     let mut publisher_stream = match plugin.setup(Some(settings)) {
         Err(error) => panic!("failed to setup publisher: {error}"),
@@ -49,7 +52,6 @@ pub async fn run<P: Producer<S> + Default + Send + 'static, S: Settings>() {
 
     executor
         .rpc(executor.get_namespace(), publisher_registration_message)
-        .await
         .expect("Publisher must first register with hub");
 
     debug!("rpc registration message sent");
@@ -58,8 +60,11 @@ pub async fn run<P: Producer<S> + Default + Send + 'static, S: Settings>() {
 
     tokio::spawn(start_private_http_server(port));
 
-    let mut pubsub_stream = executor.create_hub_to_publishers_pubsub().await.unwrap();
-    let channel_count = executor.get_channel_count().await as f64;
+    let mut pubsub_stream = executor
+        .create_hub_to_publishers_pubsub_async()
+        .await
+        .unwrap();
+    let channel_count = executor.get_channel_count_async().await as f64;
     TOTAL_CHANNELS.set(channel_count);
     debug!("channel count is {channel_count}");
 
@@ -69,7 +74,7 @@ pub async fn run<P: Producer<S> + Default + Send + 'static, S: Settings>() {
         tokio::select! {
             Some(message) = publisher_stream.recv() => {
                 trace!("message received from plugin: {:?}", message);
-                match executor.publish(message, ExecutorPublishOptions::default()).await {
+                match executor.publish_async(message, ExecutorPublishOptions::default()).await {
                     Ok(size) => debug!("published to {size} channels"),
                     Err(err) => warn!("error publishing message: {}", err)
                 }
@@ -82,13 +87,13 @@ pub async fn run<P: Producer<S> + Default + Send + 'static, S: Settings>() {
                             RPCMessageData::AssignChannels(channel_list) => {
                                 debug!("received assign channels rpc {:?}", channel_list);
                                 let channel_count = channel_list.channels.len() as f64;
-                                executor.set_channels(channel_list.channels).await;
+                                executor.set_channels_async(channel_list.channels).await;
                                 TOTAL_CHANNELS.set(channel_count);
                                 info!("total channels assigned to {channel_count}");
                             }
                             RPCMessageData::UpdateSettings() => {
                                 debug!("received update settings rpc");
-                                match executor.read_settings::<S>().await {
+                                match executor.read_settings_async::<S>().await {
                                     Ok(settings) => {
                                         plugin.set_settings(settings).await;
                                         info!("settings updated successfully");
