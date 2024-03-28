@@ -91,7 +91,7 @@ pub async fn run<P: Producer<S> + Default + Send + 'static, S: Settings>() {
                                 TOTAL_CHANNELS.set(channel_count);
                                 info!("total channels assigned to {channel_count}");
                             }
-                            RPCMessageData::UpdateSettings() => {
+                            RPCMessageData::UpdatePublisherSettings() => {
                                 debug!("received update settings rpc");
                                 match executor.read_settings_async::<S>().await {
                                     Ok(settings) => {
