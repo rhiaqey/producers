@@ -100,6 +100,8 @@ iss-prod:
 .PHONY: iss-astros
 iss-astros:
 	ID=pub13 \
+	PRIVATE_PORT=3013 \
+	PUBLIC_PORT=3014 \
 	NAME=iss-astros-1 \
 		cargo run --bin iss-astros --features=iss
 

@@ -4,6 +4,7 @@ use log::{debug, info, trace, warn};
 use reqwest::Response;
 use rhiaqey_sdk_rs::message::MessageValue;
 use rhiaqey_sdk_rs::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
+use rhiaqey_sdk_rs::settings::Settings;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use sha256::digest;
@@ -11,7 +12,6 @@ use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
 use tokio::sync::Mutex;
-use rhiaqey_sdk_rs::settings::Settings;
 
 fn default_interval() -> Option<u64> {
     Some(15000)
@@ -91,14 +91,13 @@ impl ISSPosition {
             .await
     }
 
-    async fn fetch_position(
-        settings: ISSPositionSettings,
-    ) -> Result<ISSPositionResponse, String> {
+    async fn fetch_position(settings: ISSPositionSettings) -> Result<ISSPositionResponse, String> {
         info!("downloading iss position");
 
         let res = Self::send_request(settings).await?;
         let text = res.text().await.map_err(|x| x.to_string())?;
-        let position = serde_json::from_str::<ISSPositionResponse>(text.as_str()).map_err(|x| x.to_string())?;
+        let position = serde_json::from_str::<ISSPositionResponse>(text.as_str())
+            .map_err(|x| x.to_string())?;
         debug!("iss position downloaded");
 
         Ok(position)
@@ -119,7 +118,7 @@ impl ISSPosition {
         ProducerMessage {
             key: String::from("iss/position"),
             value: MessageValue::Json(json),
-            category: None, // will be treated as default
+            category: Some(String::from("position")),
             size: None,
             timestamp,
             tag,

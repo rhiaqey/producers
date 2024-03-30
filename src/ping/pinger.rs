@@ -2,13 +2,13 @@ use async_trait::async_trait;
 use log::{debug, info};
 use rhiaqey_sdk_rs::message::MessageValue;
 use rhiaqey_sdk_rs::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
+use rhiaqey_sdk_rs::settings::Settings;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use std::sync::Arc;
 use std::time::{Duration, SystemTime};
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
 use tokio::sync::Mutex;
-use rhiaqey_sdk_rs::settings::Settings;
 
 fn default_update_tag() -> Option<bool> {
     Some(true)

@@ -6,6 +6,7 @@ use futures::StreamExt;
 use log::{debug, info, trace, warn};
 use rhiaqey_sdk_rs::message::MessageValue;
 use rhiaqey_sdk_rs::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
+use rhiaqey_sdk_rs::settings::Settings;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use std::collections::HashSet;
@@ -18,7 +19,6 @@ use tokio_tungstenite::{
     connect_async, tungstenite::protocol::Message, MaybeTlsStream, WebSocketStream,
 };
 use yahoo_definitions::PricingData;
-use rhiaqey_sdk_rs::settings::Settings;
 
 mod yahoo_definitions {
     include!(concat!(env!("OUT_DIR"), "/yahoo_realtime.rs"));

@@ -4,6 +4,7 @@ use log::{debug, info, trace, warn};
 use reqwest::Response;
 use rhiaqey_sdk_rs::message::MessageValue;
 use rhiaqey_sdk_rs::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
+use rhiaqey_sdk_rs::settings::Settings;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use sha256::digest;
@@ -11,7 +12,6 @@ use std::sync::Arc;
 use std::time::{Duration, SystemTime};
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
 use tokio::sync::Mutex;
-use rhiaqey_sdk_rs::settings::Settings;
 
 fn default_interval() -> Option<u64> {
     Some(900000)
@@ -96,7 +96,8 @@ impl ISSAstros {
 
         let res = Self::send_request(settings).await?;
         let text = res.text().await.map_err(|x| x.to_string())?;
-        let astros = serde_json::from_str::<ISSAstrosResponse>(text.as_str()).map_err(|x| x.to_string())?;
+        let astros =
+            serde_json::from_str::<ISSAstrosResponse>(text.as_str()).map_err(|x| x.to_string())?;
         debug!("iss astros downloaded");
 
         Ok(astros)
@@ -118,7 +119,7 @@ impl ISSAstros {
         ProducerMessage {
             key: String::from("iss/astros"),
             value: MessageValue::Json(json),
-            category: None, // will be treated as default
+            category: Some(String::from("astros")),
             size: None,
             timestamp,
             tag,
