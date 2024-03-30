@@ -52,14 +52,14 @@ impl Settings for ISSAstrosSettings {
 }
 
 #[derive(Default, Serialize, Deserialize, Clone, Debug)]
-pub struct ISSAstrosPeople {
+pub struct ISSAstrosPerson {
     pub craft: String,
     pub name: String,
 }
 
 #[derive(Default, Serialize, Deserialize, Clone, Debug)]
 pub struct ISSAstrosResponse {
-    pub people: Vec<ISSAstrosPeople>,
+    pub people: Vec<ISSAstrosPerson>,
     pub number: u32,
     pub message: String,
 }
