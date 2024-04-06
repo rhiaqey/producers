@@ -149,6 +149,12 @@ jobs:
           git push origin $GIT_BRANCH
           git push origin $GIT_BRANCH --tags
 
+      - name: Cleanup
+        uses: geekyeggo/delete-artifact@v5
+        with:
+          name: cargo-verison
+          failOnError: false
+
 #      - name: Push Charts to GHCR
 #        if: ${{ github.event_name != 'pull_request' }}
 #        run: |
