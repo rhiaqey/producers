@@ -37,7 +37,7 @@ RUN case "${TARGETPLATFORM}" in \
       *) echo "Unsupported platform: ${TARGETPLATFORM}" ; exit 1 ;; \
     esac \
     && rustup target add ${rust_target} \
-    && cargo install --target ${rust_target} --bin ${BINARY} --features ${FEATURES} --path .
+    && cargo install --target ${rust_target} --bin ${BINARY} --all-features --path .
 
 FROM debian:bookworm-slim
 

@@ -198,10 +198,10 @@ redis:
 .PHONY: docker-multi
 docker-multi:
 	docker buildx build \
-		--platform linux/arm64 \
-		--build-arg BINARY=iss-astros \
-		--build-arg FEATURES=iss \
-		-t rhiaqey/iss-astros:dev \
+		--platform linux/amd64 \
+		--build-arg BINARY=ticker \
+		--build-arg FEATURES=ticker \
+		-t rhiaqey/ticker:dev \
 		--progress=plain \
 		--no-cache \
 		.

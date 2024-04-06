@@ -37,13 +37,13 @@ jobs:
     strategy:
       matrix:
         producers: [
-          { image: "rhiaqey/ecb-daily", binary: "ecb-daily", features: "ecb" },
-          { image: "rhiaqey/iss-astros", binary: "iss-astros", features: "iss" },
-          { image: "rhiaqey/iss-position", binary: "iss-position", features: "iss" },
-          { image: "rhiaqey/pinger", binary: "pinger", features: "pinger" },
-          { image: "rhiaqey/rss", binary: "rss", features: "rss" },
-          { image: "rhiaqey/ticker", binary: "ticker", features: "ticker" },
-          { image: "rhiaqey/yahoo", binary: "yahoo", features: "yahoo" }
+          { image: "rhiaqey/ecb-daily", binary: "ecb-daily" },
+          { image: "rhiaqey/iss-astros", binary: "iss-astros" },
+          { image: "rhiaqey/iss-position", binary: "iss-position" },
+          { image: "rhiaqey/pinger", binary: "pinger" },
+          { image: "rhiaqey/rss", binary: "rss" },
+          { image: "rhiaqey/ticker", binary: "ticker" },
+          { image: "rhiaqey/yahoo", binary: "yahoo" }
         ]
     steps:
       - name: Checkout
@@ -59,4 +59,3 @@ jobs:
           tags: ${{ matrix.producers.image }}:latest
           build-args: |
             BINARY=${{ matrix.producers.binary }}
-            FEATURES=${{ matrix.producers.features }}
