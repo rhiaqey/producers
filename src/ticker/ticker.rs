@@ -100,6 +100,10 @@ impl Producer<TickerSettings> for Ticker {
         });
     }
 
+    async fn metrics(&self) -> Value {
+        json!({})
+    }
+
     fn schema() -> Value {
         json!({
             "$schema": "http://json-schema.org/draft-07/schema#",

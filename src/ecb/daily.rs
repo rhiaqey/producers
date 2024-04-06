@@ -6,13 +6,13 @@ use quick_xml::de::from_str;
 use reqwest::Response;
 use rhiaqey_sdk_rs::message::MessageValue;
 use rhiaqey_sdk_rs::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
+use rhiaqey_sdk_rs::settings::Settings;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
 use tokio::sync::Mutex;
-use rhiaqey_sdk_rs::settings::Settings;
 
 fn default_interval() -> Option<u64> {
     Some(15000)
@@ -123,9 +123,7 @@ impl ECBDaily {
             .await
     }
 
-    async fn fetch_daily_rates(
-        settings: ECBDailySettings,
-    ) -> Result<ECBDailyResponse, String> {
+    async fn fetch_daily_rates(settings: ECBDailySettings) -> Result<ECBDailyResponse, String> {
         info!("downloading daily rates");
 
         let res = Self::send_request(settings).await?;
@@ -219,6 +217,10 @@ impl Producer<ECBDailySettings> for ECBDaily {
                 tokio::time::sleep(Duration::from_millis(interval.unwrap())).await;
             }
         });
+    }
+
+    async fn metrics(&self) -> Value {
+        json!({})
     }
 
     fn schema() -> Value {

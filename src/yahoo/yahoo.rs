@@ -188,6 +188,10 @@ impl Producer<YahooSettings> for Yahoo {
         self.writer = Some(Arc::new(Mutex::new(ws_sender)));
     }
 
+    async fn metrics(&self) -> Value {
+        json!({})
+    }
+
     fn schema() -> Value {
         json!({
             "$schema": "http://json-schema.org/draft-07/schema#",
