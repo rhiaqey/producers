@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM rhiaqey/build:latest as builder
+FROM --platform=$BUILDPLATFORM rhiaqey/build:1.0.0 as builder
 
 ARG BINARY
 ARG FEATURES
@@ -22,7 +22,7 @@ RUN case "${TARGETPLATFORM}" in \
     && rustup target add ${rust_target} \
     && cargo install --target ${rust_target} --bin ${BINARY} --all-features --path .
 
-FROM debian:bookworm-slim
+FROM --platform=$BUILDPLATFORM rhiaqey/run:1.0.0
 
 ARG BINARY
 ARG USER=1000
@@ -36,15 +36,6 @@ ENV USER=$USER
 ENV GROUP=$GROUP
 
 LABEL org.opencontainers.image.description="Rhiaqey Producer ${BINARY}"
-
-RUN    apt-get update \
-    && apt-get install -y \
-        ca-certificates \
-        net-tools \
-        libssl-dev \
-        curl \
-    && rm -rf /var/lib/apt/lists/* \
-    && update-ca-certificates
 
 # Create the specified group and user, and add the user to the group
 RUN groupadd -g $GROUP $GROUP \
