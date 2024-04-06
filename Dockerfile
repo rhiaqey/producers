@@ -1,29 +1,12 @@
-FROM --platform=$BUILDPLATFORM rust:1.77-slim-bookworm as builder
+FROM --platform=$BUILDPLATFORM rhiaqey/build:latest as builder
 
 ARG BINARY
 ARG FEATURES
 ARG TARGETPLATFORM
 
 ENV RUST_BACKTRACE=1
+ENV RUST_LOG=trace
 
-RUN echo Building $TARGETPLATFORM on $BUILDPLATFORM
-
-RUN    apt-get update \
-    && apt-get install -y \
-        gcc-aarch64-linux-gnu \
-        libc6-dev-arm64-cross \
-        build-essential \
-        pkg-config \
-        libssl-dev \
-        cmake \
-        gcc \
-        libc-bin \
-        libc6-dev \
-        protobuf-compiler \
-    && rm -rf /var/lib/apt/lists/* \
-    && update-ca-certificates
-
-# Set the default target to ARM64
 ENV CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc
 ENV CC_aarch64_unknown_linux_gnu=aarch64-linux-gnu-gcc
 
@@ -47,8 +30,8 @@ ARG GROUP=1000
 
 ENV BINARY=$BINARY
 ENV DEBIAN_FRONTEND=noninteractive
-ENV RUST_BACKTRACE=1
-ENV RUST_LOG=trace
+ENV RUST_BACKTRACE=0
+ENV RUST_LOG=info
 ENV USER=$USER
 ENV GROUP=$GROUP
 
