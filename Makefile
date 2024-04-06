@@ -112,11 +112,22 @@ iss-astros-prod:
 		cargo run --release --bin iss-astros --features=iss
 
 .PHONY: ticker
-ticker:
+ticker: ticker1
+
+.PHONY: ticker1
+ticker1:
 	ID=ticker1 \
 	NAME=ticker-1 \
 	PRIVATE_PORT=3005 \
     PUBLIC_PORT=3006 \
+		cargo run --bin ticker
+
+.PHONY: ticker2
+ticker2:
+	ID=ticker2 \
+	NAME=ticker-1 \
+	PRIVATE_PORT=3115 \
+    PUBLIC_PORT=3116 \
 		cargo run --bin ticker
 
 .PHONY: ticker-prod
