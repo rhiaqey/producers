@@ -39,7 +39,7 @@ pub struct Ticker {
 }
 
 #[derive(Default, Serialize, Deserialize, Clone, Debug)]
-pub struct TickerBody {
+struct TickerBody {
     timestamp: u64,
 }
 
@@ -100,10 +100,6 @@ impl Producer<TickerSettings> for Ticker {
         });
     }
 
-    async fn metrics(&self) -> Value {
-        json!({})
-    }
-
     fn schema() -> Value {
         json!({
             "$schema": "http://json-schema.org/draft-07/schema#",
@@ -118,6 +114,10 @@ impl Producer<TickerSettings> for Ticker {
             "required": [],
             "additionalProperties": false
         })
+    }
+
+    async fn metrics(&self) -> Value {
+        json!({})
     }
 
     fn kind() -> String {

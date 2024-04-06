@@ -1,4 +1,4 @@
-use rhiaqey_producers::ticker::ticker::{Ticker, TickerSettings};
+use _rhiaqey_producer_ticker::ticker::{Ticker, TickerSettings};
 
 #[tokio::main]
 async fn main() {

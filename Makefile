@@ -117,7 +117,7 @@ ticker:
 	NAME=ticker-1 \
 	PRIVATE_PORT=3005 \
     PUBLIC_PORT=3006 \
-		cargo run --bin ticker --features=ticker
+		cargo run --bin ticker
 
 .PHONY: ticker-prod
 ticker-prod:
@@ -125,7 +125,7 @@ ticker-prod:
 	NAME=ticker-1 \
 	PRIVATE_PORT=3005 \
     PUBLIC_PORT=3006 \
-		cargo run --release --bin ticker --features=ticker
+		cargo run --release --bin ticker
 
 .PHONY: pinger
 pinger:

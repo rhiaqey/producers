@@ -1,8 +1,5 @@
 pub mod exe;
 
-#[cfg(feature = "ticker")]
-pub mod ticker;
-
 #[cfg(feature = "pinger")]
 pub mod ping;
 

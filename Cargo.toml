@@ -12,13 +12,23 @@ maintenance = { status = "experimental" }
 lto = true
 debug = false
 strip = "debuginfo"
+panic = 'abort'     # Abort on panic
 overflow-checks = true
-panic = "abort"
 codegen-units = 1
+
+[lib]
+name = "rhiaqey_producers"
+
+[workspace]
+members = ["lib/ticker"]
+
+[workspace.dependencies]
 
 [dependencies]
 rhiaqey-sdk-rs = { git = "https://github.com/rhiaqey/sdk-rs.git" }
 rhiaqey-common = { git = "https://github.com/rhiaqey/common.git", features = ["reqwest", "rss", "quick-xml"] }
+rhiaqey-producer-ticker = { path = "lib/ticker", version = "0.1" }
+tokio = { version = "1.37", features = ["full", "rt", "rt-multi-thread"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 env_logger = "0.11"
@@ -29,7 +39,6 @@ futures = "0.3"
 lazy_static = "1.4"
 rustis = { version = "0.12", features = ["redis-json", "tokio-runtime"] }
 redis = { version = "0.25", features = ["tokio-comp", "sentinel"] }
-tokio = { version = "1.37", features = ["full", "rt", "rt-multi-thread"] }
 axum = { version = "0.7" }
 hyper = { version = "1.2", features = ["full"] }
 sha256 = { version = "1.5", optional = true }
@@ -49,7 +58,6 @@ prost-build = { version = "0.12" }
 
 [features]
 iss = ["dep:reqwest", "dep:sha256"]
-ticker = []
 pinger = []
 yahoo = ["dep:tokio-tungstenite", "dep:base64"]
 rss = ["dep:reqwest", "dep:rss", "dep:sha256", "dep:chrono"]
@@ -68,7 +76,6 @@ required-features = ["iss"]
 [[bin]]
 name = "ticker"
 src = "src/bin/ticker.rs"
-required-features = ["ticker"]
 
 [[bin]]
 name = "pinger"

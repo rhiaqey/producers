@@ -1,14 +1,15 @@
 {
-    "version": "0.2",
-    "ignorePaths": [],
-    "dictionaryDefinitions": [],
-    "dictionaries": [],
-    "words": [
-        "astros",
-        "chrono",
-        "reqwest",
-        "rhiaqey"
-    ],
-    "ignoreWords": [],
-    "import": []
+  "version": "0.2",
+  "ignorePaths": [],
+  "dictionaryDefinitions": [],
+  "dictionaries": [],
+  "words": [
+    "astros",
+    "chrono",
+    "reqwest",
+    "rhiaqey",
+    "prost"
+  ],
+  "ignoreWords": [],
+  "import": []
 }
