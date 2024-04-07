@@ -17,7 +17,7 @@ overflow-checks = true
 codegen-units = 1
 
 [workspace]
-members = ["lib/ecb", "lib/pinger", "lib/ticker"]
+members = ["lib/ecb", "lib/pinger", "lib/rss", "lib/ticker"]
 
 [workspace.package]
 version = "0.1.36"
@@ -39,6 +39,7 @@ rhiaqey-common = { workspace = true }
 rhiaqey-producer-ticker = { path = "lib/ticker" }
 rhiaqey-producer-pinger = { path = "lib/pinger" }
 rhiaqey-producer-ecb = { path = "lib/ecb" }
+rhiaqey-producer-rss = { path = "lib/rss" }
 tokio = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
@@ -53,7 +54,6 @@ redis = { version = "0.25", features = ["tokio-comp", "sentinel"] }
 axum = { version = "0.7" }
 hyper = { version = "1.2", features = ["full"] }
 sha256 = { version = "1.5", optional = true }
-rss = { version = "2.0", features = ["serde"], optional = true }
 reqwest = { version = "0.12", optional = true }
 chrono = { version = "0.4", optional = true }
 tokio-tungstenite = { version = "0.21", features = ["native-tls"], optional = true }
@@ -69,12 +69,16 @@ prost-build = { version = "0.12" }
 [features]
 iss = ["dep:reqwest", "dep:sha256"]
 yahoo = ["dep:tokio-tungstenite", "dep:base64"]
-rss = ["dep:reqwest", "dep:rss", "dep:sha256", "dep:chrono"]
 
 [[bin]]
 name = "iss-position"
 src = "src/bin/iss-position.rs"
 required-features = ["iss"]
+
+[[bin]]
+name = "yahoo"
+src = "src/bin/yahoo.rs"
+required-features = ["yahoo"]
 
 [[bin]]
 name = "iss-astros"
@@ -92,13 +96,7 @@ src = "src/bin/pinger.rs"
 [[bin]]
 name = "rss"
 src = "src/bin/rss.rs"
-required-features = ["rss"]
 
 [[bin]]
 name = "ecb-daily"
 src = "src/bin/ecb-daily.rs"
-
-[[bin]]
-name = "yahoo"
-src = "src/bin/yahoo.rs"
-required-features = ["yahoo"]

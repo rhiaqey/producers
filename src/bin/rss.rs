@@ -1,4 +1,4 @@
-use rhiaqey_producers::rss::rss::{RSSSettings, RSS};
+use rhiaqey_producer_rss::rss::{RSSSettings, RSS};
 
 #[tokio::main]
 async fn main() {

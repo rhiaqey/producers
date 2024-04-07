@@ -1714,7 +1714,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ecb"
-version = "0.1.35"
+version = "0.1.36"
 dependencies = [
  "async-trait",
  "chrono",
@@ -1742,6 +1742,25 @@ dependencies = [
  "rhiaqey-sdk-rs",
  "serde",
  "serde_json",
+ "tokio",
+]
+
+[[package]]
+name = "rhiaqey-producer-rss"
+version = "0.1.36"
+dependencies = [
+ "async-trait",
+ "chrono",
+ "env_logger",
+ "futures",
+ "log",
+ "reqwest",
+ "rhiaqey-common",
+ "rhiaqey-sdk-rs",
+ "rss",
+ "serde",
+ "serde_json",
+ "sha256",
  "tokio",
 ]
 
@@ -1783,9 +1802,9 @@ dependencies = [
  "rhiaqey-common",
  "rhiaqey-producer-ecb",
  "rhiaqey-producer-pinger",
+ "rhiaqey-producer-rss",
  "rhiaqey-producer-ticker",
  "rhiaqey-sdk-rs",
- "rss",
  "rustis",
  "serde",
  "serde_json",

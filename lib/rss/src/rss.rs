@@ -35,7 +35,7 @@ fn default_timeout() -> Option<u64> {
 }
 
 #[derive(Default, Serialize, Deserialize, Clone, Debug)]
-pub struct RSSResponse {
+struct RSSResponse {
     #[serde(rename = "channel", skip_serializing_if = "Option::is_none")]
     pub channel: Option<rss::Channel>,
 
@@ -275,10 +275,6 @@ impl Producer<RSSSettings> for RSS {
         });
     }
 
-    async fn metrics(&self) -> Value {
-        json!({})
-    }
-
     fn schema() -> Value {
         json!({
             "$schema": "http://json-schema.org/draft-07/schema#",
@@ -310,6 +306,10 @@ impl Producer<RSSSettings> for RSS {
             "required": [],
             "additionalProperties": false
         })
+    }
+
+    async fn metrics(&self) -> Value {
+        json!({})
     }
 
     fn kind() -> String {

@@ -1,0 +1,33 @@
+[package]
+name = "rhiaqey-producer-rss"
+version.workspace = true
+edition.workspace = true
+
+[badges]
+maintenance = { status = "experimental" }
+
+[profile.release]
+lto = true
+debug = false
+strip = "debuginfo"
+overflow-checks = true
+codegen-units = 1
+
+[lib]
+# https://doc.rust-lang.org/reference/linkage.html
+crate-type = ["lib", "cdylib"]
+
+[dependencies]
+async-trait = { workspace = true }
+rhiaqey-sdk-rs = { workspace = true }
+rhiaqey-common = { workspace = true }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+env_logger = { workspace = true }
+log = { workspace = true }
+reqwest = { version = "0.12" }
+futures = { version = "0.3" }
+chrono = { version = "0.4" }
+rss = { version = "2.0", features = ["serde"] }
+sha256 = { version = "1.5" }
