@@ -1,4 +1,3 @@
-use async_trait::async_trait;
 use base64::{engine::general_purpose, Engine as _};
 use futures::stream::SplitSink;
 use futures::SinkExt;
@@ -57,7 +56,6 @@ enum YahooStreamAction {
     Unsubscribe(HashSet<String>),
 }
 
-#[async_trait]
 impl Producer<YahooSettings> for Yahoo {
     fn setup(&mut self, settings: Option<YahooSettings>) -> ProducerMessageReceiver {
         info!("setting up {}", Self::kind());

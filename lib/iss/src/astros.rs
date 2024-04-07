@@ -1,4 +1,3 @@
-use async_trait::async_trait;
 use futures::TryFutureExt;
 use log::{debug, info, trace, warn};
 use reqwest::Response;
@@ -127,7 +126,6 @@ impl ISSAstros {
     }
 }
 
-#[async_trait]
 impl Producer<ISSAstrosSettings> for ISSAstros {
     fn setup(&mut self, settings: Option<ISSAstrosSettings>) -> ProducerMessageReceiver {
         info!("setting up {}", Self::kind());

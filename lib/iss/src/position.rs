@@ -1,4 +1,3 @@
-use async_trait::async_trait;
 use futures::TryFutureExt;
 use log::{debug, info, trace, warn};
 use reqwest::Response;
@@ -126,7 +125,6 @@ impl ISSPosition {
     }
 }
 
-#[async_trait]
 impl Producer<ISSPositionSettings> for ISSPosition {
     fn setup(&mut self, settings: Option<ISSPositionSettings>) -> ProducerMessageReceiver {
         info!("setting up {}", Self::kind());

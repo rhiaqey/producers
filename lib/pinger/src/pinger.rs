@@ -1,4 +1,3 @@
-use async_trait::async_trait;
 use log::{debug, info};
 use rhiaqey_sdk_rs::message::MessageValue;
 use rhiaqey_sdk_rs::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
@@ -57,7 +56,6 @@ pub struct PingerBody {
     data: String,
 }
 
-#[async_trait]
 impl Producer<PingerSettings> for Pinger {
     fn setup(&mut self, settings: Option<PingerSettings>) -> ProducerMessageReceiver {
         info!("setting up {}", Self::kind());

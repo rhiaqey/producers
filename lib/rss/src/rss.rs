@@ -1,4 +1,3 @@
-use async_trait::async_trait;
 use chrono::DateTime;
 use futures::TryFutureExt;
 use log::{debug, info, trace, warn};
@@ -210,7 +209,6 @@ impl RSS {
     }
 }
 
-#[async_trait]
 impl Producer<RSSSettings> for RSS {
     fn setup(&mut self, settings: Option<RSSSettings>) -> ProducerMessageReceiver {
         info!("setting up {}", Self::kind());

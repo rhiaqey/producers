@@ -1,4 +1,3 @@
-use async_trait::async_trait;
 use chrono::prelude::*;
 use futures::TryFutureExt;
 use log::{debug, info, trace, warn};
@@ -169,7 +168,6 @@ impl ECBDaily {
     }
 }
 
-#[async_trait]
 impl Producer<ECBDailySettings> for ECBDaily {
     fn setup(&mut self, settings: Option<ECBDailySettings>) -> ProducerMessageReceiver {
         info!("setting up {}", Self::kind());

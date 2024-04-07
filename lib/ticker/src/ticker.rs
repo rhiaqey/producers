@@ -1,4 +1,3 @@
-use async_trait::async_trait;
 use log::{debug, info};
 use rhiaqey_sdk_rs::message::MessageValue;
 use rhiaqey_sdk_rs::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
@@ -43,7 +42,6 @@ struct TickerBody {
     timestamp: u64,
 }
 
-#[async_trait]
 impl Producer<TickerSettings> for Ticker {
     fn setup(&mut self, settings: Option<TickerSettings>) -> ProducerMessageReceiver {
         info!("setting up {}", Self::kind());
