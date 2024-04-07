@@ -21,8 +21,8 @@ jobs:
       - name: Cargo install
         uses: dimitrmo/cargo-verison-action@v1.0.18
         with:
-          skip-bump: true
           workspace: true
+          skip-bump: true
 
       - name: Store binary
         uses: actions/upload-artifact@v4
@@ -72,8 +72,9 @@ jobs:
 
       - name: Cargo Verison
         id: verison
-        uses: dimitrmo/cargo-verison-action@v1.0.17
+        uses: dimitrmo/cargo-verison-action@v1.0.18
         with:
+          workspace: true
           skip-install: true
           git-tag-version: false
 
@@ -130,8 +131,9 @@ jobs:
 
       - name: Cargo Verison
         id: verison
-        uses: dimitrmo/cargo-verison-action@v1.0.17
+        uses: dimitrmo/cargo-verison-action@v1.0.18
         with:
+          workspace: true
           skip-install: true
           message: |
             Release %s
