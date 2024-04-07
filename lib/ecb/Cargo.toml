@@ -6,13 +6,6 @@ edition.workspace = true
 [badges]
 maintenance = { status = "experimental" }
 
-[profile.release]
-lto = true
-debug = false
-strip = "debuginfo"
-overflow-checks = true
-codegen-units = 1
-
 [lib]
 # https://doc.rust-lang.org/reference/linkage.html
 crate-type = ["lib", "cdylib"]
