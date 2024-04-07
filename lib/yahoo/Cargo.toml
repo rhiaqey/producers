@@ -1,0 +1,37 @@
+[package]
+name = "rhiaqey-producer-yahoo"
+version.workspace = true
+edition.workspace = true
+
+[badges]
+maintenance = { status = "experimental" }
+
+[profile.release]
+lto = true
+debug = false
+strip = "debuginfo"
+overflow-checks = true
+codegen-units = 1
+
+[lib]
+# https://doc.rust-lang.org/reference/linkage.html
+crate-type = ["lib", "cdylib"]
+
+[dependencies]
+async-trait = { workspace = true }
+rhiaqey-sdk-rs = { workspace = true }
+rhiaqey-common = { workspace = true }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+env_logger = { workspace = true }
+log = { workspace = true }
+futures = { version = "0.3" }
+base64 = { version = "0.22" }
+tokio-tungstenite = { version = "0.21", features = ["native-tls"] }
+protobuf = { version = "3.4", features = ["bytes"] }
+prost = "0.12"
+prost-types = "0.12"
+
+[build-dependencies]
+prost-build = { version = "0.12" }

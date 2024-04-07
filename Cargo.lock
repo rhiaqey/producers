@@ -1796,13 +1796,32 @@ dependencies = [
 ]
 
 [[package]]
+name = "rhiaqey-producer-yahoo"
+version = "0.1.36"
+dependencies = [
+ "async-trait",
+ "base64",
+ "env_logger",
+ "futures",
+ "log",
+ "prost",
+ "prost-build",
+ "prost-types",
+ "protobuf 3.4.0",
+ "rhiaqey-common",
+ "rhiaqey-sdk-rs",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tokio-tungstenite",
+]
+
+[[package]]
 name = "rhiaqey-producers"
 version = "0.1.36"
 dependencies = [
  "async-trait",
  "axum",
- "base64",
- "chrono",
  "env_logger",
  "futures",
  "hyper",
@@ -1810,25 +1829,19 @@ dependencies = [
  "log",
  "openssl",
  "prometheus",
- "prost",
- "prost-build",
- "prost-types",
- "protobuf 3.4.0",
  "redis",
- "reqwest",
  "rhiaqey-common",
  "rhiaqey-producer-ecb",
  "rhiaqey-producer-iss",
  "rhiaqey-producer-pinger",
  "rhiaqey-producer-rss",
  "rhiaqey-producer-ticker",
+ "rhiaqey-producer-yahoo",
  "rhiaqey-sdk-rs",
  "rustis",
  "serde",
  "serde_json",
- "sha256",
  "tokio",
- "tokio-tungstenite",
 ]
 
 [[package]]

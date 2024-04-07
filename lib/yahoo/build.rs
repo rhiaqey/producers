@@ -10,6 +10,6 @@ fn main() -> Result<()> {
     );
     prost_build
         .default_package_filename("yahoo_realtime")
-        .compile_protos(&["src/yahoo/realtime.proto"], &["src"])?;
+        .compile_protos(&["src/realtime.proto"], &["src"])?;
     Ok(())
 }

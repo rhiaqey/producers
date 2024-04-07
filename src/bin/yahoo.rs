@@ -1,4 +1,4 @@
-use rhiaqey_producers::yahoo::yahoo::{Yahoo, YahooSettings};
+use rhiaqey_producer_yahoo::yahoo::{Yahoo, YahooSettings};
 
 #[tokio::main]
 async fn main() {
