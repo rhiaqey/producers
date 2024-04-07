@@ -17,7 +17,7 @@ overflow-checks = true
 codegen-units = 1
 
 [workspace]
-members = ["lib/pinger", "lib/ticker"]
+members = ["lib/ecb", "lib/pinger", "lib/ticker"]
 
 [workspace.package]
 version = "0.1.35"
@@ -36,8 +36,9 @@ async-trait = "0.1"
 [dependencies]
 rhiaqey-sdk-rs = { workspace = true }
 rhiaqey-common = { workspace = true }
-rhiaqey-producer-ticker = { path = "lib/ticker", version = "0.1" }
-rhiaqey-producer-pinger = { path = "lib/pinger", version = "0.1" }
+rhiaqey-producer-ticker = { path = "lib/ticker" }
+rhiaqey-producer-pinger = { path = "lib/pinger" }
+rhiaqey-producer-ecb = { path = "lib/ecb" }
 tokio = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
@@ -45,7 +46,7 @@ env_logger = { workspace = true }
 log = { workspace = true }
 async-trait = { workspace = true }
 prometheus = { version = "0.13", features = ["process"] }
-futures = "0.3"
+futures = { version = "0.3" }
 lazy_static = "1.4"
 rustis = { version = "0.12", features = ["redis-json", "tokio-runtime"] }
 redis = { version = "0.25", features = ["tokio-comp", "sentinel"] }
@@ -55,7 +56,6 @@ sha256 = { version = "1.5", optional = true }
 rss = { version = "2.0", features = ["serde"], optional = true }
 reqwest = { version = "0.12", optional = true }
 chrono = { version = "0.4", optional = true }
-quick-xml = { version = "0.31", features = ["async-tokio", "serialize", "encoding"], optional = true }
 tokio-tungstenite = { version = "0.21", features = ["native-tls"], optional = true }
 base64 = { version = "0.22", optional = true }
 protobuf = { version = "3.4", features = ["bytes"] }
@@ -70,7 +70,6 @@ prost-build = { version = "0.12" }
 iss = ["dep:reqwest", "dep:sha256"]
 yahoo = ["dep:tokio-tungstenite", "dep:base64"]
 rss = ["dep:reqwest", "dep:rss", "dep:sha256", "dep:chrono"]
-ecb = ["dep:reqwest", "dep:quick-xml", "dep:chrono", "dep:sha256"]
 
 [[bin]]
 name = "iss-position"
@@ -98,7 +97,6 @@ required-features = ["rss"]
 [[bin]]
 name = "ecb-daily"
 src = "src/bin/ecb-daily.rs"
-required-features = ["ecb"]
 
 [[bin]]
 name = "yahoo"

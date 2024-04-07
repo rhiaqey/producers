@@ -59,7 +59,7 @@ pub struct ECBDaily {
 }
 
 #[derive(Default, Serialize, Deserialize, Clone, Debug, PartialEq)]
-pub struct ECBDailyResponseEnvelopeCubeWithCurrencyAndRate {
+struct ECBDailyResponseEnvelopeCubeWithCurrencyAndRate {
     #[serde(rename = "@currency")]
     pub currency: String,
     #[serde(rename = "@rate")]
@@ -67,7 +67,7 @@ pub struct ECBDailyResponseEnvelopeCubeWithCurrencyAndRate {
 }
 
 #[derive(Default, Serialize, Deserialize, Clone, Debug, PartialEq)]
-pub struct ECBDailyResponseEnvelopeCubeWithTime {
+struct ECBDailyResponseEnvelopeCubeWithTime {
     #[serde(rename = "@time")]
     pub time: String,
     #[serde(rename = "Cube")]
@@ -75,19 +75,19 @@ pub struct ECBDailyResponseEnvelopeCubeWithTime {
 }
 
 #[derive(Default, Serialize, Deserialize, Clone, Debug, PartialEq)]
-pub struct ECBDailyResponseEnvelopeCube {
+struct ECBDailyResponseEnvelopeCube {
     #[serde(rename = "Cube")] // Cube > Cube
     pub cube: Vec<ECBDailyResponseEnvelopeCubeWithTime>,
 }
 
 #[derive(Default, Serialize, Deserialize, Clone, Debug, PartialEq)]
-pub struct ECBDailyResponseEnvelopeSender {
+struct ECBDailyResponseEnvelopeSender {
     pub name: String, // European Central Bank
 }
 
 #[derive(Default, Serialize, Deserialize, Clone, Debug, PartialEq)]
 #[serde(rename = "Envelope")]
-pub struct ECBDailyResponse {
+struct ECBDailyResponse {
     pub subject: String, // Reference rates
     #[serde(rename = "Sender")]
     pub sender: ECBDailyResponseEnvelopeSender,
@@ -96,7 +96,7 @@ pub struct ECBDailyResponse {
 }
 
 #[derive(Default, Serialize, Clone, Debug, PartialEq)]
-pub struct ECBDailyRate {
+struct ECBDailyRate {
     pub symbol: String,
     pub amount: f64,
     pub timestamp: u64,
@@ -219,10 +219,6 @@ impl Producer<ECBDailySettings> for ECBDaily {
         });
     }
 
-    async fn metrics(&self) -> Value {
-        json!({})
-    }
-
     fn schema() -> Value {
         json!({
             "$schema": "http://json-schema.org/draft-07/schema#",
@@ -246,6 +242,10 @@ impl Producer<ECBDailySettings> for ECBDaily {
             "required": [],
             "additionalProperties": false
         })
+    }
+
+    async fn metrics(&self) -> Value {
+        json!({})
     }
 
     fn kind() -> String {

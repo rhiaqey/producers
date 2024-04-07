@@ -1,4 +1,4 @@
-use rhiaqey_producers::ecb::daily::{ECBDaily, ECBDailySettings};
+use rhiaqey_producer_ecb::daily::{ECBDaily, ECBDailySettings};
 
 #[tokio::main]
 async fn main() {

@@ -1713,6 +1713,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "rhiaqey-producer-ecb"
+version = "0.1.35"
+dependencies = [
+ "async-trait",
+ "chrono",
+ "env_logger",
+ "futures",
+ "log",
+ "quick-xml 0.31.0",
+ "reqwest",
+ "rhiaqey-common",
+ "rhiaqey-sdk-rs",
+ "serde",
+ "serde_json",
+ "sha256",
+ "tokio",
+]
+
+[[package]]
 name = "rhiaqey-producer-pinger"
 version = "0.1.35"
 dependencies = [
@@ -1759,10 +1778,10 @@ dependencies = [
  "prost-build",
  "prost-types",
  "protobuf 3.4.0",
- "quick-xml 0.31.0",
  "redis",
  "reqwest",
  "rhiaqey-common",
+ "rhiaqey-producer-ecb",
  "rhiaqey-producer-pinger",
  "rhiaqey-producer-ticker",
  "rhiaqey-sdk-rs",
