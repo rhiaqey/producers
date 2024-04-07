@@ -1714,7 +1714,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ecb"
-version = "0.1.39"
+version = "0.1.40"
 dependencies = [
  "chrono",
  "env_logger",
@@ -1732,7 +1732,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-iss"
-version = "0.1.39"
+version = "0.1.40"
 dependencies = [
  "env_logger",
  "futures",
@@ -1748,7 +1748,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-pinger"
-version = "0.1.39"
+version = "0.1.40"
 dependencies = [
  "env_logger",
  "log",
@@ -1761,7 +1761,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-rss"
-version = "0.1.39"
+version = "0.1.40"
 dependencies = [
  "chrono",
  "env_logger",
@@ -1779,7 +1779,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ticker"
-version = "0.1.39"
+version = "0.1.40"
 dependencies = [
  "env_logger",
  "log",
@@ -1792,7 +1792,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-yahoo"
-version = "0.1.39"
+version = "0.1.40"
 dependencies = [
  "base64",
  "env_logger",
@@ -1812,7 +1812,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producers"
-version = "0.1.39"
+version = "0.1.40"
 dependencies = [
  "axum",
  "env_logger",
@@ -1840,9 +1840,8 @@ dependencies = [
 [[package]]
 name = "rhiaqey-sdk-rs"
 version = "0.1.1"
-source = "git+https://github.com/rhiaqey/sdk-rs.git#f1506d2eb6eebdca5617ffc8636992d48e67af55"
+source = "git+https://github.com/rhiaqey/sdk-rs.git#e14ca2c0948cf69c3882738508a78cd7a22cf307"
 dependencies = [
- "async-trait",
  "serde",
  "serde_bytes",
  "serde_json",
