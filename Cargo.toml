@@ -20,7 +20,7 @@ codegen-units = 1
 members = ["lib/ecb", "lib/pinger", "lib/ticker"]
 
 [workspace.package]
-version = "0.1.35"
+version = "0.1.36"
 edition = "2021"
 
 [workspace.dependencies]
