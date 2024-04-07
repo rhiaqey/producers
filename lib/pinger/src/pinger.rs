@@ -126,10 +126,6 @@ impl Producer<PingerSettings> for Pinger {
         });
     }
 
-    async fn metrics(&self) -> Value {
-        json!({})
-    }
-
     fn schema() -> Value {
         json!({
             "$schema": "http://json-schema.org/draft-07/schema#",
@@ -152,6 +148,10 @@ impl Producer<PingerSettings> for Pinger {
             "required": [],
             "additionalProperties": false
         })
+    }
+
+    async fn metrics(&self) -> Value {
+        json!({})
     }
 
     fn kind() -> String {
