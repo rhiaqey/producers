@@ -1714,7 +1714,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-pinger"
-version = "0.1.35"
+version = "0.1.36"
 dependencies = [
  "async-trait",
  "env_logger",
@@ -1728,7 +1728,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ticker"
-version = "0.1.35"
+version = "0.1.36"
 dependencies = [
  "async-trait",
  "env_logger",
@@ -1742,7 +1742,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producers"
-version = "0.1.35"
+version = "0.1.36"
 dependencies = [
  "async-trait",
  "axum",
