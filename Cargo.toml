@@ -20,7 +20,7 @@ codegen-units = 1
 name = "rhiaqey_producers"
 
 [workspace]
-members = ["lib/ticker"]
+members = ["lib/pinger", "lib/ticker"]
 
 [workspace.dependencies]
 
@@ -28,6 +28,7 @@ members = ["lib/ticker"]
 rhiaqey-sdk-rs = { git = "https://github.com/rhiaqey/sdk-rs.git" }
 rhiaqey-common = { git = "https://github.com/rhiaqey/common.git", features = ["reqwest", "rss", "quick-xml"] }
 rhiaqey-producer-ticker = { path = "lib/ticker", version = "0.1" }
+rhiaqey-producer-pinger = { path = "lib/pinger", version = "0.1" }
 tokio = { version = "1.37", features = ["full", "rt", "rt-multi-thread"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
@@ -58,7 +59,6 @@ prost-build = { version = "0.12" }
 
 [features]
 iss = ["dep:reqwest", "dep:sha256"]
-pinger = []
 yahoo = ["dep:tokio-tungstenite", "dep:base64"]
 rss = ["dep:reqwest", "dep:rss", "dep:sha256", "dep:chrono"]
 ecb = ["dep:reqwest", "dep:quick-xml", "dep:chrono", "dep:sha256"]
@@ -80,7 +80,6 @@ src = "src/bin/ticker.rs"
 [[bin]]
 name = "pinger"
 src = "src/bin/pinger.rs"
-required-features = ["pinger"]
 
 [[bin]]
 name = "rss"

@@ -1713,6 +1713,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "rhiaqey-producer-pinger"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "env_logger",
+ "log",
+ "rhiaqey-common",
+ "rhiaqey-sdk-rs",
+ "serde",
+ "serde_json",
+ "tokio",
+]
+
+[[package]]
 name = "rhiaqey-producer-ticker"
 version = "0.1.0"
 dependencies = [
@@ -1749,6 +1763,7 @@ dependencies = [
  "redis",
  "reqwest",
  "rhiaqey-common",
+ "rhiaqey-producer-pinger",
  "rhiaqey-producer-ticker",
  "rhiaqey-sdk-rs",
  "rss",

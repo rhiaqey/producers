@@ -1,5 +1,5 @@
 [package]
-name = "rhiaqey-producer-ticker"
+name = "rhiaqey-producer-pinger"
 version = "0.1.0"
 edition = "2021"
 

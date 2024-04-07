@@ -92,7 +92,7 @@ impl Producer<PingerSettings> for Pinger {
             loop {
                 let settings = settings.lock().await.clone();
                 let interval = settings.interval_in_millis;
-                let mut tag = Some(String::from("ping"));
+                let mut tag = Some(String::from("pinger"));
                 let epoch = SystemTime::now()
                     .duration_since(SystemTime::UNIX_EPOCH)
                     .unwrap();
@@ -102,18 +102,18 @@ impl Producer<PingerSettings> for Pinger {
                 }
 
                 if settings.update_tag.unwrap_or(true) {
-                    tag = Some(format!("ping-{}", epoch.as_millis()));
+                    tag = Some(format!("pinger-{}", epoch.as_millis()));
                 }
 
                 let json = serde_json::to_value(PingerBody {
-                    data: String::from("ping"),
+                    data: String::from("pinger"),
                 })
                 .unwrap();
 
                 sender
                     .send(ProducerMessage {
                         tag,
-                        key: String::from("ping"),
+                        key: String::from("pinger"),
                         value: MessageValue::Json(json),
                         category: None, // will be treated as default
                         size: None,

@@ -1,4 +1,4 @@
-use rhiaqey_producers::ping::pinger::{Pinger, PingerSettings};
+use rhiaqey_producer_pinger::pinger::{Pinger, PingerSettings};
 
 #[tokio::main]
 async fn main() {
