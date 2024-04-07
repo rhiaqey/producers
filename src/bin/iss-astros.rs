@@ -1,4 +1,4 @@
-use rhiaqey_producers::iss::astros::{ISSAstros, ISSAstrosSettings};
+use rhiaqey_producer_iss::astros::{ISSAstros, ISSAstrosSettings};
 
 #[tokio::main]
 async fn main() {

@@ -9,12 +9,12 @@ use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use sha256::digest;
 use std::sync::Arc;
-use std::time::{Duration, SystemTime};
+use std::time::Duration;
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
 use tokio::sync::Mutex;
 
 fn default_interval() -> Option<u64> {
-    Some(900000)
+    Some(15000)
 }
 
 fn default_timeout() -> Option<u64> {
@@ -22,11 +22,11 @@ fn default_timeout() -> Option<u64> {
 }
 
 fn default_url() -> Option<String> {
-    Some("http://api.open-notify.org/astros.json".to_string())
+    Some("http://api.open-notify.org/iss-now.json".to_string())
 }
 
 #[derive(Deserialize, Clone, Debug)]
-pub struct ISSAstrosSettings {
+pub struct ISSPositionSettings {
     #[serde(alias = "Url", default = "default_url")]
     pub url: Option<String>,
 
@@ -37,9 +37,9 @@ pub struct ISSAstrosSettings {
     pub timeout_in_millis: Option<u64>,
 }
 
-impl Default for ISSAstrosSettings {
+impl Default for ISSPositionSettings {
     fn default() -> Self {
-        ISSAstrosSettings {
+        ISSPositionSettings {
             url: default_url(),
             interval_in_millis: default_interval(),
             timeout_in_millis: default_timeout(),
@@ -47,32 +47,32 @@ impl Default for ISSAstrosSettings {
     }
 }
 
-impl Settings for ISSAstrosSettings {
+impl Settings for ISSPositionSettings {
     //
 }
 
 #[derive(Default, Serialize, Deserialize, Clone, Debug)]
-pub struct ISSAstrosPerson {
-    pub craft: String,
-    pub name: String,
+struct ISSPositionObject {
+    pub latitude: String,
+    pub longitude: String,
 }
 
 #[derive(Default, Serialize, Deserialize, Clone, Debug)]
-pub struct ISSAstrosResponse {
-    pub people: Vec<ISSAstrosPerson>,
-    pub number: u32,
+struct ISSPositionResponse {
+    pub iss_position: ISSPositionObject,
+    pub timestamp: u64,
     pub message: String,
 }
 
 #[derive(Default, Debug)]
-pub struct ISSAstros {
+pub struct ISSPosition {
     sender: Option<UnboundedSender<ProducerMessage>>,
-    settings: Arc<Mutex<ISSAstrosSettings>>,
+    settings: Arc<Mutex<ISSPositionSettings>>,
 }
 
-impl ISSAstros {
-    async fn send_request(settings: ISSAstrosSettings) -> Result<Response, String> {
-        info!("fetching iss astros");
+impl ISSPosition {
+    async fn send_request(settings: ISSPositionSettings) -> Result<Response, String> {
+        info!("fetching iss position");
 
         let client = reqwest::Client::new();
         let timeout = settings
@@ -91,35 +91,34 @@ impl ISSAstros {
             .await
     }
 
-    async fn fetch_astros(settings: ISSAstrosSettings) -> Result<ISSAstrosResponse, String> {
-        info!("downloading iss astros");
+    async fn fetch_position(settings: ISSPositionSettings) -> Result<ISSPositionResponse, String> {
+        info!("downloading iss position");
 
         let res = Self::send_request(settings).await?;
         let text = res.text().await.map_err(|x| x.to_string())?;
-        let astros =
-            serde_json::from_str::<ISSAstrosResponse>(text.as_str()).map_err(|x| x.to_string())?;
-        debug!("iss astros downloaded");
+        let position = serde_json::from_str::<ISSPositionResponse>(text.as_str())
+            .map_err(|x| x.to_string())?;
+        debug!("iss position downloaded");
 
-        Ok(astros)
+        Ok(position)
     }
 
-    fn prepare_message(payload: ISSAstrosResponse) -> ProducerMessage {
+    fn prepare_message(payload: ISSPositionResponse) -> ProducerMessage {
         debug!("preparing message from response");
 
-        let epoch = SystemTime::now()
-            .duration_since(SystemTime::UNIX_EPOCH)
-            .unwrap();
+        let tag = Some(digest(format!(
+            "{}-{}",
+            payload.iss_position.latitude, payload.iss_position.longitude
+        )));
 
-        let timestamp = Some(epoch.as_secs());
-
-        let tag = Some(digest(format!("{}-{}", timestamp.unwrap(), payload.number)));
+        let timestamp = Some(payload.timestamp * 1000);
 
         let json = serde_json::to_value(payload).unwrap();
 
         ProducerMessage {
-            key: String::from("iss/astros"),
+            key: String::from("iss/position"),
             value: MessageValue::Json(json),
-            category: Some(String::from("astros")),
+            category: Some(String::from("position")),
             size: None,
             timestamp,
             tag,
@@ -128,11 +127,13 @@ impl ISSAstros {
 }
 
 #[async_trait]
-impl Producer<ISSAstrosSettings> for ISSAstros {
-    fn setup(&mut self, settings: Option<ISSAstrosSettings>) -> ProducerMessageReceiver {
+impl Producer<ISSPositionSettings> for ISSPosition {
+    fn setup(&mut self, settings: Option<ISSPositionSettings>) -> ProducerMessageReceiver {
         info!("setting up {}", Self::kind());
 
-        self.settings = Arc::new(Mutex::new(settings.unwrap_or(ISSAstrosSettings::default())));
+        self.settings = Arc::new(Mutex::new(
+            settings.unwrap_or(ISSPositionSettings::default()),
+        ));
 
         let (sender, receiver) = unbounded_channel::<ProducerMessage>();
         self.sender = Some(sender);
@@ -140,7 +141,7 @@ impl Producer<ISSAstrosSettings> for ISSAstros {
         Ok(receiver)
     }
 
-    async fn set_settings(&mut self, settings: ISSAstrosSettings) {
+    async fn set_settings(&mut self, settings: ISSPositionSettings) {
         let mut locked_settings = self.settings.lock().await;
         *locked_settings = settings;
         debug!("new settings updated");
@@ -158,7 +159,7 @@ impl Producer<ISSAstrosSettings> for ISSAstros {
                 let interval = settings.interval_in_millis;
 
                 if settings.url.is_some() {
-                    match Self::fetch_astros(settings).await {
+                    match Self::fetch_position(settings).await {
                         Ok(response) => {
                             trace!("we have our response {:?}", response);
                             sender
@@ -175,10 +176,6 @@ impl Producer<ISSAstrosSettings> for ISSAstros {
         });
     }
 
-    async fn metrics(&self) -> Value {
-        json!({})
-    }
-
     fn schema() -> Value {
         json!({
             "$schema": "http://json-schema.org/draft-07/schema#",
@@ -186,7 +183,7 @@ impl Producer<ISSAstrosSettings> for ISSAstros {
             "properties": {
                 "Url": {
                     "type": "string",
-                    "examples": [ "http://api.open-notify.org/astros.json" ],
+                    "examples": [ "http://api.open-notify.org/iss-now.json" ],
                 },
                 "Interval": {
                     "type": "integer",
@@ -204,7 +201,11 @@ impl Producer<ISSAstrosSettings> for ISSAstros {
         })
     }
 
+    async fn metrics(&self) -> Value {
+        json!({})
+    }
+
     fn kind() -> String {
-        String::from("iss_astros")
+        String::from("iss_position")
     }
 }

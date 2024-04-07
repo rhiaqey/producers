@@ -1732,6 +1732,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "rhiaqey-producer-iss"
+version = "0.1.36"
+dependencies = [
+ "async-trait",
+ "env_logger",
+ "futures",
+ "log",
+ "reqwest",
+ "rhiaqey-common",
+ "rhiaqey-sdk-rs",
+ "serde",
+ "serde_json",
+ "sha256",
+ "tokio",
+]
+
+[[package]]
 name = "rhiaqey-producer-pinger"
 version = "0.1.36"
 dependencies = [
@@ -1801,6 +1818,7 @@ dependencies = [
  "reqwest",
  "rhiaqey-common",
  "rhiaqey-producer-ecb",
+ "rhiaqey-producer-iss",
  "rhiaqey-producer-pinger",
  "rhiaqey-producer-rss",
  "rhiaqey-producer-ticker",

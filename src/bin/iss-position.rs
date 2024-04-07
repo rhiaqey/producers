@@ -1,4 +1,4 @@
-use rhiaqey_producers::iss::position::{ISSPosition, ISSPositionSettings};
+use rhiaqey_producer_iss::position::{ISSPosition, ISSPositionSettings};
 
 #[tokio::main]
 async fn main() {
