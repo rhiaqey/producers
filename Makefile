@@ -11,23 +11,6 @@ export PRIVATE_PORT=3003
 export PUBLIC_PORT=3004
 export NAMESPACE=rhiaqey
 
-export SECRET=92c54ddb6370d95e04f679dc773af83da4f359265909289e330c51651e840250
-
-define CHANNELS
-[
-	{
-		"Name": "sdf",
-		"Size": 10
-	},
-	{
-		"Name": "cokoland",
-		"Size": 15
-	}
-]
-endef
-
-export CHANNELS
-
 define PUBLIC_KEY
 -----BEGIN RSA PUBLIC KEY-----
 MIIBCgKCAQEAwWOo7UYK8upVY3qf1zvpwdyVL+4KWwKx4lKQXd5ljiEjNBdhQlRP
@@ -77,25 +60,25 @@ export PRIVATE_KEY
 yahoo:
 	ID=yahoo-1 \
 	NAME=yahoo-1 \
-		cargo run --bin yahoo --features=yahoo
+		cargo run --bin yahoo
 
 .PHONY: yahoo-prod
 yahoo-prod:
 	ID=yahoo-1 \
 	NAME=yahoo-1 \
-		cargo run --release --bin yahoo --features=yahoo
+		cargo run --release --bin yahoo
 
 .PHONY: iss
 iss:
 	ID=pub1 \
 	NAME=iss-position-1 \
-		cargo run --bin iss-position --features=iss
+		cargo run --bin iss-position
 
 .PHONY: iss-prod
 iss-prod:
 	ID=pub1 \
 	NAME=iss-position-1 \
-		cargo run --release --bin iss-position --features=iss
+		cargo run --release --bin iss-position
 
 .PHONY: iss-astros
 iss-astros:
@@ -103,13 +86,13 @@ iss-astros:
 	PRIVATE_PORT=3013 \
 	PUBLIC_PORT=3014 \
 	NAME=iss-astros-1 \
-		cargo run --bin iss-astros --features=iss
+		cargo run --bin iss-astros
 
 .PHONY: iss-astros-prod
 iss-astros-prod:
 	ID=pub13 \
 	NAME=iss-astros-1 \
-		cargo run --release --bin iss-astros --features=iss
+		cargo run --release --bin iss-astros
 
 .PHONY: ticker
 ticker: ticker1
@@ -144,7 +127,7 @@ pinger:
 	NAME=pinger-1 \
 	PRIVATE_PORT=3007 \
     PUBLIC_PORT=3008 \
-		cargo run --bin pinger --features=pinger
+		cargo run --bin pinger
 
 .PHONY: pinger-prod
 pinger-prod:
@@ -152,7 +135,7 @@ pinger-prod:
 	NAME=pinger-1 \
 	PRIVATE_PORT=3007 \
     PUBLIC_PORT=3008 \
-		cargo run --release --bin pinger --features=pinger
+		cargo run --release --bin pinger
 
 .PHONY: rss
 rss:
@@ -160,7 +143,7 @@ rss:
 	NAME=rss-1 \
 	PRIVATE_PORT=3009 \
     PUBLIC_PORT=3010 \
-		cargo run --bin rss --features=rss
+		cargo run --bin rss
 
 .PHONY: rss-prod
 rss-prod:
@@ -168,7 +151,7 @@ rss-prod:
 	NAME=rss-1 \
 	PRIVATE_PORT=3009 \
     PUBLIC_PORT=3010 \
-		cargo run --release --bin rss --features=rss
+		cargo run --release --bin rss
 
 .PHONY: ecb
 ecb:
@@ -176,7 +159,7 @@ ecb:
 	NAME=ecb-1 \
 	PRIVATE_PORT=3011 \
     PUBLIC_PORT=3012 \
-		cargo run --bin ecb-daily --features=ecb
+		cargo run --bin ecb-daily
 
 .PHONY: ecb-prod
 ecb-prod:
@@ -184,7 +167,7 @@ ecb-prod:
 	NAME=ecb-1 \
 	PRIVATE_PORT=3011 \
     PUBLIC_PORT=3012 \
-		cargo run --release --bin ecb-daily --features=ecb
+		cargo run --release --bin ecb-daily
 
 .PHONY: build
 build: prod

@@ -125,7 +125,7 @@ pub async fn run<P: Producer<S> + Default + Send + 'static, S: Settings>() {
                                         info!("settings updated successfully");
                                     },
                                     Err(err) => {
-                                        warn!("failed to read settings {err}");
+                                        warn!("failed to read settings: {err}");
                                     }
                                 }
                             }

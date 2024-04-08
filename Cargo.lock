@@ -1687,7 +1687,7 @@ dependencies = [
 [[package]]
 name = "rhiaqey-common"
 version = "0.2.0"
-source = "git+https://github.com/rhiaqey/common.git#dad4e3457db3857d24bf46ff61d0e66914696c8d"
+source = "git+https://github.com/rhiaqey/common.git#ea4cae551c9fab55722616198d687320a539b6b6"
 dependencies = [
  "aes-gcm-siv",
  "anyhow",
@@ -1696,14 +1696,11 @@ dependencies = [
  "envy",
  "hyper",
  "log",
- "quick-xml 0.31.0",
  "rand",
  "redis",
- "reqwest",
  "rhiaqey-sdk-rs",
  "rmp-serde",
  "rsa",
- "rss",
  "rustis",
  "rusty_ulid",
  "serde",
