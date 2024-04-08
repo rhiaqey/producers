@@ -20,7 +20,7 @@ codegen-units = 1
 members = ["lib/ecb", "lib/iss", "lib/pinger", "lib/rss", "lib/ticker", "lib/yahoo"]
 
 [workspace.package]
-version = "0.1.40"
+version = "0.1.41"
 edition = "2021"
 
 [workspace.dependencies]

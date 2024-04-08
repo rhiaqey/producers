@@ -1714,7 +1714,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ecb"
-version = "0.1.40"
+version = "0.1.41"
 dependencies = [
  "chrono",
  "env_logger",
@@ -1732,7 +1732,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-iss"
-version = "0.1.40"
+version = "0.1.41"
 dependencies = [
  "env_logger",
  "futures",
@@ -1748,7 +1748,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-pinger"
-version = "0.1.40"
+version = "0.1.41"
 dependencies = [
  "env_logger",
  "log",
@@ -1761,7 +1761,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-rss"
-version = "0.1.40"
+version = "0.1.41"
 dependencies = [
  "chrono",
  "env_logger",
@@ -1779,7 +1779,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ticker"
-version = "0.1.40"
+version = "0.1.41"
 dependencies = [
  "env_logger",
  "log",
@@ -1792,7 +1792,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-yahoo"
-version = "0.1.40"
+version = "0.1.41"
 dependencies = [
  "base64",
  "env_logger",
@@ -1812,7 +1812,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producers"
-version = "0.1.40"
+version = "0.1.41"
 dependencies = [
  "axum",
  "env_logger",
