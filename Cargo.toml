@@ -57,9 +57,13 @@ axum = { version = "0.7" }
 hyper = { version = "1.2", features = ["full"] }
 openssl = { version = "0.10", features = ["vendored"] }
 
+[features]
+yahoo = []
+
 [[bin]]
 name = "yahoo"
 src = "src/bin/yahoo.rs"
+required-features = ["yahoo"]
 
 [[bin]]
 name = "iss-position"
