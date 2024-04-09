@@ -31,6 +31,7 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = { version = "1.0" }
 env_logger = { version = "0.11" }
 log = { version = "0.4" }
+anyhow = { version = "1.0" }
 
 [dependencies]
 rhiaqey-sdk-rs = { workspace = true }
@@ -46,6 +47,7 @@ serde = { workspace = true }
 serde_json = { workspace = true }
 env_logger = { workspace = true }
 log = { workspace = true }
+anyhow = { workspace = true }
 prometheus = { version = "0.13", features = ["process"] }
 futures = { version = "0.3" }
 lazy_static = { version = "1.4" }

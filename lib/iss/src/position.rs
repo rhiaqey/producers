@@ -1,4 +1,4 @@
-use futures::TryFutureExt;
+use anyhow::{bail, Context};
 use log::{debug, info, trace, warn};
 use reqwest::Response;
 use rhiaqey_sdk_rs::message::MessageValue;
@@ -70,7 +70,7 @@ pub struct ISSPosition {
 }
 
 impl ISSPosition {
-    async fn send_request(settings: ISSPositionSettings) -> Result<Response, String> {
+    async fn send_request(settings: ISSPositionSettings) -> anyhow::Result<Response> {
         info!("fetching iss position");
 
         let client = reqwest::Client::new();
@@ -79,24 +79,32 @@ impl ISSPosition {
             .unwrap_or(default_timeout().unwrap());
 
         if settings.url.is_none() {
-            return Err(String::from("url is not configured properly"));
+            bail!("url is not configured properly")
         }
 
         client
             .get(settings.url.unwrap())
             .timeout(Duration::from_millis(timeout))
             .send()
-            .map_err(|x| x.to_string())
             .await
+            .context("failed to send request")
     }
 
-    async fn fetch_position(settings: ISSPositionSettings) -> Result<ISSPositionResponse, String> {
+    async fn fetch_position(settings: ISSPositionSettings) -> anyhow::Result<ISSPositionResponse> {
         info!("downloading iss position");
 
-        let res = Self::send_request(settings).await?;
-        let text = res.text().await.map_err(|x| x.to_string())?;
+        let res = Self::send_request(settings)
+            .await
+            .context("failed to send request")?;
+
+        let text = res
+            .text()
+            .await
+            .context("failed to get full response as text")?;
+
         let position = serde_json::from_str::<ISSPositionResponse>(text.as_str())
-            .map_err(|x| x.to_string())?;
+            .context("failed to deserialize response")?;
+
         debug!("iss position downloaded");
 
         Ok(position)

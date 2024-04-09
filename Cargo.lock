@@ -1731,6 +1731,7 @@ dependencies = [
 name = "rhiaqey-producer-iss"
 version = "0.1.41"
 dependencies = [
+ "anyhow",
  "env_logger",
  "futures",
  "log",
@@ -1811,6 +1812,7 @@ dependencies = [
 name = "rhiaqey-producers"
 version = "0.1.41"
 dependencies = [
+ "anyhow",
  "axum",
  "env_logger",
  "futures",
