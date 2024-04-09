@@ -41,7 +41,7 @@ rhiaqey-producer-pinger = { path = "lib/pinger" }
 rhiaqey-producer-ecb = { path = "lib/ecb" }
 rhiaqey-producer-rss = { path = "lib/rss" }
 rhiaqey-producer-iss = { path = "lib/iss" }
-rhiaqey-producer-yahoo = { path = "lib/yahoo" }
+rhiaqey-producer-yahoo = { path = "lib/yahoo", optional = true }
 tokio = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
