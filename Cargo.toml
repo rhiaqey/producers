@@ -36,11 +36,11 @@ anyhow = { version = "1.0" }
 [dependencies]
 rhiaqey-sdk-rs = { workspace = true }
 rhiaqey-common = { workspace = true }
-rhiaqey-producer-ticker = { path = "lib/ticker" }
-rhiaqey-producer-pinger = { path = "lib/pinger" }
-rhiaqey-producer-ecb = { path = "lib/ecb" }
-rhiaqey-producer-rss = { path = "lib/rss" }
-rhiaqey-producer-iss = { path = "lib/iss" }
+rhiaqey-producer-ticker = { path = "lib/ticker", optional = true }
+rhiaqey-producer-pinger = { path = "lib/pinger", optional = true }
+rhiaqey-producer-ecb = { path = "lib/ecb", optional = true }
+rhiaqey-producer-rss = { path = "lib/rss", optional = true }
+rhiaqey-producer-iss = { path = "lib/iss", optional = true }
 rhiaqey-producer-yahoo = { path = "lib/yahoo", optional = true }
 tokio = { workspace = true }
 serde = { workspace = true }
@@ -58,7 +58,13 @@ hyper = { version = "1.2", features = ["full"] }
 openssl = { version = "0.10", features = ["vendored"] }
 
 [features]
-yahoo = []
+yahoo = ["rhiaqey-producer-yahoo"]
+iss-position = ["rhiaqey-producer-iss"]
+iss-astros = ["rhiaqey-producer-iss"]
+ticker = ["rhiaqey-producer-ticker"]
+pinger = ["rhiaqey-producer-pinger"]
+rss = ["rhiaqey-producer-rss"]
+ecb-daily = ["rhiaqey-producer-ecb"]
 
 [[bin]]
 name = "yahoo"
@@ -68,23 +74,29 @@ required-features = ["yahoo"]
 [[bin]]
 name = "iss-position"
 src = "src/bin/iss-position.rs"
+required-features = ["iss-position"]
 
 [[bin]]
 name = "iss-astros"
 src = "src/bin/iss-astros.rs"
+required-features = ["iss-astros"]
 
 [[bin]]
 name = "ticker"
 src = "src/bin/ticker.rs"
+required-features = ["ticker"]
 
 [[bin]]
 name = "pinger"
 src = "src/bin/pinger.rs"
+required-features = ["pinger"]
 
 [[bin]]
 name = "rss"
 src = "src/bin/rss.rs"
+required-features = ["rss"]
 
 [[bin]]
 name = "ecb-daily"
 src = "src/bin/ecb-daily.rs"
+required-features = ["ecb-daily"]
