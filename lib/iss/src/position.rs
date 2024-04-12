@@ -129,6 +129,9 @@ impl ISSPosition {
             size: None,
             timestamp,
             tag,
+            user_ids: None,
+            client_ids: None,
+            group_ids: None,
         }
     }
 }

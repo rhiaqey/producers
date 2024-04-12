@@ -116,6 +116,9 @@ impl Producer<PingerSettings> for Pinger {
                         category: None, // will be treated as default
                         size: None,
                         timestamp: Option::from(now as u64),
+                        user_ids: None,
+                        client_ids: None,
+                        group_ids: None,
                     })
                     .unwrap();
 

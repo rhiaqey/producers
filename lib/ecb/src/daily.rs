@@ -158,6 +158,9 @@ impl ECBDaily {
                             value: MessageValue::Json(data_value),
                             tag: Some(tag),
                             timestamp: Some(rate.timestamp),
+                            user_ids: None,
+                            client_ids: None,
+                            group_ids: None,
                         })
                     }
                 });

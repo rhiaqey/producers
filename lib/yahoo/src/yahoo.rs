@@ -152,6 +152,9 @@ impl Producer<YahooSettings> for Yahoo {
                                                 value: MessageValue::Json(json),
                                                 category: None, // will be treated as default
                                                 timestamp: Option::from(now as u64),
+                                                user_ids: None,
+                                                client_ids: None,
+                                                group_ids: None,
                                             })
                                             .unwrap();
                                     },

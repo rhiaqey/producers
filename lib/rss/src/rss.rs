@@ -169,6 +169,9 @@ impl RSS {
                     value: MessageValue::Json(data),
                     tag: Some(tag),
                     timestamp: Some(timestamp as u64),
+                    user_ids: None,
+                    client_ids: None,
+                    group_ids: None,
                 }
             })
             .collect();
@@ -202,6 +205,9 @@ impl RSS {
                     value: MessageValue::Json(response),
                     tag: Some(tag),
                     timestamp: Some(timestamp as u64),
+                    user_ids: None,
+                    client_ids: None,
+                    group_ids: None,
                 })
             }
             Err(err) => Err(err),
