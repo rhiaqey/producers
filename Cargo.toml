@@ -19,7 +19,7 @@ codegen-units = 1
 [workspace]
 members = [
     "crates/rhiaqey-producer-ecb",
-    "lib/iss",
+    "crates/rhiaqey-producer-iss",
     "lib/pinger",
     "lib/rss",
     "lib/ticker",
@@ -47,7 +47,7 @@ rhiaqey-producer-ticker = { path = "lib/ticker", optional = true }
 rhiaqey-producer-pinger = { path = "lib/pinger", optional = true }
 rhiaqey-producer-ecb = { path = "crates/rhiaqey-producer-ecb", optional = true }
 rhiaqey-producer-rss = { path = "lib/rss", optional = true }
-rhiaqey-producer-iss = { path = "lib/iss", optional = true }
+rhiaqey-producer-iss = { path = "crates/rhiaqey-producer-iss", optional = true }
 rhiaqey-producer-yahoo = { path = "lib/yahoo", optional = true }
 tokio = { workspace = true }
 serde = { workspace = true }
