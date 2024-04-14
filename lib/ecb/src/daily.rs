@@ -160,7 +160,6 @@ impl ECBDaily {
                             timestamp: Some(rate.timestamp),
                             user_ids: None,
                             client_ids: None,
-                            group_ids: None,
                         })
                     }
                 });

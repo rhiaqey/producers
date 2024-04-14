@@ -171,7 +171,6 @@ impl RSS {
                     timestamp: Some(timestamp as u64),
                     user_ids: None,
                     client_ids: None,
-                    group_ids: None,
                 }
             })
             .collect();
@@ -207,7 +206,6 @@ impl RSS {
                     timestamp: Some(timestamp as u64),
                     user_ids: None,
                     client_ids: None,
-                    group_ids: None,
                 })
             }
             Err(err) => Err(err),

@@ -154,7 +154,6 @@ impl Producer<YahooSettings> for Yahoo {
                                                 timestamp: Option::from(now as u64),
                                                 user_ids: None,
                                                 client_ids: None,
-                                                group_ids: None,
                                             })
                                             .unwrap();
                                     },

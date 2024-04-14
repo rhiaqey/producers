@@ -118,7 +118,6 @@ impl Producer<PingerSettings> for Pinger {
                         timestamp: Option::from(now as u64),
                         user_ids: None,
                         client_ids: None,
-                        group_ids: None,
                     })
                     .unwrap();
 

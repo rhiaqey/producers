@@ -124,7 +124,6 @@ impl ISSAstros {
             tag,
             user_ids: None,
             client_ids: None,
-            group_ids: None,
         }
     }
 }
