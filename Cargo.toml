@@ -17,7 +17,14 @@ overflow-checks = true
 codegen-units = 1
 
 [workspace]
-members = ["lib/ecb", "lib/iss", "lib/pinger", "lib/rss", "lib/ticker", "lib/yahoo"]
+members = [
+    "crates/rhiaqey-producer-ecb",
+    "lib/iss",
+    "lib/pinger",
+    "lib/rss",
+    "lib/ticker",
+    "lib/yahoo"
+]
 
 [workspace.package]
 version = "0.1.49"
@@ -38,7 +45,7 @@ rhiaqey-sdk-rs = { workspace = true }
 rhiaqey-common = { workspace = true }
 rhiaqey-producer-ticker = { path = "lib/ticker", optional = true }
 rhiaqey-producer-pinger = { path = "lib/pinger", optional = true }
-rhiaqey-producer-ecb = { path = "lib/ecb", optional = true }
+rhiaqey-producer-ecb = { path = "crates/rhiaqey-producer-ecb", optional = true }
 rhiaqey-producer-rss = { path = "lib/rss", optional = true }
 rhiaqey-producer-iss = { path = "lib/iss", optional = true }
 rhiaqey-producer-yahoo = { path = "lib/yahoo", optional = true }
