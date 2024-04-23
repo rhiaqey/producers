@@ -16,7 +16,7 @@ use std::time::Duration;
 
 use crate::exe::metrics::TOTAL_CHANNELS;
 
-pub async fn run<P: Producer<S> + Default + Send + 'static, S: Settings>() {
+pub async fn run<P: Producer<S> + Send + 'static, S: Settings>() {
     env_logger::init();
     let env = parse_env();
 
