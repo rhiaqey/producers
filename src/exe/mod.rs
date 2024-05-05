@@ -13,6 +13,7 @@ use rhiaqey_sdk_rs::producer::Producer;
 use rhiaqey_sdk_rs::settings::Settings;
 use serde_json::json;
 use std::time::Duration;
+use tokio::signal;
 
 use crate::exe::metrics::TOTAL_CHANNELS;
 
@@ -98,6 +99,10 @@ pub async fn run<P: Producer<S> + Send + 'static, S: Settings>() {
 
                 trace!("metrics sent");
             },
+            Ok(result) = signal::ctrl_c() => {
+                trace!("signal caught: {:?}", result);
+                break;
+            },
             Some(message) = publisher_stream.recv() => {
                 trace!("message received from plugin: {:?}", message);
                 match executor.publish_async(message, ExecutorPublishOptions::default()).await {
@@ -136,4 +141,5 @@ pub async fn run<P: Producer<S> + Send + 'static, S: Settings>() {
             }
         }
     }
+    info!("shutting down");
 }
