@@ -1,3 +1,6 @@
+export REDIS_VERSION=7.2.4
+export REDIS_INSIGHT_VERSION=2.48.0
+
 export REDIS_MODE=standalone
 export REDIS_PASSWORD=welcome
 export REDIS_ADDRESS=0.0.0.0:6379
@@ -199,3 +202,30 @@ docker-multi:
 		--progress=plain \
 		--no-cache \
 		.
+
+.PHONY: hub
+hub:
+	docker run -it --rm --name hub -p 3000:3000 -p 3001:3001 \
+		-e REDIS_PASSWORD=${REDIS_PASSWORD} \
+		-e PUBLIC_KEY=/certs/pub.pem \
+		-e PRIVATE_KEY=/certs/priv.pem \
+		-e PRIVATE_PORT=3000 \
+		-e PUBLIC_PORT=3001 \
+		-v ./certs:/certs \
+		--entrypoint 'rhiaqey-hub' \
+		--network host \
+		rhiaqey/hub:latest 'run'
+
+.PHONY: redis
+redis:
+	docker run -it --rm --name redis -p 6379:6379 \
+		-e ALLOW_EMPTY_PASSWORD=no \
+		-e REDIS_PASSWORD=${REDIS_PASSWORD} \
+		--network host \
+		rhiaqey/redis:${REDIS_VERSION}
+
+.PHONY: redisinsight
+redisinsight:
+	docker run -it --rm --name redisinsight -p 5540:5540 \
+		--network host \
+		redis/redisinsight:${REDIS_INSIGHT_VERSION}
