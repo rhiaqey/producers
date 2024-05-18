@@ -1,0 +1,11 @@
+[package]
+name = "rhiaqey-producer-ctrader-fix"
+version.workspace = true
+edition.workspace = true
+
+[badges]
+maintenance = { status = "experimental" }
+
+[dependencies]
+fefixs = { git = "https://github.com/ferrumfix/ferrumfix" }
+quickfix = "0.1.4"

@@ -23,7 +23,8 @@ members = [
     "crates/rhiaqey-producer-pinger",
     "crates/rhiaqey-producer-rss",
     "crates/rhiaqey-producer-ticker",
-    "crates/rhiaqey-producer-yahoo"
+    "crates/rhiaqey-producer-yahoo",
+    "crates/rhiaqey-producer-ctrader-fix"
 ]
 
 [workspace.package]
@@ -49,6 +50,7 @@ rhiaqey-producer-ecb = { path = "crates/rhiaqey-producer-ecb", optional = true }
 rhiaqey-producer-rss = { path = "crates/rhiaqey-producer-rss", optional = true }
 rhiaqey-producer-iss = { path = "crates/rhiaqey-producer-iss", optional = true }
 rhiaqey-producer-yahoo = { path = "crates/rhiaqey-producer-yahoo", optional = true }
+rhiaqey-producer-ctrader-fix = { path = "crates/rhiaqey-producer-ctrader-fix", optional = true }
 tokio = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
@@ -72,6 +74,12 @@ ticker = ["rhiaqey-producer-ticker"]
 pinger = ["rhiaqey-producer-pinger"]
 rss = ["rhiaqey-producer-rss"]
 ecb-daily = ["rhiaqey-producer-ecb"]
+ctrader-fix = ["rhiaqey-producer-ctrader-fix"]
+
+[[bin]]
+name = "ctrader-fix"
+src = "src/bin/ctrader-fix.rs"
+required-features = ["ctrader-fix"]
 
 [[bin]]
 name = "yahoo"

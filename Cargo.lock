@@ -335,6 +335,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "cmake"
+version = "0.1.50"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a31c789563b815f77f4250caee12365734369f942439b7defd71e18a48197130"
+dependencies = [
+ "cc",
+]
+
+[[package]]
 name = "colorchoice"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -629,6 +638,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9fc0510504f03c51ada170672ac806f1f105a88aa97a5281117e1ddc3368e51a"
 
 [[package]]
+name = "fefixs"
+version = "0.7.0"
+source = "git+https://github.com/ferrumfix/ferrumfix#6e235eac303e574849e27fcd23721395050932fa"
+
+[[package]]
 name = "fixedbitset"
 version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -663,6 +677,12 @@ checksum = "e13624c2627564efccf4934284bdd98cbaa14e79b0b5a141218e507b3a823456"
 dependencies = [
  "percent-encoding",
 ]
+
+[[package]]
+name = "fs_extra"
+version = "1.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "42703706b716c37f96a77aea830392ad231f44c9e9a67872fa5548707e11b11c"
 
 [[package]]
 name = "futures"
@@ -1676,6 +1696,27 @@ dependencies = [
 ]
 
 [[package]]
+name = "quickfix"
+version = "0.1.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cced64bb2dff71f926836a83e4d1f38c3d85e765431c10e6759945af05612b74"
+dependencies = [
+ "log",
+ "quickfix-ffi",
+ "thiserror",
+]
+
+[[package]]
+name = "quickfix-ffi"
+version = "0.1.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c195f7c68b61a3396dd8280154938ee2b4e39c985266f0176b2d41572306ff42"
+dependencies = [
+ "cmake",
+ "fs_extra",
+]
+
+[[package]]
 name = "quote"
 version = "1.0.36"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1842,6 +1883,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "rhiaqey-producer-ctrader-fix"
+version = "0.1.68"
+dependencies = [
+ "fefixs",
+ "quickfix",
+]
+
+[[package]]
 name = "rhiaqey-producer-ecb"
 version = "0.1.68"
 dependencies = [
@@ -1957,6 +2006,7 @@ dependencies = [
  "prometheus",
  "redis",
  "rhiaqey-common",
+ "rhiaqey-producer-ctrader-fix",
  "rhiaqey-producer-ecb",
  "rhiaqey-producer-iss",
  "rhiaqey-producer-pinger",

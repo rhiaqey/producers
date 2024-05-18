@@ -172,6 +172,14 @@ ecb-prod:
     PUBLIC_PORT=3012 \
 		cargo run --release --bin ecb-daily --features ecb-daily
 
+.PHONY: ctrader
+ctrader:
+	ID=ctrader1 \
+	NAME=ctrader-1 \
+	PRIVATE_PORT=3013 \
+    PUBLIC_PORT=3014 \
+		cargo run --bin ctrader-fix --features ctrader-fix
+
 .PHONY: build
 build: prod
 
@@ -184,13 +192,6 @@ prod:
 dev:
 	cargo build --all-features -j 64
 	ls -lah target/debug
-
-.PHONY: redis
-redis:
-	docker run -it --rm --name redis -p 6379:6379 \
-		-e ALLOW_EMPTY_PASSWORD=no \
-		-e REDIS_PASSWORD=${REDIS_PASSWORD} \
-		rhiaqey/redis:latest
 
 .PHONY: docker-multi
 docker-multi:
