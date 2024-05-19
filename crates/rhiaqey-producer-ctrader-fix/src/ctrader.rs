@@ -3,15 +3,23 @@ use serde::Deserialize;
 
 #[derive(Deserialize, Clone, Debug)]
 pub struct CTraderSettings {
-    ctrader_plist_hub_id: String,
-    ctrader_plist_hub_plant: String,
+    hostname: String,
+    port: usize,
+    password: String,
+    sender_comp_id: String,
+    target_comp_id: String,
+    sender_sub_id: String,
 }
 
 impl Default for CTraderSettings {
     fn default() -> Self {
         CTraderSettings {
-            ctrader_plist_hub_id: String::from("hub_live"),
-            ctrader_plist_hub_plant: String::from("ctrader"),
+            hostname: String::from(""),
+            port: 0,
+            password: String::from(""),
+            sender_comp_id: String::from("cTrader"),
+            target_comp_id: String::from("cServer"),
+            sender_sub_id: String::from("QUOTE"),
         }
     }
 }
