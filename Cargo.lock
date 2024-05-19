@@ -1888,6 +1888,9 @@ version = "0.1.69"
 dependencies = [
  "fefixs",
  "quickfix",
+ "rhiaqey-common",
+ "rhiaqey-sdk-rs",
+ "serde",
 ]
 
 [[package]]
