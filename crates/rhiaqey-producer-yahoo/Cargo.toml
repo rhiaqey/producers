@@ -20,7 +20,7 @@ env_logger = { workspace = true }
 log = { workspace = true }
 futures = { version = "0.3" }
 base64 = { version = "0.22" }
-tokio-tungstenite = { version = "0.21", features = ["native-tls"] }
+tokio-tungstenite = { version = "0.23", features = ["native-tls"] }
 protobuf = { version = "3.4", features = ["bytes"] }
 prost = "0.12"
 prost-types = "0.12"
