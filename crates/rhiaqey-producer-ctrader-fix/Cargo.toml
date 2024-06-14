@@ -9,6 +9,9 @@ maintenance = { status = "experimental" }
 [dependencies]
 rhiaqey-sdk-rs = { workspace = true }
 rhiaqey-common = { workspace = true }
-fefixs = { git = "https://github.com/ferrumfix/ferrumfix" }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+env_logger = { workspace = true }
+log = { workspace = true }
 quickfix = "0.1.4"
-serde = { version = "1.0.202", features = ["derive"] }

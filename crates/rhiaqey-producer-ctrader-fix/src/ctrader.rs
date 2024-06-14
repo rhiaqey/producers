@@ -1,23 +1,48 @@
+use log::info;
+use quickfix::dictionary_item::{EndTime, StartTime};
+use quickfix::{
+    Application, ApplicationCallback, ConnectionHandler, Dictionary, FileMessageStoreFactory,
+    LogFactory, SessionId, SessionSettings, SocketAcceptor, StdLogger,
+};
+use rhiaqey_sdk_rs::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
 use rhiaqey_sdk_rs::settings::Settings;
 use serde::Deserialize;
+use std::io::{stdin, Read};
+use std::sync::Arc;
+use tokio::sync::mpsc::unbounded_channel;
+use tokio::sync::Mutex;
+
+#[derive(Deserialize, Clone, Debug)]
+enum Port {
+    SSL = 5211,
+    PLAIN = 5201,
+}
 
 #[derive(Deserialize, Clone, Debug)]
 pub struct CTraderSettings {
     hostname: String,
-    port: usize,
+    port: Port,
     password: String,
     sender_comp_id: String,
     target_comp_id: String,
     sender_sub_id: String,
 }
 
+/**
+Host name: demo-uk-eqx-01.p.ctrader.com
+(Current IP address 99.83.135.211 can be changed without notice)
+Port: 5211 (SSL), 5201 (Plain text).
+Password: (a/c 4363372 password)
+SenderCompID: demo.ctrader.4363372
+TargetCompID: cServer
+SenderSubID: QUOTE*/
 impl Default for CTraderSettings {
     fn default() -> Self {
         CTraderSettings {
-            hostname: String::from(""),
-            port: 0,
-            password: String::from(""),
-            sender_comp_id: String::from("cTrader"),
+            hostname: String::from("demo-uk-eqx-01.p.ctrader.com"),
+            port: Port::PLAIN,
+            password: String::from("welcome"),
+            sender_comp_id: String::from("demo.ctrader.4363372"),
             target_comp_id: String::from("cServer"),
             sender_sub_id: String::from("QUOTE"),
         }
@@ -26,4 +51,92 @@ impl Default for CTraderSettings {
 
 impl Settings for CTraderSettings {
     //
+}
+
+#[derive(Default)]
+pub struct CTrader {
+    settings: CTraderSettings,
+    socket_acceptor: Option<
+        Arc<Mutex<SocketAcceptor<'static, MyApplication, StdLogger, FileMessageStoreFactory>>>,
+    >,
+}
+
+#[derive(Default)]
+pub struct MyApplication;
+
+impl ApplicationCallback for MyApplication {
+    // Implement whatever callback you need
+
+    fn on_create(&self, _session: &SessionId) {
+        // Do whatever you want here 😁
+    }
+}
+
+impl Producer<CTraderSettings> for CTrader {
+    fn setup(&mut self, settings: Option<CTraderSettings>) -> ProducerMessageReceiver {
+        if settings.is_none() {
+            return Err(Box::from("Settings are not available"));
+        }
+
+        let setup_settings = settings.unwrap();
+
+        let session_id = SessionId::try_new(
+            "FIX.4.4",
+            setup_settings.sender_comp_id.as_str(),
+            setup_settings.target_comp_id.as_str(),
+            "",
+        )?;
+
+        let mut settings = SessionSettings::new();
+        settings.set(
+            Some(&session_id),
+            Dictionary::try_from_items(&[&StartTime("00:00:01"), &EndTime("23:59:59")])?,
+        )?;
+
+        let store_factory = FileMessageStoreFactory::try_new(&settings)?;
+        let log_factory = LogFactory::try_new(&StdLogger::Stdout)?;
+
+        let app = Application::try_new(&MyApplication)?;
+        let acceptor = SocketAcceptor::try_new(&settings, &app, &store_factory, &log_factory)?;
+
+        self.socket_acceptor = Some(Arc::new(Mutex::new(acceptor)));
+
+        let (sender, receiver) = unbounded_channel::<ProducerMessage>();
+
+        Ok(receiver)
+    }
+
+    async fn set_settings(&mut self, settings: CTraderSettings) {
+        todo!()
+    }
+
+    async fn start(&mut self) {
+        if let Some(acceptor) = self.socket_acceptor.clone() {
+            let mut lock = acceptor.lock().await;
+            info!("found acceptor");
+            lock.start().unwrap();
+            info!("acceptor started");
+
+            let mut stdin = stdin().lock();
+            let mut stdin_buf = [0];
+            loop {
+                let _ = stdin.read_exact(&mut stdin_buf);
+                if stdin_buf[0] == b'q' {
+                    break;
+                }
+            }
+        }
+    }
+
+    fn schema() -> serde_json::value::Value {
+        todo!()
+    }
+
+    async fn metrics(&self) -> serde_json::value::Value {
+        todo!()
+    }
+
+    fn kind() -> String {
+        todo!()
+    }
 }
