@@ -9,6 +9,7 @@ use rhiaqey_sdk_rs::settings::Settings;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use std::collections::HashSet;
+use std::error::Error;
 use std::sync::Arc;
 use std::time::SystemTime;
 use tokio::net::TcpStream;
@@ -42,7 +43,7 @@ impl Settings for YahooSettings {
     //
 }
 
-#[derive(Default, Debug)]
+#[derive(Debug)]
 pub struct Yahoo {
     sender: Option<UnboundedSender<ProducerMessage>>,
     settings: Arc<Mutex<YahooSettings>>,
@@ -57,6 +58,14 @@ enum YahooStreamAction {
 }
 
 impl Producer<YahooSettings> for Yahoo {
+    fn create() -> Result<Self, Box<dyn Error>> {
+        Ok(Self {
+            sender: None,
+            settings: Default::default(),
+            writer: None,
+        })
+    }
+
     fn setup(&mut self, settings: Option<YahooSettings>) -> ProducerMessageReceiver {
         info!("setting up {}", Self::kind());
 

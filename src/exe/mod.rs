@@ -34,7 +34,13 @@ pub async fn run<P: Producer<S> + Send + 'static, S: Settings>() {
         executor.get_name()
     );
 
-    let mut plugin = P::default();
+    let mut plugin = match P::create() {
+        Ok(plugin) => plugin,
+        Err(err) => {
+            panic!("failed to create plugin: {err}");
+        }
+    };
+
     let port = executor.get_private_port();
     let settings = executor
         .read_settings_async::<S>()

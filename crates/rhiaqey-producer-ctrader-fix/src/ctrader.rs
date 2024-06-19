@@ -1,5 +1,7 @@
-use log::info;
-use quickfix::dictionary_item::{EndTime, StartTime};
+/*
+// use futures::TryFutureExt;
+use log::debug;
+// use quickfix::dictionary_item::{EndTime, StartTime};
 use quickfix::{
     Application, ApplicationCallback, ConnectionHandler, Dictionary, FileMessageStoreFactory,
     LogFactory, SessionId, SessionSettings, SocketAcceptor, StdLogger,
@@ -7,7 +9,9 @@ use quickfix::{
 use rhiaqey_sdk_rs::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
 use rhiaqey_sdk_rs::settings::Settings;
 use serde::Deserialize;
-use std::io::{stdin, Read};
+use serde_json::{json, Value};
+use std::error::Error;
+// use std::io::{stdin, Read};
 use std::sync::Arc;
 use tokio::sync::mpsc::unbounded_channel;
 use tokio::sync::Mutex;
@@ -53,12 +57,14 @@ impl Settings for CTraderSettings {
     //
 }
 
-#[derive(Default)]
+#[derive(Debug)]
 pub struct CTrader {
-    settings: CTraderSettings,
+    settings: Arc<Mutex<CTraderSettings>>,
+    file_message_store: FileMessageStoreFactory,
+    /*
     socket_acceptor: Option<
         Arc<Mutex<SocketAcceptor<'static, MyApplication, StdLogger, FileMessageStoreFactory>>>,
-    >,
+    >,*/
 }
 
 #[derive(Default)]
@@ -73,7 +79,20 @@ impl ApplicationCallback for MyApplication {
 }
 
 impl Producer<CTraderSettings> for CTrader {
-    fn setup(&mut self, settings: Option<CTraderSettings>) -> ProducerMessageReceiver {
+    fn create() -> Result<Self, Box<dyn Error>> {
+        let _log_factory = LogFactory::try_new(&StdLogger::Stdout)?;
+        let _app = Application::try_new(&MyApplication)?;
+        let settings = SessionSettings::new();
+        let file_message_store = FileMessageStoreFactory::try_new(&settings)?;
+
+        Ok(Self {
+            file_message_store,
+            settings: Default::default(),
+        })
+    }
+
+    fn setup(&mut self, _settings: Option<CTraderSettings>) -> ProducerMessageReceiver {
+        /*
         if settings.is_none() {
             return Err(Box::from("Settings are not available"));
         }
@@ -93,24 +112,19 @@ impl Producer<CTraderSettings> for CTrader {
             Dictionary::try_from_items(&[&StartTime("00:00:01"), &EndTime("23:59:59")])?,
         )?;
 
-        let store_factory = FileMessageStoreFactory::try_new(&settings)?;
-        let log_factory = LogFactory::try_new(&StdLogger::Stdout)?;
-
-        let app = Application::try_new(&MyApplication)?;
-        let acceptor = SocketAcceptor::try_new(&settings, &app, &store_factory, &log_factory)?;
-
-        self.socket_acceptor = Some(Arc::new(Mutex::new(acceptor)));
-
-        let (sender, receiver) = unbounded_channel::<ProducerMessage>();
+        // self.socket_acceptor = Some(Arc::new(Mutex::new(acceptor)));
+        */
+        let (_sender, receiver) = unbounded_channel::<ProducerMessage>();
 
         Ok(receiver)
     }
 
     async fn set_settings(&mut self, settings: CTraderSettings) {
-        todo!()
+        debug!("setting settings {:?}", settings);
     }
 
     async fn start(&mut self) {
+        /*
         if let Some(acceptor) = self.socket_acceptor.clone() {
             let mut lock = acceptor.lock().await;
             info!("found acceptor");
@@ -125,18 +139,26 @@ impl Producer<CTraderSettings> for CTrader {
                     break;
                 }
             }
-        }
+        }*/
+        tokio::task::spawn(async move { loop {} });
     }
 
     fn schema() -> serde_json::value::Value {
-        todo!()
+        json!({
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "additionalProperties": false
+        })
     }
 
-    async fn metrics(&self) -> serde_json::value::Value {
-        todo!()
+    async fn metrics(&self) -> Value {
+        json!({})
     }
 
     fn kind() -> String {
-        todo!()
+        String::from("ctrader")
     }
 }
+*/
