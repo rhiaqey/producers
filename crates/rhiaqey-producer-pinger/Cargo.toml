@@ -19,4 +19,4 @@ serde_json = { workspace = true }
 env_logger = { workspace = true }
 log = { workspace = true }
 fastping-rs = "0.2"
-dns-lookup = "2.0.4"
+dns-lookup = "2.0"

@@ -15,4 +15,4 @@ serde_json = { workspace = true }
 env_logger = { workspace = true }
 log = { workspace = true }
 futures = { version = "0.3" }
-quickfix = "0.1.4"
+quickfix = "0.1"
