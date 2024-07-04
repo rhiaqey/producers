@@ -97,6 +97,9 @@ iss-astros-prod:
 	NAME=iss-astros-1 \
 		cargo run --release --bin iss-astros --features iss-astros
 
+.PHONY: ticks
+ticks: ticker
+
 .PHONY: ticker
 ticker: ticker1
 
