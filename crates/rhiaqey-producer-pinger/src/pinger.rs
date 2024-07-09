@@ -1,12 +1,13 @@
 use fastping_rs::{PingResult, Pinger as LibPinger};
 use log::{debug, info, trace, warn};
 use rhiaqey_sdk_rs::message::MessageValue;
-use rhiaqey_sdk_rs::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
+use rhiaqey_sdk_rs::producer::{
+    Producer, ProducerConfig, ProducerMessage, ProducerMessageReceiver,
+};
 use rhiaqey_sdk_rs::settings::Settings;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use std::collections::HashMap;
-use std::error::Error;
 use std::net::IpAddr;
 use std::sync::Arc;
 use std::time::{Duration, SystemTime};
@@ -79,15 +80,21 @@ pub struct Pinger {
     settings: Arc<Mutex<PingerSettings>>,
 }
 
-impl Producer<PingerSettings> for Pinger {
-    fn create() -> Result<Self, Box<dyn Error>> {
-        Ok(Self {
+impl Default for Pinger {
+    fn default() -> Self {
+        Self {
             sender: None,
             settings: Default::default(),
-        })
+        }
     }
+}
 
-    fn setup(&mut self, settings: Option<PingerSettings>) -> ProducerMessageReceiver {
+impl Producer<PingerSettings> for Pinger {
+    async fn setup(
+        &mut self,
+        _config: ProducerConfig,
+        settings: Option<PingerSettings>,
+    ) -> ProducerMessageReceiver {
         info!("setting up {}", Self::kind());
 
         self.settings = Arc::new(Mutex::new(settings.unwrap_or(PingerSettings::default())));

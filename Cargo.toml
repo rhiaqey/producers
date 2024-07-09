@@ -60,7 +60,6 @@ log = { workspace = true }
 anyhow = { workspace = true }
 prometheus = { version = "0.13", features = ["process"] }
 futures = { version = "0.3" }
-lazy_static = { version = "1.5" }
 rustis = { version = "0.13", features = ["redis-json", "tokio-runtime"] }
 redis = { version = "0.25", features = ["tokio-comp", "sentinel"] }
 axum = { version = "0.7" }
