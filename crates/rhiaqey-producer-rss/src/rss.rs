@@ -3,12 +3,13 @@ use futures::TryFutureExt;
 use log::{debug, info, trace, warn};
 use reqwest::Response;
 use rhiaqey_sdk_rs::message::MessageValue;
-use rhiaqey_sdk_rs::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
+use rhiaqey_sdk_rs::producer::{
+    Producer, ProducerConfig, ProducerMessage, ProducerMessageReceiver,
+};
 use rhiaqey_sdk_rs::settings::Settings;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use std::cmp::Ordering;
-use std::error::Error;
 use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
@@ -214,15 +215,21 @@ impl RSS {
     }
 }
 
-impl Producer<RSSSettings> for RSS {
-    fn create() -> Result<Self, Box<dyn Error>> {
-        Ok(Self {
+impl Default for RSS {
+    fn default() -> Self {
+        Self {
             sender: None,
             settings: Default::default(),
-        })
+        }
     }
+}
 
-    fn setup(&mut self, settings: Option<RSSSettings>) -> ProducerMessageReceiver {
+impl Producer<RSSSettings> for RSS {
+    async fn setup(
+        &mut self,
+        _config: ProducerConfig,
+        settings: Option<RSSSettings>,
+    ) -> ProducerMessageReceiver {
         info!("setting up {}", Self::kind());
 
         self.settings = Arc::new(RwLock::new(settings.unwrap_or(RSSSettings::default())));
