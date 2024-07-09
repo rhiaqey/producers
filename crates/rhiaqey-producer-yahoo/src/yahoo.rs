@@ -4,12 +4,13 @@ use futures::SinkExt;
 use futures::StreamExt;
 use log::{debug, info, trace, warn};
 use rhiaqey_sdk_rs::message::MessageValue;
-use rhiaqey_sdk_rs::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
+use rhiaqey_sdk_rs::producer::{
+    Producer, ProducerConfig, ProducerMessage, ProducerMessageReceiver,
+};
 use rhiaqey_sdk_rs::settings::Settings;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use std::collections::HashSet;
-use std::error::Error;
 use std::sync::Arc;
 use std::time::SystemTime;
 use tokio::net::TcpStream;
@@ -57,16 +58,22 @@ enum YahooStreamAction {
     Unsubscribe(HashSet<String>),
 }
 
-impl Producer<YahooSettings> for Yahoo {
-    fn create() -> Result<Self, Box<dyn Error>> {
-        Ok(Self {
+impl Default for Yahoo {
+    fn default() -> Self {
+        Self {
             sender: None,
             settings: Default::default(),
             writer: None,
-        })
+        }
     }
+}
 
-    fn setup(&mut self, settings: Option<YahooSettings>) -> ProducerMessageReceiver {
+impl Producer<YahooSettings> for Yahoo {
+    async fn setup(
+        &mut self,
+        _config: ProducerConfig,
+        settings: Option<YahooSettings>,
+    ) -> ProducerMessageReceiver {
         info!("setting up {}", Self::kind());
 
         self.settings = Arc::new(Mutex::new(settings.unwrap_or(YahooSettings::default())));
