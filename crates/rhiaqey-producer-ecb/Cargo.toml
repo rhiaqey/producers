@@ -21,5 +21,5 @@ log = { workspace = true }
 reqwest = { version = "0.12" }
 sha256 = { version = "1.5" }
 chrono = { version = "0.4" }
-quick-xml = { version = "0.35", features = ["async-tokio", "serialize", "encoding"] }
+quick-xml = { version = "0.36", features = ["async-tokio", "serialize", "encoding"] }
 futures = { version = "0.3" }
