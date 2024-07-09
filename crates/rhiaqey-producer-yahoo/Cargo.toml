@@ -26,4 +26,4 @@ prost = "0.13"
 prost-types = "0.13"
 
 [build-dependencies]
-prost-build = { version = "0.12" }
+prost-build = { version = "0.13" }
