@@ -1,10 +1,11 @@
 use log::{debug, info};
 use rhiaqey_sdk_rs::message::MessageValue;
-use rhiaqey_sdk_rs::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
+use rhiaqey_sdk_rs::producer::{
+    Producer, ProducerConfig, ProducerMessage, ProducerMessageReceiver,
+};
 use rhiaqey_sdk_rs::settings::Settings;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
-use std::error::Error;
 use std::sync::Arc;
 use std::time::{Duration, SystemTime};
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
@@ -43,15 +44,21 @@ struct TickerBody {
     timestamp: u64,
 }
 
-impl Producer<TickerSettings> for Ticker {
-    fn create() -> Result<Self, Box<dyn Error>> {
-        Ok(Self {
+impl Default for Ticker {
+    fn default() -> Self {
+        Self {
             sender: None,
             settings: Default::default(),
-        })
+        }
     }
+}
 
-    fn setup(&mut self, settings: Option<TickerSettings>) -> ProducerMessageReceiver {
+impl Producer<TickerSettings> for Ticker {
+    async fn setup(
+        &mut self,
+        _config: ProducerConfig,
+        settings: Option<TickerSettings>,
+    ) -> ProducerMessageReceiver {
         info!("setting up {}", Self::kind());
 
         self.settings = Arc::new(Mutex::new(settings.unwrap_or(TickerSettings::default())));
