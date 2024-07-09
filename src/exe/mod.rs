@@ -9,19 +9,19 @@ use rhiaqey_common::executor::{Executor, ExecutorPublishOptions};
 use rhiaqey_common::pubsub::{
     MetricsMessage, PublisherRegistrationMessage, RPCMessage, RPCMessageData,
 };
-use rhiaqey_sdk_rs::producer::Producer;
+use rhiaqey_sdk_rs::producer::{Producer, ProducerConfig};
 use rhiaqey_sdk_rs::settings::Settings;
 use serde_json::json;
 use std::time::Duration;
 use tokio::signal;
 
-use crate::exe::metrics::TOTAL_CHANNELS;
+use crate::exe::metrics::{init_metrics, TOTAL_CHANNELS};
 
 pub async fn run<P: Producer<S> + Send + 'static, S: Settings>() {
     env_logger::init();
     let env = parse_env();
 
-    let mut executor = match Executor::setup(env).await {
+    let mut executor = match Executor::setup(env.clone()).await {
         Ok(exec) => exec,
         Err(error) => {
             panic!("failed to setup executor: {error}");
@@ -34,20 +34,24 @@ pub async fn run<P: Producer<S> + Send + 'static, S: Settings>() {
         executor.get_name()
     );
 
-    let mut plugin = match P::create() {
-        Ok(plugin) => plugin,
-        Err(err) => {
-            panic!("failed to create plugin: {err}");
-        }
-    };
-
+    let mut plugin = P::default();
     let port = executor.get_private_port();
     let settings = executor
         .read_settings_async::<S>()
         .await
         .unwrap_or(S::default());
 
-    let mut publisher_stream = match plugin.setup(Some(settings)) {
+    init_metrics(&env, P::kind()).await;
+
+    let config = ProducerConfig {
+        id: Some(executor.get_id()),
+        name: Some(executor.get_name()),
+        namespace: Some(executor.get_namespace()),
+        port: executor.get_public_port(),
+        host: None,
+    };
+
+    let mut publisher_stream = match plugin.setup(config, Some(settings)).await {
         Err(error) => panic!("failed to setup publisher: {error}"),
         Ok(sender) => sender,
     };
@@ -80,7 +84,7 @@ pub async fn run<P: Producer<S> + Send + 'static, S: Settings>() {
         .unwrap();
 
     let channel_count = executor.get_channel_count_async().await as f64;
-    TOTAL_CHANNELS.set(channel_count);
+    TOTAL_CHANNELS.get().unwrap().set(channel_count);
     debug!("channel count is {channel_count}");
 
     info!("ready, set, go...");
@@ -88,6 +92,7 @@ pub async fn run<P: Producer<S> + Send + 'static, S: Settings>() {
     loop {
         tokio::select! {
             _ = interval.tick() => {
+                let total_channels = TOTAL_CHANNELS.get().unwrap().get();
                 executor.rpc(executor.get_namespace(), RPCMessage {
                     data: RPCMessageData::Metrics(MetricsMessage {
                         id: executor.get_id(),
@@ -95,7 +100,7 @@ pub async fn run<P: Producer<S> + Send + 'static, S: Settings>() {
                         namespace: executor.get_namespace(),
                         metrics: json!({
                             "common": {
-                                "total_channels": TOTAL_CHANNELS.get()
+                                "total_channels": total_channels
                             },
                             "producer": plugin.metrics().await
                         })
@@ -125,7 +130,7 @@ pub async fn run<P: Producer<S> + Send + 'static, S: Settings>() {
                                 debug!("received assign channels rpc {:?}", channels);
                                 let channel_count = channels.len() as f64;
                                 executor.set_channels_async(channels).await;
-                                TOTAL_CHANNELS.set(channel_count);
+                                TOTAL_CHANNELS.get().unwrap().set(channel_count);
                                 info!("total channels assigned to {channel_count}");
                             }
                             RPCMessageData::UpdatePublisherSettings() => {

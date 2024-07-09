@@ -2,12 +2,13 @@ use futures::TryFutureExt;
 use log::{debug, info, trace, warn};
 use reqwest::Response;
 use rhiaqey_sdk_rs::message::MessageValue;
-use rhiaqey_sdk_rs::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
+use rhiaqey_sdk_rs::producer::{
+    Producer, ProducerConfig, ProducerMessage, ProducerMessageReceiver,
+};
 use rhiaqey_sdk_rs::settings::Settings;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use sha256::digest;
-use std::error::Error;
 use std::sync::Arc;
 use std::time::{Duration, SystemTime};
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
@@ -129,15 +130,21 @@ impl ISSAstros {
     }
 }
 
-impl Producer<ISSAstrosSettings> for ISSAstros {
-    fn create() -> Result<Self, Box<dyn Error>> {
-        Ok(Self {
+impl Default for ISSAstros {
+    fn default() -> Self {
+        Self {
             sender: None,
-            settings: Default::default(),
-        })
+            settings: Arc::new(Default::default()),
+        }
     }
+}
 
-    fn setup(&mut self, settings: Option<ISSAstrosSettings>) -> ProducerMessageReceiver {
+impl Producer<ISSAstrosSettings> for ISSAstros {
+    async fn setup(
+        &mut self,
+        _config: ProducerConfig,
+        settings: Option<ISSAstrosSettings>,
+    ) -> ProducerMessageReceiver {
         info!("setting up {}", Self::kind());
 
         self.settings = Arc::new(Mutex::new(settings.unwrap_or(ISSAstrosSettings::default())));

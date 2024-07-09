@@ -2,12 +2,13 @@ use anyhow::{bail, Context};
 use log::{debug, info, trace, warn};
 use reqwest::Response;
 use rhiaqey_sdk_rs::message::MessageValue;
-use rhiaqey_sdk_rs::producer::{Producer, ProducerMessage, ProducerMessageReceiver};
+use rhiaqey_sdk_rs::producer::{
+    Producer, ProducerConfig, ProducerMessage, ProducerMessageReceiver,
+};
 use rhiaqey_sdk_rs::settings::Settings;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use sha256::digest;
-use std::error::Error;
 use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
@@ -136,15 +137,21 @@ impl ISSPosition {
     }
 }
 
-impl Producer<ISSPositionSettings> for ISSPosition {
-    fn create() -> Result<Self, Box<dyn Error>> {
-        Ok(Self {
+impl Default for ISSPosition {
+    fn default() -> Self {
+        Self {
             sender: None,
             settings: Default::default(),
-        })
+        }
     }
+}
 
-    fn setup(&mut self, settings: Option<ISSPositionSettings>) -> ProducerMessageReceiver {
+impl Producer<ISSPositionSettings> for ISSPosition {
+    async fn setup(
+        &mut self,
+        _config: ProducerConfig,
+        settings: Option<ISSPositionSettings>,
+    ) -> ProducerMessageReceiver {
         info!("setting up {}", Self::kind());
 
         self.settings = Arc::new(Mutex::new(
