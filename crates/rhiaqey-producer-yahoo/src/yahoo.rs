@@ -224,10 +224,6 @@ impl Producer<YahooSettings> for Yahoo {
         })
     }
 
-    async fn metrics(&self) -> Value {
-        json!({})
-    }
-
     fn kind() -> String {
         String::from("yahoo")
     }

@@ -131,10 +131,6 @@ impl Producer<TickerSettings> for Ticker {
         })
     }
 
-    async fn metrics(&self) -> Value {
-        json!({})
-    }
-
     fn kind() -> String {
         String::from("ticker")
     }

@@ -283,10 +283,6 @@ impl Producer<PingerSettings> for Pinger {
         })
     }
 
-    async fn metrics(&self) -> Value {
-        json!({})
-    }
-
     fn kind() -> String {
         String::from("pinger")
     }

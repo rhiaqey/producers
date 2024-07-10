@@ -259,10 +259,6 @@ impl Producer<ECBDailySettings> for ECBDaily {
         })
     }
 
-    async fn metrics(&self) -> Value {
-        json!({})
-    }
-
     fn kind() -> String {
         String::from("ecb_daily")
     }

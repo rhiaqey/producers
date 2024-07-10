@@ -325,10 +325,6 @@ impl Producer<RSSSettings> for RSS {
         })
     }
 
-    async fn metrics(&self) -> Value {
-        json!({})
-    }
-
     fn kind() -> String {
         String::from("rss")
     }

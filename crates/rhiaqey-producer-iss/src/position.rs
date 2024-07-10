@@ -224,10 +224,6 @@ impl Producer<ISSPositionSettings> for ISSPosition {
         })
     }
 
-    async fn metrics(&self) -> Value {
-        json!({})
-    }
-
     fn kind() -> String {
         String::from("iss_position")
     }
