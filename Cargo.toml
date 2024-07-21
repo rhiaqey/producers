@@ -40,6 +40,7 @@ serde_json = { version = "1.0" }
 env_logger = { version = "0.11" }
 log = { version = "0.4" }
 anyhow = { version = "1.0" }
+lazy_static = "1.5"
 
 [dependencies]
 rhiaqey-sdk-rs = { workspace = true }
@@ -57,6 +58,7 @@ serde_json = { workspace = true }
 env_logger = { workspace = true }
 log = { workspace = true }
 anyhow = { workspace = true }
+lazy_static = { workspace = true }
 prometheus = { version = "0.13", features = ["process"] }
 futures = { version = "0.3" }
 rustis = { version = "0.13", features = ["redis-json", "tokio-runtime"] }
@@ -64,7 +66,6 @@ redis = { version = "0.25", features = ["tokio-comp", "sentinel"] }
 axum = { version = "0.7" }
 hyper = { version = "1.4", features = ["full"] }
 openssl = { version = "0.10", features = ["vendored"] }
-lazy_static = "1.5.0"
 
 [features]
 yahoo = ["rhiaqey-producer-yahoo"]
