@@ -1,3 +1,103 @@
+use log::{debug, info};
+use rhiaqey_sdk_rs::producer::{
+    Producer, ProducerConfig, ProducerMessage, ProducerMessageReceiver,
+};
+use rhiaqey_sdk_rs::settings::Settings;
+use serde::Deserialize;
+use serde_json::{json, Value};
+use std::sync::Arc;
+use tokio::sync::mpsc::unbounded_channel;
+use tokio::sync::Mutex;
+
+#[derive(Deserialize, Clone, Debug)]
+enum Port {
+    SSL = 5211,
+    PLAIN = 5201,
+}
+
+#[derive(Deserialize, Clone, Debug)]
+pub struct CTraderSettings {
+    hostname: String,
+    port: Port,
+    password: String,
+    sender_comp_id: String,
+    target_comp_id: String,
+    sender_sub_id: String,
+}
+
+impl Default for CTraderSettings {
+    fn default() -> Self {
+        CTraderSettings {
+            hostname: String::from(""),
+            port: Port::PLAIN,
+            password: String::from(""),
+            sender_comp_id: String::from(""),
+            target_comp_id: String::from(""),
+            sender_sub_id: String::from(""),
+        }
+    }
+}
+
+impl Settings for CTraderSettings {
+    //
+}
+
+#[derive(Debug)]
+pub struct CTrader {
+    settings: Arc<Mutex<CTraderSettings>>,
+}
+
+impl Default for CTrader {
+    fn default() -> Self {
+        Self {
+            settings: Arc::new(Default::default()),
+        }
+    }
+}
+
+impl Producer<CTraderSettings> for CTrader {
+    async fn setup(
+        &mut self,
+        _config: ProducerConfig,
+        settings: Option<CTraderSettings>,
+    ) -> ProducerMessageReceiver {
+        info!("setting up ctrader producer");
+
+        if let Some(cfg) = settings {
+            debug!("setting found");
+            self.set_settings(cfg).await;
+        }
+
+        let (_sender, receiver) = unbounded_channel::<ProducerMessage>();
+
+        Ok(receiver)
+    }
+
+    async fn set_settings(&mut self, settings: CTraderSettings) {
+        let mut locked_settings = self.settings.lock().await;
+        *locked_settings = settings;
+        debug!("new settings updated");
+    }
+
+    async fn start(&mut self) {
+        todo!()
+    }
+
+    fn schema() -> Value {
+        json!({
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "additionalProperties": false
+        })
+    }
+
+    fn kind() -> String {
+        String::from("ctrader")
+    }
+}
+
 /*
 // use futures::TryFutureExt;
 use log::debug;
@@ -33,6 +133,15 @@ pub struct CTraderSettings {
 }
 
 /**
+
+Host name: demo-uk-eqx-01.p.ctrader.com
+(Current IP address 99.83.135.211 can be changed without notice)
+Port: 5211 (SSL), 5201 (Plain text).
+Password: (a/c 4363372 password)
+SenderCompID: demo.ctrader.4363372
+TargetCompID: cServer
+SenderSubID: QUOTE
+
 Host name: demo-uk-eqx-01.p.ctrader.com
 (Current IP address 99.83.135.211 can be changed without notice)
 Port: 5211 (SSL), 5201 (Plain text).

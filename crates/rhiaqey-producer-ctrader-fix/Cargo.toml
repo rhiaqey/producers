@@ -16,3 +16,7 @@ env_logger = { workspace = true }
 log = { workspace = true }
 futures = { version = "0.3" }
 quickfix = "0.1"
+fefix = { version = "0.7", features = ["codegen"] }
+
+[build-dependencies]
+fefix = { version = "0.7", features = ["codegen"] }
