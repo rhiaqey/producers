@@ -1785,28 +1785,6 @@ dependencies = [
 
 [[package]]
 name = "redis"
-version = "0.25.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e0d7a6955c7511f60f3ba9e86c6d02b3c3f144f8c24b288d1f4e18074ab8bbec"
-dependencies = [
- "async-trait",
- "bytes",
- "combine",
- "futures-util",
- "itoa",
- "percent-encoding",
- "pin-project-lite",
- "rand",
- "ryu",
- "sha1_smol",
- "socket2",
- "tokio",
- "tokio-util",
- "url",
-]
-
-[[package]]
-name = "redis"
 version = "0.26.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8cc5b667390cb038bc65fc4b18c06e2550469f7e06a02d886f1a018a11f63563"
@@ -1923,7 +1901,7 @@ dependencies = [
  "hyper",
  "log",
  "rand",
- "redis 0.26.0",
+ "redis",
  "rhiaqey-sdk-rs",
  "rmp-serde",
  "rsa",
@@ -2064,7 +2042,7 @@ dependencies = [
  "log",
  "openssl",
  "prometheus",
- "redis 0.25.4",
+ "redis",
  "rhiaqey-common",
  "rhiaqey-producer-ctrader-fix",
  "rhiaqey-producer-ecb",
