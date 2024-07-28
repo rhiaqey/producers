@@ -5,9 +5,18 @@ use rhiaqey_sdk_rs::producer::{
 use rhiaqey_sdk_rs::settings::Settings;
 use serde::Deserialize;
 use serde_json::{json, Value};
+use std::collections::HashMap;
 use std::sync::Arc;
+use std::thread;
+use std::time::Duration;
 use tokio::sync::mpsc::unbounded_channel;
 use tokio::sync::Mutex;
+
+use cfix::types::{DepthPrice, IncrementalRefresh, MarketDataHandler, SpotPrice};
+use cfix::{
+    types::{ConnectionHandler, ExecutionReport, TradeDataHandler},
+    MarketClient, TradeClient,
+};
 
 #[derive(Deserialize, Clone, Debug)]
 enum Port {
@@ -55,6 +64,60 @@ impl Default for CTrader {
     }
 }
 
+struct Handler;
+
+#[async_trait::async_trait]
+impl ConnectionHandler for Handler {
+    async fn on_connect(&self) {
+        info!("in handler : connected");
+    }
+
+    async fn on_logon(&self) {
+        info!("in handler : logon");
+    }
+
+    async fn on_disconnect(&self) {
+        info!("in handler : disconnected");
+    }
+}
+
+#[async_trait::async_trait]
+impl TradeDataHandler for Handler {
+    async fn on_execution_report(&self, exec_report: ExecutionReport) {
+        info!("on execution repost : {:?}", exec_report);
+    }
+}
+
+#[async_trait::async_trait]
+impl MarketDataHandler for Handler {
+    async fn on_price_of(&self, symbol_id: u32, price: SpotPrice) {
+        info!("in handler : symbol({}) - price: {:?}", symbol_id, price);
+    }
+
+    async fn on_market_depth_full_refresh(
+        &self,
+        symbol_id: u32,
+        full_depth: HashMap<String, DepthPrice>,
+    ) {
+        info!(
+            "in handle : symbol({}) - full depth: {:?}",
+            symbol_id, full_depth
+        );
+    }
+
+    async fn on_market_depth_incremental_refresh(&self, refresh: Vec<IncrementalRefresh>) {
+        info!("in handle : incremental refresh: {:?}", refresh);
+    }
+
+    async fn on_accpeted_spot_subscription(&self, symbol_id: u32) {
+        info!("on accepted spot subscription {}", symbol_id);
+    }
+
+    async fn on_accpeted_depth_subscription(&self, symbol_id: u32) {
+        info!("on accepted depth subscription {}", symbol_id);
+    }
+}
+
 impl Producer<CTraderSettings> for CTrader {
     async fn setup(
         &mut self,
@@ -80,7 +143,84 @@ impl Producer<CTraderSettings> for CTrader {
     }
 
     async fn start(&mut self) {
-        todo!()
+        let host = "demo-uk-eqx-01.p.ctrader.com";
+        let username = "4363372";
+        let password = "07650765";
+        let sender_comp_id = "demo.ctrader.4363372";
+
+        let handler = Arc::new(Handler {});
+
+        let mut trade_client = TradeClient::new(
+            host.to_string(),
+            username.to_string(),
+            password.to_string(),
+            sender_comp_id.to_string(),
+            None,
+        );
+
+        let mut market_client = MarketClient::new(
+            host.to_string(),
+            username.to_string(),
+            password.to_string(),
+            sender_comp_id.to_string(),
+            None,
+        );
+
+        trade_client.register_connection_handler_arc(handler.clone());
+        trade_client.register_trade_handler_arc(handler.clone());
+
+        market_client.register_connection_handler_arc(handler.clone());
+        market_client.register_market_handler_arc(handler.clone());
+
+        trade_client.connect().await.unwrap();
+        market_client.connect().await.unwrap();
+
+        if trade_client.is_connected() {
+            // fetch_security_list is available only for the trade client
+            let res = trade_client.fetch_security_list().await.unwrap();
+            for symbol_info in res.into_iter() {
+                println!("{:?}", symbol_info);
+            }
+
+            info!(
+                "order statuses {:?}",
+                trade_client.fetch_all_order_status(None).await.unwrap() // orders
+            );
+
+            let symbol_id = 22395; // BTCUSD
+
+            info!(
+                "sub list {:?}",
+                market_client.spot_subscription_list().await
+            );
+
+            info!(
+                "positions {:?}",
+                trade_client.fetch_positions().await.unwrap() // open positions
+            );
+
+            // market_client.subscribe_depth(symbol_id).await.unwrap();
+            market_client.subscribe_spot(symbol_id).await.unwrap();
+
+            info!("spot subscription requested");
+
+            tokio::time::sleep(Duration::from_millis(3000)).await;
+
+            info!(
+                "The prices of symbol_id({}) is {:?}",
+                symbol_id,
+                market_client.price_of(symbol_id).await
+            );
+
+            info!(
+                "Spot subscription list : {:?}",
+                market_client.spot_subscription_list().await
+            );
+
+            // trade_client.disconnect().await.unwrap();
+        }
+
+        println!("started...");
     }
 
     fn schema() -> Value {
