@@ -14,11 +14,5 @@ serde = { workspace = true }
 serde_json = { workspace = true }
 env_logger = { workspace = true }
 log = { workspace = true }
-futures = { version = "0.3" }
 quickfix = "0.1"
-fefix = { version = "0.7", features = ["codegen"] }
-ctrader-fix = { path = "../../../ctrader-fix" }
-async-trait = "0.1"
-
-[build-dependencies]
-fefix = { version = "0.7", features = ["codegen"] }
+quickfix-msg44 = "0.1"

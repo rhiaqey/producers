@@ -1,4 +1,21 @@
 use log::{debug, info};
+use std::any::{Any, TypeId};
+
+use quickfix::dictionary_item::{
+    ConnectionType, DataDictionary, EndTime, FileStorePath, HeartBtInt, ReconnectInterval,
+    SocketAcceptPort, SocketConnectHost, SocketConnectPort, StartTime,
+};
+use quickfix::{
+    Application, ApplicationCallback, ConnectionHandler, Dictionary, FieldMap,
+    FileMessageStoreFactory, LogFactory, Message, MsgFromAdminError, MsgFromAppError,
+    MsgToAppError, QuickFixError, SessionId, SessionSettings, SocketInitiator, StdLogger,
+};
+
+// this is valid
+use quickfix_msg44::field_id::PASSWORD;
+use quickfix_msg44::field_id::USERNAME;
+use quickfix_msg44::field_types::MsgType;
+
 use rhiaqey_sdk_rs::producer::{
     Producer, ProducerConfig, ProducerMessage, ProducerMessageReceiver,
 };
@@ -11,12 +28,6 @@ use std::thread;
 use std::time::Duration;
 use tokio::sync::mpsc::unbounded_channel;
 use tokio::sync::Mutex;
-
-use cfix::types::{DepthPrice, IncrementalRefresh, MarketDataHandler, SpotPrice};
-use cfix::{
-    types::{ConnectionHandler, ExecutionReport, TradeDataHandler},
-    MarketClient, TradeClient,
-};
 
 #[derive(Deserialize, Clone, Debug)]
 enum Port {
@@ -64,57 +75,89 @@ impl Default for CTrader {
     }
 }
 
-struct Handler;
+impl ApplicationCallback for CTrader {
+    // Implement whatever callback you need
 
-#[async_trait::async_trait]
-impl ConnectionHandler for Handler {
-    async fn on_connect(&self) {
-        info!("in handler : connected");
+    fn on_create(&self, session: &SessionId) {
+        // Do whatever you want here.
+        info!("-------------------- created {:?}", session);
     }
 
-    async fn on_logon(&self) {
-        info!("in handler : logon");
+    fn on_logon(&self, session: &SessionId) {
+        info!("-------------------- on login {:?}", session);
     }
 
-    async fn on_disconnect(&self) {
-        info!("in handler : disconnected");
-    }
-}
-
-#[async_trait::async_trait]
-impl TradeDataHandler for Handler {
-    async fn on_execution_report(&self, exec_report: ExecutionReport) {
-        info!("on execution repost : {:?}", exec_report);
-    }
-}
-
-#[async_trait::async_trait]
-impl MarketDataHandler for Handler {
-    async fn on_price_of(&self, symbol_id: u32, price: SpotPrice) {
-        info!("in handler : symbol({}) - price: {:?}", symbol_id, price);
+    fn on_logout(&self, session: &SessionId) {
+        info!("-------------------- on logout {:?}", session);
     }
 
-    async fn on_market_depth_full_refresh(
-        &self,
-        symbol_id: u32,
-        full_depth: HashMap<String, DepthPrice>,
-    ) {
+    // https://github.com/arthurlm/quickfix-rs/blob/main/examples/coinbase-fix-utils/src/logon_utils.rs#L13
+    fn on_msg_to_admin(&self, msg: &mut Message, session: &SessionId) {
+        // Intercept a login message automatically sent by quickfix library
+        let msg_type = msg
+            .with_header(|h| h.get_field(35))
+            .and_then(|x| MsgType::from_const_bytes(x.as_bytes()).ok());
+
+        if msg_type == Some(MsgType::Logon) {
+            info!("????????????????????????????????????????????????????????");
+
+            let username = "4363372";
+            let password = "07650765";
+
+            msg.set_field(USERNAME, username)
+                .expect("failed to set username");
+            msg.set_field(PASSWORD, password)
+                .expect("failed to set password");
+
+            info!("=======================================================");
+        }
+
+        // if let Some(msg_type) = msg_type {
+        // if MsgType::Logon == msg_type {
+        //
+        // }
+        // }
+
+        /*
+        // Set password
+        msg.set_field(USERNAME, "s.nakamoto")
+            .expect("Fail to set password");
+        msg.set_field(PASSWORD, config.api_passphrase.as_str())
+            .expect("Fail to set password");
+        */
+
         info!(
-            "in handle : symbol({}) - full depth: {:?}",
-            symbol_id, full_depth
+            "-------------------- message to admin {:?} - {:?} - {:?}",
+            msg, session, msg_type
         );
     }
 
-    async fn on_market_depth_incremental_refresh(&self, refresh: Vec<IncrementalRefresh>) {
-        info!("in handle : incremental refresh: {:?}", refresh);
+    fn on_msg_to_app(&self, msg: &mut Message, session: &SessionId) -> Result<(), MsgToAppError> {
+        info!(
+            "-------------------- message to app {:?} - {:?}",
+            msg, session
+        );
+        Ok(())
     }
 
-    async fn on_accpeted_spot_subscription(&self, symbol_id: u32) {
-        info!("on accepted spot subscription {}", symbol_id);
+    fn on_msg_from_admin(
+        &self,
+        msg: &Message,
+        session: &SessionId,
+    ) -> Result<(), MsgFromAdminError> {
+        info!(
+            "-------------------- message from admin {:?} - {:?}",
+            msg, session
+        );
+        Ok(())
     }
 
-    async fn on_accpeted_depth_subscription(&self, symbol_id: u32) {
-        info!("on accepted depth subscription {}", symbol_id);
+    fn on_msg_from_app(&self, msg: &Message, session: &SessionId) -> Result<(), MsgFromAppError> {
+        info!(
+            "-------------------- message from app {:?} - {:?}",
+            msg, session
+        );
+        Ok(())
     }
 }
 
@@ -144,83 +187,74 @@ impl Producer<CTraderSettings> for CTrader {
 
     async fn start(&mut self) {
         let host = "demo-uk-eqx-01.p.ctrader.com";
-        let username = "4363372";
-        let password = "07650765";
+        let port = 5201; // 5211 ssl
+        let target_comp_id = "cServer";
         let sender_comp_id = "demo.ctrader.4363372";
 
-        let handler = Arc::new(Handler {});
+        let initiator_session =
+            SessionId::try_new("FIX.4.4", sender_comp_id, target_comp_id, "").unwrap();
 
-        let mut trade_client = TradeClient::new(
-            host.to_string(),
-            username.to_string(),
-            password.to_string(),
-            sender_comp_id.to_string(),
-            None,
-        );
+        let acceptor_session =
+            SessionId::try_new("FIX.4.4", target_comp_id, sender_comp_id, "").unwrap();
 
-        let mut market_client = MarketClient::new(
-            host.to_string(),
-            username.to_string(),
-            password.to_string(),
-            sender_comp_id.to_string(),
-            None,
-        );
+        let mut settings = SessionSettings::new();
 
-        trade_client.register_connection_handler_arc(handler.clone());
-        trade_client.register_trade_handler_arc(handler.clone());
+        settings
+            .set(
+                None,
+                Dictionary::try_from_items(&[&ConnectionType::Initiator]).unwrap(),
+            )
+            .unwrap();
 
-        market_client.register_connection_handler_arc(handler.clone());
-        market_client.register_market_handler_arc(handler.clone());
+        settings
+            .set(
+                Some(&initiator_session),
+                Dictionary::try_from_items(&[
+                    &ConnectionType::Initiator,
+                    &StartTime("00:00:00"),
+                    &EndTime("23:59:59"),
+                    &SocketConnectHost(host),
+                    &SocketConnectPort(port),
+                    &HeartBtInt(20),
+                    &ReconnectInterval(60),
+                    &FileStorePath("store"),
+                    &DataDictionary("fix44.xml"),
+                ])
+                .unwrap(),
+            )
+            .unwrap();
 
-        trade_client.connect().await.unwrap();
-        market_client.connect().await.unwrap();
+        settings
+            .set(
+                Some(&acceptor_session),
+                Dictionary::try_from_items(&[
+                    &ConnectionType::Acceptor,
+                    &StartTime("00:00:00"),
+                    &EndTime("23:59:59"),
+                    &SocketAcceptPort(port),
+                    &HeartBtInt(20),
+                    &ReconnectInterval(60),
+                    &FileStorePath("store"),
+                    &DataDictionary("fix44.xml"),
+                ])
+                .unwrap(),
+            )
+            .unwrap();
 
-        if trade_client.is_connected() {
-            // fetch_security_list is available only for the trade client
-            let res = trade_client.fetch_security_list().await.unwrap();
-            for symbol_info in res.into_iter() {
-                println!("{:?}", symbol_info);
-            }
+        let store_factory = FileMessageStoreFactory::try_new(&settings).unwrap();
+        let log_factory = LogFactory::try_new(&StdLogger::Stdout).unwrap();
+        let app = Application::try_new(self).unwrap();
+        let mut socket =
+            SocketInitiator::try_new(&settings, &app, &store_factory, &log_factory).unwrap();
 
-            info!(
-                "order statuses {:?}",
-                trade_client.fetch_all_order_status(None).await.unwrap() // orders
-            );
+        socket.start().unwrap();
 
-            let symbol_id = 22395; // BTCUSD
-
-            info!(
-                "sub list {:?}",
-                market_client.spot_subscription_list().await
-            );
-
-            info!(
-                "positions {:?}",
-                trade_client.fetch_positions().await.unwrap() // open positions
-            );
-
-            // market_client.subscribe_depth(symbol_id).await.unwrap();
-            market_client.subscribe_spot(symbol_id).await.unwrap();
-
-            info!("spot subscription requested");
-
-            tokio::time::sleep(Duration::from_millis(3000)).await;
-
-            info!(
-                "The prices of symbol_id({}) is {:?}",
-                symbol_id,
-                market_client.price_of(symbol_id).await
-            );
-
-            info!(
-                "Spot subscription list : {:?}",
-                market_client.spot_subscription_list().await
-            );
-
-            // trade_client.disconnect().await.unwrap();
+        while !socket.is_logged_on().unwrap() {
+            // tokio::time::sleep(Duration::from_secs(250)).await;
+            // thread::sleep(250.into());
         }
 
-        println!("started...");
+        info!("started...");
     }
 
     fn schema() -> Value {
@@ -236,6 +270,11 @@ impl Producer<CTraderSettings> for CTrader {
     fn kind() -> String {
         String::from("ctrader")
     }
+}
+
+fn server_loop<C: ConnectionHandler>(mut connection_handler: C) -> Result<(), QuickFixError> {
+    info!(">> connection handler START");
+    connection_handler.start()
 }
 
 /*
