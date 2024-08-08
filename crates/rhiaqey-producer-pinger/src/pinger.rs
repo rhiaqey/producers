@@ -26,15 +26,6 @@ fn default_ping_data_packet_size() -> Option<usize> {
     Some(16) // 16 bytes
 }
 
-fn default_addresses() -> Option<Vec<String>> {
-    Some(vec![
-        String::from("urnovl.co"),
-        String::from("rhiaqey.com"),
-        String::from("8.8.8.8"),
-        String::from("1.1.1.1"),
-    ])
-}
-
 #[derive(Deserialize, Clone, Debug)]
 pub struct PingerSettings {
     #[serde(alias = "MaxRoundTrip", default = "default_max_round_trip")]
@@ -46,8 +37,8 @@ pub struct PingerSettings {
     )]
     pub packet_size: Option<usize>,
 
-    #[serde(alias = "Addresses", default = "default_addresses")]
-    pub addresses: Option<Vec<String>>,
+    #[serde(alias = "Addresses", default = "Vec::new")]
+    pub addresses: Vec<String>,
 
     #[serde(alias = "Interval", default = "default_interval")]
     pub interval_in_millis: Option<u64>,
@@ -56,7 +47,7 @@ pub struct PingerSettings {
 impl Default for PingerSettings {
     fn default() -> Self {
         PingerSettings {
-            addresses: default_addresses(),
+            addresses: vec![],
             max_roundtrip: default_max_round_trip(),
             packet_size: default_ping_data_packet_size(),
             interval_in_millis: default_interval(),
@@ -144,7 +135,7 @@ impl Producer<PingerSettings> for Pinger {
                 let mut addresses: HashMap<String, HashMap<IpAddr, Option<PingResultBody>>> =
                     HashMap::new();
 
-                settings.addresses.unwrap_or(vec![]).iter().for_each(|x| {
+                settings.addresses.iter().for_each(|x| {
                     trace!("Adding address: {}", x);
                     total_input_addresses += 1;
 
