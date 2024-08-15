@@ -143,7 +143,7 @@ impl Producer<YahooSettings> for Yahoo {
                     Some(message) = wss_receiver.next() => {
                         match message.unwrap() {
                             Message::Ping(_) => {
-                                debug!("pinger message arrived");
+                                debug!("ping message arrived");
                             },
                             Message::Close(_) => {
                                 debug!("close message arrived");
