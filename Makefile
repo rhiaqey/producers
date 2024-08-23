@@ -1,11 +1,10 @@
-export REDIS_VERSION=7.2.4
-export REDIS_INSIGHT_VERSION=2.48.0
-
 export REDIS_MODE=standalone
 export REDIS_PASSWORD=welcome
 export REDIS_ADDRESS=0.0.0.0:6379
 export REDIS_SENTINEL_MASTER=mymaster
 export REDIS_SENTINEL_ADDRESSES=localhost:26379,localhost:26380,localhost:26381
+export REDIS_VERSION=7.4.0
+export REDIS_INSIGHT_VERSION=2.54.0
 
 export RUST_BACKTRACE=full
 export RUST_LOG=rhiaqey=trace
