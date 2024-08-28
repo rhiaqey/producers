@@ -160,15 +160,15 @@ dependencies = [
 
 [[package]]
 name = "atom_syndication"
-version = "0.12.3"
+version = "0.12.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f2f34613907f31c9dbef0240156db3c9263f34842b6e1a8999d2304ea62c8a30"
+checksum = "2a3a5ed3201df5658d1aa45060c5a57dc9dba8a8ada20d696d67cb0c479ee043"
 dependencies = [
  "chrono",
  "derive_builder",
  "diligent-date-parser",
  "never",
- "quick-xml 0.31.0",
+ "quick-xml 0.36.1",
 ]
 
 [[package]]
@@ -1700,7 +1700,6 @@ version = "0.31.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1004a344b30a54e2ee58d66a71b32d2db2feb0a31f9a2d302bf0536f15de2a33"
 dependencies = [
- "encoding_rs",
  "memchr",
 ]
 
@@ -1942,7 +1941,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ctrader-fix"
-version = "0.1.128"
+version = "0.1.129"
 dependencies = [
  "env_logger",
  "log",
@@ -1958,7 +1957,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ecb"
-version = "0.1.128"
+version = "0.1.129"
 dependencies = [
  "chrono",
  "env_logger",
@@ -1977,7 +1976,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-iss"
-version = "0.1.128"
+version = "0.1.129"
 dependencies = [
  "anyhow",
  "env_logger",
@@ -1995,7 +1994,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-pinger"
-version = "0.1.128"
+version = "0.1.129"
 dependencies = [
  "dns-lookup",
  "env_logger",
@@ -2011,7 +2010,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-rss"
-version = "0.1.128"
+version = "0.1.129"
 dependencies = [
  "chrono",
  "env_logger",
@@ -2030,7 +2029,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ticker"
-version = "0.1.128"
+version = "0.1.129"
 dependencies = [
  "env_logger",
  "log",
@@ -2044,7 +2043,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-yahoo"
-version = "0.1.128"
+version = "0.1.129"
 dependencies = [
  "base64",
  "env_logger",
@@ -2065,7 +2064,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producers"
-version = "0.1.128"
+version = "0.1.129"
 dependencies = [
  "anyhow",
  "axum",
@@ -2206,9 +2205,9 @@ dependencies = [
 
 [[package]]
 name = "rustix"
-version = "0.38.34"
+version = "0.38.35"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "70dc5ec042f7a43c4a73241207cecc9873a06d45debb38b329f8541d85c2730f"
+checksum = "a85d50532239da68e9addb745ba38ff4612a242c1c7ceea689c4bc7c2f43c36f"
 dependencies = [
  "bitflags",
  "errno",
