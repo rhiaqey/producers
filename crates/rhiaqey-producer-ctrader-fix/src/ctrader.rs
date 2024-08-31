@@ -120,7 +120,7 @@ impl ApplicationCallback for CTrader {
 
         /*
         // Set password
-        msg.set_field(USERNAME, "s.nakamoto")
+        msg.set_field(USERNAME, "smith")
             .expect("Fail to set password");
         msg.set_field(PASSWORD, config.api_passphrase.as_str())
             .expect("Fail to set password");
@@ -272,7 +272,7 @@ impl Producer<CTraderSettings> for CTrader {
     }
 }
 
-fn server_loop<C: ConnectionHandler>(mut connection_handler: C) -> Result<(), QuickFixError> {
+fn _server_loop<C: ConnectionHandler>(mut connection_handler: C) -> Result<(), QuickFixError> {
     info!(">> connection handler START");
     connection_handler.start()
 }
