@@ -1730,9 +1730,9 @@ dependencies = [
 
 [[package]]
 name = "quickfix-msg44"
-version = "0.1.4"
+version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2382caca736c92327af7b83d9d2562d9fed7a173d04fc5fdfb3d8bedcf82d939"
+checksum = "8bad928ef153392bce62d8fbe73db22c2b465c884349818a6d1ec9bf3bfc4ed1"
 dependencies = [
  "quickfix",
  "quickfix-msg-gen",
