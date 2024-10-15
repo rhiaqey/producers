@@ -168,7 +168,7 @@ dependencies = [
  "derive_builder",
  "diligent-date-parser",
  "never",
- "quick-xml 0.36.2",
+ "quick-xml",
 ]
 
 [[package]]
@@ -300,9 +300,9 @@ checksum = "428d9aa8fbc0670b7b8d6030a7fadd0f86151cae55e4dbbece15f3780a3dfaf3"
 
 [[package]]
 name = "cc"
-version = "1.1.28"
+version = "1.1.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2e80e3b6a3ab07840e1cae9b0666a63970dc28e8ed5ffbcdacbfc760c281bfc1"
+checksum = "b16803a61b81d9eabb7eae2588776c4c1e584b738ede45fdbb4c972cec1e9945"
 dependencies = [
  "shlex",
 ]
@@ -1062,15 +1062,6 @@ checksum = "7943c866cc5cd64cbc25b2e01621d07fa8eb2a1a23160ee81ce38704e97b8ecf"
 
 [[package]]
 name = "itertools"
-version = "0.12.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ba291022dbbd398a455acf126c1e341954079855bc60dfdda641363bd6922569"
-dependencies = [
- "either",
-]
-
-[[package]]
-name = "itertools"
 version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "413ee7dfc52ee1a4949ceeb7dbc8a33f2d6c088194d9f922fb8318faf1f01186"
@@ -1086,9 +1077,9 @@ checksum = "49f1f14873335454500d59611f1cf4a4b0f786f9ac11f4312a78e4cf2566695b"
 
 [[package]]
 name = "js-sys"
-version = "0.3.71"
+version = "0.3.72"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0cb94a0ffd3f3ee755c20f7d8752f45cac88605a4dcf808abcff72873296ec7b"
+checksum = "6a88f1bda2bd75b0452a14784937d796722fdebfe50df998aeb3f0b7603019a9"
 dependencies = [
  "wasm-bindgen",
 ]
@@ -1611,7 +1602,7 @@ checksum = "0c1318b19085f08681016926435853bbf7858f9c082d0999b80550ff5d9abe15"
 dependencies = [
  "bytes",
  "heck",
- "itertools 0.13.0",
+ "itertools",
  "log",
  "multimap",
  "once_cell",
@@ -1631,7 +1622,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e9552f850d5f0964a4e4d0bf306459ac29323ddfbae05e35a7c0d35cb0803cc5"
 dependencies = [
  "anyhow",
- "itertools 0.13.0",
+ "itertools",
  "proc-macro2",
  "quote",
  "syn",
@@ -1675,15 +1666,6 @@ dependencies = [
 
 [[package]]
 name = "quick-xml"
-version = "0.31.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1004a344b30a54e2ee58d66a71b32d2db2feb0a31f9a2d302bf0536f15de2a33"
-dependencies = [
- "memchr",
-]
-
-[[package]]
-name = "quick-xml"
 version = "0.36.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f7649a7b4df05aed9ea7ec6f628c67c9953a43869b8bc50929569b2999d443fe"
@@ -1696,9 +1678,9 @@ dependencies = [
 
 [[package]]
 name = "quickfix"
-version = "0.1.4"
+version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cced64bb2dff71f926836a83e4d1f38c3d85e765431c10e6759945af05612b74"
+checksum = "0d55ccaffe4b0ff8e62afd422e12ec621f5aa4616f770b946e360e7236191f39"
 dependencies = [
  "log",
  "quickfix-ffi",
@@ -1707,9 +1689,9 @@ dependencies = [
 
 [[package]]
 name = "quickfix-ffi"
-version = "0.1.4"
+version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c195f7c68b61a3396dd8280154938ee2b4e39c985266f0176b2d41572306ff42"
+checksum = "0f1fac6474e2febf6894668caeb2095372d21acbc82d7eed3117d9393fd159fe"
 dependencies = [
  "cmake",
  "fs_extra",
@@ -1717,13 +1699,13 @@ dependencies = [
 
 [[package]]
 name = "quickfix-msg-gen"
-version = "0.1.4"
+version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "47fb876c4a1dcb1fd881fbee2f8814656733e6e7db7101ec123f37accb46a58f"
+checksum = "80a8458fdb2e853910c15f7dd7f8d85429ba8ceb3fcc94499fa5073fc0552394"
 dependencies = [
  "bytes",
  "convert_case",
- "itertools 0.12.1",
+ "itertools",
  "quickfix",
  "quickfix-spec-parser",
 ]
@@ -1740,12 +1722,12 @@ dependencies = [
 
 [[package]]
 name = "quickfix-spec-parser"
-version = "0.1.4"
+version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4d55ff55b48011d0f55256667af4534481e6df91105b02888715b65ac0599332"
+checksum = "d8dbc260a004eb0c22cdb619de0c74c86f3c0c9648bb5e8445f84a02c12b94dd"
 dependencies = [
  "bytes",
- "quick-xml 0.31.0",
+ "quick-xml",
  "thiserror",
 ]
 
@@ -1920,7 +1902,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ctrader-fix"
-version = "0.1.149"
+version = "0.1.150"
 dependencies = [
  "env_logger",
  "log",
@@ -1936,14 +1918,14 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ecb"
-version = "0.1.149"
+version = "0.1.150"
 dependencies = [
  "chrono",
  "env_logger",
  "futures",
  "log",
  "prometheus",
- "quick-xml 0.36.2",
+ "quick-xml",
  "reqwest",
  "rhiaqey-common",
  "rhiaqey-sdk-rs",
@@ -1955,7 +1937,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-iss"
-version = "0.1.149"
+version = "0.1.150"
 dependencies = [
  "anyhow",
  "env_logger",
@@ -1973,7 +1955,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-pinger"
-version = "0.1.149"
+version = "0.1.150"
 dependencies = [
  "dns-lookup",
  "env_logger",
@@ -1989,7 +1971,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-rss"
-version = "0.1.149"
+version = "0.1.150"
 dependencies = [
  "chrono",
  "env_logger",
@@ -2008,7 +1990,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ticker"
-version = "0.1.149"
+version = "0.1.150"
 dependencies = [
  "env_logger",
  "log",
@@ -2022,7 +2004,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-yahoo"
-version = "0.1.149"
+version = "0.1.150"
 dependencies = [
  "base64",
  "env_logger",
@@ -2043,7 +2025,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producers"
-version = "0.1.149"
+version = "0.1.150"
 dependencies = [
  "anyhow",
  "axum",
@@ -2147,7 +2129,7 @@ dependencies = [
  "atom_syndication",
  "derive_builder",
  "never",
- "quick-xml 0.36.2",
+ "quick-xml",
  "serde",
 ]
 
@@ -2236,9 +2218,9 @@ dependencies = [
 
 [[package]]
 name = "rustversion"
-version = "1.0.17"
+version = "1.0.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "955d28af4278de8121b7ebeb796b6a45735dc01436d898801014aced2773a3d6"
+checksum = "0e819f2bc632f285be6d7cd36e25940d45b2391dd6d9b939e79de557f7014248"
 
 [[package]]
 name = "rusty_ulid"
@@ -2857,9 +2839,9 @@ checksum = "9c8d87e72b64a3b4db28d11ce29237c246188f4f51057d65a7eab63b7987e423"
 
 [[package]]
 name = "wasm-bindgen"
-version = "0.2.94"
+version = "0.2.95"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ef073ced962d62984fb38a36e5fdc1a2b23c9e0e1fa0689bb97afa4202ef6887"
+checksum = "128d1e363af62632b8eb57219c8fd7877144af57558fb2ef0368d0087bddeb2e"
 dependencies = [
  "cfg-if",
  "once_cell",
@@ -2868,9 +2850,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-backend"
-version = "0.2.94"
+version = "0.2.95"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c4bfab14ef75323f4eb75fa52ee0a3fb59611977fd3240da19b2cf36ff85030e"
+checksum = "cb6dd4d3ca0ddffd1dd1c9c04f94b868c37ff5fac97c30b97cff2d74fce3a358"
 dependencies = [
  "bumpalo",
  "log",
@@ -2883,9 +2865,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-futures"
-version = "0.4.44"
+version = "0.4.45"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "65471f79c1022ffa5291d33520cbbb53b7687b01c2f8e83b57d102eed7ed479d"
+checksum = "cc7ec4f8827a71586374db3e87abdb5a2bb3a15afed140221307c3ec06b1f63b"
 dependencies = [
  "cfg-if",
  "js-sys",
@@ -2895,9 +2877,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-macro"
-version = "0.2.94"
+version = "0.2.95"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a7bec9830f60924d9ceb3ef99d55c155be8afa76954edffbb5936ff4509474e7"
+checksum = "e79384be7f8f5a9dd5d7167216f022090cf1f9ec128e6e6a482a2cb5c5422c56"
 dependencies = [
  "quote",
  "wasm-bindgen-macro-support",
@@ -2905,9 +2887,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-macro-support"
-version = "0.2.94"
+version = "0.2.95"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4c74f6e152a76a2ad448e223b0fc0b6b5747649c3d769cc6bf45737bf97d0ed6"
+checksum = "26c6ab57572f7a24a4985830b120de1594465e5d500f24afe89e16b4e833ef68"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2918,15 +2900,15 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-shared"
-version = "0.2.94"
+version = "0.2.95"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a42f6c679374623f295a8623adfe63d9284091245c3504bde47c17a3ce2777d9"
+checksum = "65fc09f10666a9f147042251e0dda9c18f166ff7de300607007e96bdebc1068d"
 
 [[package]]
 name = "web-sys"
-version = "0.3.71"
+version = "0.3.72"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "44188d185b5bdcae1052d08bcbcf9091a5524038d4572cc4f4f2bb9d5554ddd9"
+checksum = "f6488b90108c040df0fe62fa815cbdee25124641df01814dd7282749234c6112"
 dependencies = [
  "js-sys",
  "wasm-bindgen",
