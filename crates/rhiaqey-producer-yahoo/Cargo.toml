@@ -22,7 +22,7 @@ prometheus = { workspace = true }
 futures = { version = "0.3" }
 base64 = { version = "0.22" }
 tokio-tungstenite = { version = "0.24", features = ["native-tls"] }
-protobuf = { version = "3.6", features = ["bytes"] }
+protobuf = { version = "3.7", features = ["bytes"] }
 prost = "0.13"
 prost-types = "0.13"
 
