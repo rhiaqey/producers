@@ -151,7 +151,7 @@ impl Producer<YahooSettings> for Yahoo {
                             Message::Text(value) => {
                                 trace!("text message arrived {}", value);
 
-                                match general_purpose::STANDARD.decode(value) {
+                                match general_purpose::STANDARD.decode(value.as_bytes()) {
                                     Ok(raw) => {
                                         let data: PricingData = prost::Message::decode(raw.as_slice()).unwrap();
                                         let id = data.id.clone();
