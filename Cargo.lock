@@ -300,9 +300,9 @@ checksum = "325918d6fe32f23b19878fe4b34794ae41fc19ddbe53b10571a4874d44ffd39b"
 
 [[package]]
 name = "cc"
-version = "1.2.4"
+version = "1.2.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9157bbaa6b165880c27a4293a474c91cdcf265cc68cc829bf10be0964a391caf"
+checksum = "c31a0499c1dc64f458ad13872de75c0eb7e3fdb0e67964610c914b034fc5956e"
 dependencies = [
  "shlex",
 ]
@@ -2051,7 +2051,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ctrader-fix"
-version = "0.1.178"
+version = "0.1.179"
 dependencies = [
  "env_logger",
  "log",
@@ -2067,7 +2067,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ecb"
-version = "0.1.178"
+version = "0.1.179"
 dependencies = [
  "chrono",
  "env_logger",
@@ -2086,7 +2086,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-iss"
-version = "0.1.178"
+version = "0.1.179"
 dependencies = [
  "anyhow",
  "env_logger",
@@ -2104,7 +2104,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-pinger"
-version = "0.1.178"
+version = "0.1.179"
 dependencies = [
  "dns-lookup",
  "env_logger",
@@ -2120,7 +2120,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-rss"
-version = "0.1.178"
+version = "0.1.179"
 dependencies = [
  "chrono",
  "env_logger",
@@ -2139,7 +2139,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ticker"
-version = "0.1.178"
+version = "0.1.179"
 dependencies = [
  "env_logger",
  "log",
@@ -2153,7 +2153,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-yahoo"
-version = "0.1.178"
+version = "0.1.179"
 dependencies = [
  "base64",
  "env_logger",
@@ -2174,7 +2174,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producers"
-version = "0.1.178"
+version = "0.1.179"
 dependencies = [
  "anyhow",
  "axum",
@@ -2814,9 +2814,9 @@ dependencies = [
 
 [[package]]
 name = "tokio-tungstenite"
-version = "0.26.0"
+version = "0.26.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5c14b3e8ebea4eb2577de77903e6c008d9ac80b5aae1f9ae781c5229ae935a44"
+checksum = "be4bf6fecd69fcdede0ec680aaf474cdab988f9de6bc73d3758f0160e3b7025a"
 dependencies = [
  "futures-util",
  "log",
@@ -2895,9 +2895,9 @@ checksum = "e421abadd41a4225275504ea4d6566923418b7f05506fbc9c0fe86ba7396114b"
 
 [[package]]
 name = "tungstenite"
-version = "0.26.0"
+version = "0.26.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d4ab519cc9c1e57e6cab1087f262f9fc978a4e9d5f943b0e029567521d3525cb"
+checksum = "413083a99c579593656008130e29255e54dcaae495be556cc26888f211648c24"
 dependencies = [
  "byteorder",
  "bytes",
