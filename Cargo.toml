@@ -65,7 +65,7 @@ futures = { version = "0.3" }
 rustis = { version = "0.13", features = ["redis-json", "tokio-runtime"] }
 redis = { version = "0.28", features = ["tokio-comp", "sentinel"] }
 axum = { version = "0.8" }
-hyper = { version = "1.5", features = ["full"] }
+hyper = { version = "1.6", features = ["full"] }
 openssl = { version = "0.10", features = ["vendored"] }
 
 [features]
