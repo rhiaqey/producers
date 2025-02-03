@@ -1838,13 +1838,13 @@ dependencies = [
 
 [[package]]
 name = "quickfix"
-version = "0.1.5"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0d55ccaffe4b0ff8e62afd422e12ec621f5aa4616f770b946e360e7236191f39"
+checksum = "8ed11054a60348a64b57b012c14fdb92ae7c413950e9d57e5506c10f1177038e"
 dependencies = [
  "log",
  "quickfix-ffi",
- "thiserror 1.0.69",
+ "thiserror 2.0.11",
 ]
 
 [[package]]
