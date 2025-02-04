@@ -141,9 +141,9 @@ checksum = "69f7f8c3906b62b754cd5326047894316021dcfe5a194c8ea52bdd94934a3457"
 
 [[package]]
 name = "async-trait"
-version = "0.1.85"
+version = "0.1.86"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3f934833b4b7233644e5848f235df3f57ed8c80f1528a26c3dfa13d2147fa056"
+checksum = "644dd749086bf3771a2fbc5f256fdb982d53f011c7d5d560304eafeecebce79d"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -169,7 +169,7 @@ dependencies = [
  "derive_builder",
  "diligent-date-parser",
  "never",
- "quick-xml 0.37.2",
+ "quick-xml",
 ]
 
 [[package]]
@@ -294,15 +294,15 @@ checksum = "1fd0f2584146f6f2ef48085050886acf353beff7305ebd1ae69500e27c67f64b"
 
 [[package]]
 name = "bytes"
-version = "1.9.0"
+version = "1.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "325918d6fe32f23b19878fe4b34794ae41fc19ddbe53b10571a4874d44ffd39b"
+checksum = "f61dac84819c6588b558454b194026eb1f09c293b9036ae9b159e74e73ab6cf9"
 
 [[package]]
 name = "cc"
-version = "1.2.10"
+version = "1.2.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "13208fcbb66eaeffe09b99fffbe1af420f00a7b35aa99ad683dfc1aa76145229"
+checksum = "e4730490333d58093109dc02c23174c3f4d490998c3fed3cc8e82d57afedb9cf"
 dependencies = [
  "shlex",
 ]
@@ -374,9 +374,9 @@ checksum = "c2459377285ad874054d797f3ccebf984978aa39129f6eafde5cdc8315b612f8"
 
 [[package]]
 name = "convert_case"
-version = "0.6.0"
+version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ec182b0ca2f35d8fc196cf3404988fd8b8c739a4d270ff118a398feb0cbec1ca"
+checksum = "bb402b8d4c85569410425650ce3eddc7d698ed96d39a73f941b08fb63082f1e7"
 dependencies = [
  "unicode-segmentation",
 ]
@@ -1216,6 +1216,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "itertools"
+version = "0.14.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2b192c782037fadd9cfa75548310488aabdbf3d2da73885b31bd0abd03351285"
+dependencies = [
+ "either",
+]
+
+[[package]]
 name = "itoa"
 version = "1.0.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1753,7 +1762,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d0f3e5beed80eb580c68e2c600937ac2c4eedabdfd5ef1e5b7ea4f3fba84497b"
 dependencies = [
  "heck",
- "itertools",
+ "itertools 0.13.0",
  "log",
  "multimap",
  "once_cell",
@@ -1773,7 +1782,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "157c5a9d7ea5c2ed2d9fb8f495b64759f7816c7eaea54ba3978f0d63000162e3"
 dependencies = [
  "anyhow",
- "itertools",
+ "itertools 0.13.0",
  "proc-macro2",
  "quote",
  "syn",
@@ -1817,15 +1826,6 @@ dependencies = [
 
 [[package]]
 name = "quick-xml"
-version = "0.36.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f7649a7b4df05aed9ea7ec6f628c67c9953a43869b8bc50929569b2999d443fe"
-dependencies = [
- "memchr",
-]
-
-[[package]]
-name = "quick-xml"
 version = "0.37.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "165859e9e55f79d67b96c5d96f4e88b6f2695a1972849c15a6a3f5c59fc2c003"
@@ -1838,20 +1838,20 @@ dependencies = [
 
 [[package]]
 name = "quickfix"
-version = "0.1.5"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0d55ccaffe4b0ff8e62afd422e12ec621f5aa4616f770b946e360e7236191f39"
+checksum = "8ed11054a60348a64b57b012c14fdb92ae7c413950e9d57e5506c10f1177038e"
 dependencies = [
  "log",
  "quickfix-ffi",
- "thiserror 1.0.69",
+ "thiserror 2.0.11",
 ]
 
 [[package]]
 name = "quickfix-ffi"
-version = "0.1.5"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0f1fac6474e2febf6894668caeb2095372d21acbc82d7eed3117d9393fd159fe"
+checksum = "23cfe1932dbf9aefd3d5cff167899e0bfb53bee9249d7cb9b7453245dad1003e"
 dependencies = [
  "cmake",
  "fs_extra",
@@ -1859,22 +1859,22 @@ dependencies = [
 
 [[package]]
 name = "quickfix-msg-gen"
-version = "0.1.5"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "80a8458fdb2e853910c15f7dd7f8d85429ba8ceb3fcc94499fa5073fc0552394"
+checksum = "8365701fd111d6751c76212c090792616cf3e7dab867c3fa5a0622a702aaa44d"
 dependencies = [
  "bytes",
  "convert_case",
- "itertools",
+ "itertools 0.14.0",
  "quickfix",
  "quickfix-spec-parser",
 ]
 
 [[package]]
 name = "quickfix-msg44"
-version = "0.1.5"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8bad928ef153392bce62d8fbe73db22c2b465c884349818a6d1ec9bf3bfc4ed1"
+checksum = "366c11246c582393d6e4cb2e0b059bb7c3841b7dc88c06d40daf3d24a6610518"
 dependencies = [
  "quickfix",
  "quickfix-msg-gen",
@@ -1882,13 +1882,13 @@ dependencies = [
 
 [[package]]
 name = "quickfix-spec-parser"
-version = "0.1.5"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d8dbc260a004eb0c22cdb619de0c74c86f3c0c9648bb5e8445f84a02c12b94dd"
+checksum = "3b524385aef22ee6fbf95bf6b5c7c23d97bad8a8b147acc66c38fbbf8f40ea1a"
 dependencies = [
  "bytes",
- "quick-xml 0.36.2",
- "thiserror 1.0.69",
+ "quick-xml",
+ "thiserror 2.0.11",
 ]
 
 [[package]]
@@ -2062,7 +2062,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ctrader-fix"
-version = "0.1.195"
+version = "0.1.196"
 dependencies = [
  "env_logger",
  "log",
@@ -2078,14 +2078,14 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ecb"
-version = "0.1.195"
+version = "0.1.196"
 dependencies = [
  "chrono",
  "env_logger",
  "futures",
  "log",
  "prometheus",
- "quick-xml 0.37.2",
+ "quick-xml",
  "reqwest",
  "rhiaqey-common",
  "rhiaqey-sdk-rs",
@@ -2097,7 +2097,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-iss"
-version = "0.1.195"
+version = "0.1.196"
 dependencies = [
  "anyhow",
  "env_logger",
@@ -2115,7 +2115,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-pinger"
-version = "0.1.195"
+version = "0.1.196"
 dependencies = [
  "dns-lookup",
  "env_logger",
@@ -2131,7 +2131,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-rss"
-version = "0.1.195"
+version = "0.1.196"
 dependencies = [
  "chrono",
  "env_logger",
@@ -2150,7 +2150,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ticker"
-version = "0.1.195"
+version = "0.1.196"
 dependencies = [
  "env_logger",
  "log",
@@ -2164,7 +2164,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-yahoo"
-version = "0.1.195"
+version = "0.1.196"
 dependencies = [
  "base64",
  "env_logger",
@@ -2185,7 +2185,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producers"
-version = "0.1.195"
+version = "0.1.196"
 dependencies = [
  "anyhow",
  "axum",
@@ -2289,7 +2289,7 @@ dependencies = [
  "atom_syndication",
  "derive_builder",
  "never",
- "quick-xml 0.37.2",
+ "quick-xml",
  "serde",
 ]
 
@@ -2339,9 +2339,9 @@ dependencies = [
 
 [[package]]
 name = "rustls"
-version = "0.23.21"
+version = "0.23.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8f287924602bf649d949c63dc8ac8b235fa5387d394020705b80c4eb597ce5b8"
+checksum = "9fb9263ab4eb695e42321db096e3b8fbd715a59b154d5c88d82db2175b681ba7"
 dependencies = [
  "once_cell",
  "rustls-pki-types",
@@ -2630,9 +2630,9 @@ checksum = "13c2bddecc57b384dee18652358fb23172facb8a2c51ccc10d74c157bdea3292"
 
 [[package]]
 name = "syn"
-version = "2.0.96"
+version = "2.0.98"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d5d0adab1ae378d7f53bdebc67a39f1f151407ef230f0ce2883572f5d8985c80"
+checksum = "36147f1a48ae0ec2b5b3bc5b537d267457555a10dc06f3dbc8cb11ba3006d3b1"
 dependencies = [
  "proc-macro2",
  "quote",
