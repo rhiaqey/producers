@@ -29,7 +29,7 @@ members = [
 
 [workspace.package]
 version = "0.1.229"
-edition = "2021"
+edition = "2024"
 
 [workspace.dependencies]
 rhiaqey-sdk-rs = { git = "https://github.com/rhiaqey/sdk-rs.git" }
