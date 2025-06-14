@@ -54,19 +54,13 @@ rhiaqey-producer-iss = { path = "crates/rhiaqey-producer-iss", optional = true }
 rhiaqey-producer-yahoo = { path = "crates/rhiaqey-producer-yahoo", optional = true }
 rhiaqey-producer-ctrader-fix = { path = "crates/rhiaqey-producer-ctrader-fix", optional = true }
 tokio = { workspace = true }
-serde = { workspace = true }
-serde_json = { workspace = true }
 env_logger = { workspace = true }
 log = { workspace = true }
-anyhow = { workspace = true }
 lazy_static = { workspace = true }
 prometheus = { workspace = true }
 futures = { version = "0.3" }
-rustis = { version = "0.13", features = ["redis-json", "tokio-runtime"] }
-redis = { version = "0.32", features = ["tokio-comp", "sentinel"] }
 axum = { version = "0.8" }
 hyper = { version = "1.6", features = ["full"] }
-openssl = { version = "0.10", features = ["vendored"] }
 
 [features]
 yahoo = ["rhiaqey-producer-yahoo"]
