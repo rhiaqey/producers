@@ -23,7 +23,7 @@ futures = { version = "0.3" }
 base64 = { version = "0.22" }
 tokio-tungstenite = { version = "0.26", features = ["native-tls"] }
 protobuf = { version = "3.7", features = ["bytes"] }
-prost = "0.13"
+prost = "0.14"
 prost-types = "0.13"
 
 [build-dependencies]
