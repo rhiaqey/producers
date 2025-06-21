@@ -45,7 +45,8 @@
     "xreadgroup",
     "xrevrange",
     "xstream",
-    "xtrim"
+    "xtrim",
+    "redisinsight"
   ],
   "ignoreWords": [],
   "import": []
