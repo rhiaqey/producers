@@ -61,6 +61,7 @@ prometheus = { workspace = true }
 futures = { version = "0.3" }
 axum = { version = "0.8" }
 hyper = { version = "1.6", features = ["full"] }
+openssl = { version = "0.10", features = ["vendored"] }
 
 [features]
 yahoo = ["rhiaqey-producer-yahoo"]

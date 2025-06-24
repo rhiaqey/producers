@@ -11,6 +11,8 @@ on:
 env:
   CI: true
   CARGO_TERM_COLOR: always
+  OPENSSL_STATIC: 1
+  OPENSSL_NO_VENDOR: 0
 
 jobs:
   Setup:
