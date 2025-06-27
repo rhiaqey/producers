@@ -276,9 +276,9 @@ dependencies = [
 
 [[package]]
 name = "bumpalo"
-version = "3.18.1"
+version = "3.19.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "793db76d6187cd04dff33004d8e6c9cc4e05cd330500379d2394209271b4aeee"
+checksum = "46c5e41b57b8bba42a04676d81cb89e9ee8e859a1a66f80a5a72e1cb76b34d43"
 
 [[package]]
 name = "byteorder"
@@ -1131,9 +1131,9 @@ dependencies = [
 
 [[package]]
 name = "indexmap"
-version = "2.9.0"
+version = "2.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cea70ddb795996207ad57735b50c5982d8844f38ba9ee5f1aedcfb708a2aa11e"
+checksum = "fe4cd85333e22411419a0bcae1297d25e58c9443848b11dc6a86fefe8c78a661"
 dependencies = [
  "equivalent",
  "hashbrown",
@@ -2101,7 +2101,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ctrader-fix"
-version = "0.1.238"
+version = "0.1.239"
 dependencies = [
  "env_logger",
  "log",
@@ -2117,7 +2117,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ecb"
-version = "0.1.238"
+version = "0.1.239"
 dependencies = [
  "chrono",
  "env_logger",
@@ -2136,7 +2136,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-iss"
-version = "0.1.238"
+version = "0.1.239"
 dependencies = [
  "anyhow",
  "env_logger",
@@ -2154,7 +2154,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-pinger"
-version = "0.1.238"
+version = "0.1.239"
 dependencies = [
  "dns-lookup",
  "env_logger",
@@ -2170,7 +2170,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-rss"
-version = "0.1.238"
+version = "0.1.239"
 dependencies = [
  "chrono",
  "env_logger",
@@ -2189,7 +2189,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ticker"
-version = "0.1.238"
+version = "0.1.239"
 dependencies = [
  "env_logger",
  "log",
@@ -2203,7 +2203,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-yahoo"
-version = "0.1.238"
+version = "0.1.239"
 dependencies = [
  "base64",
  "futures",
@@ -2219,7 +2219,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producers"
-version = "0.1.238"
+version = "0.1.239"
 dependencies = [
  "axum",
  "env_logger",
