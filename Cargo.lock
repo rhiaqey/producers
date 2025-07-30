@@ -984,7 +984,7 @@ dependencies = [
  "libc",
  "percent-encoding",
  "pin-project-lite",
- "socket2 0.6.0",
+ "socket2 0.5.10",
  "system-configuration",
  "tokio",
  "tower-service",
@@ -2101,7 +2101,7 @@ dependencies = [
 [[package]]
 name = "rhiaqey-common"
 version = "0.2.3"
-source = "git+https://github.com/rhiaqey/common.git#a8675a4d1b46ee6cf548e1ccc2951d1884c8a57d"
+source = "git+https://github.com/rhiaqey/common.git#e4eedf4ebf64ff6eb1fa91ca42e7112f4348cb43"
 dependencies = [
  "aes-gcm-siv",
  "anyhow",
@@ -2265,7 +2265,7 @@ dependencies = [
 [[package]]
 name = "rhiaqey-sdk-rs"
 version = "0.1.2"
-source = "git+https://github.com/rhiaqey/sdk-rs.git#b6d2ec15f0d0d37ec8546a70c9707d76bd18e547"
+source = "git+https://github.com/rhiaqey/sdk-rs.git#0c4bbe058bac2de7d977121c78e0d4dc73c8ddbf"
 dependencies = [
  "serde",
  "serde_json",
@@ -2730,7 +2730,7 @@ dependencies = [
  "getrandom 0.3.3",
  "once_cell",
  "rustix",
- "windows-sys 0.59.0",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]
