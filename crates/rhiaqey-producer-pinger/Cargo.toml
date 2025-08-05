@@ -20,4 +20,4 @@ env_logger = { workspace = true }
 log = { workspace = true }
 prometheus = { workspace = true }
 fastping-rs = "0.2"
-dns-lookup = "2.0"
+dns-lookup = "2.1"
