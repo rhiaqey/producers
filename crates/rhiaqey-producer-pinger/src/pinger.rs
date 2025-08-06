@@ -157,12 +157,12 @@ impl Producer<PingerSettings> for Pinger {
                                     let mut results: HashMap<IpAddr, Option<PingResultBody>> =
                                         HashMap::new();
 
-                                    result.iter().for_each(|y| {
+                                    for y in result {
                                         trace!("Adding address for domain[{x}]: {y}");
                                         pinger.add_ipaddr(y.to_string().as_str());
                                         results.insert(y.to_owned(), None);
                                         total_addresses += 1;
-                                    });
+                                    }
 
                                     addresses.insert(x.to_string(), results);
                                 }
