@@ -832,9 +832,9 @@ checksum = "a8d1add55171497b4705a648c6b583acafb01d58050a51727785f0b2c8e0a2b2"
 
 [[package]]
 name = "h2"
-version = "0.4.11"
+version = "0.4.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "17da50a276f1e01e0ba6c029e47b7100754904ee8a278f886546e98575380785"
+checksum = "f3c0b69cfcb4e1b9f1bf2f53f95f766e4661169728ec61cd3fe5a0166f2d1386"
 dependencies = [
  "atomic-waker",
  "bytes",
@@ -851,9 +851,9 @@ dependencies = [
 
 [[package]]
 name = "hashbrown"
-version = "0.15.4"
+version = "0.15.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5971ac85611da7067dbfcabef3c70ebb5606018acd9e2a3903a0da507521e0d5"
+checksum = "9229cfe53dfd69f0609a49f65461bd93001ea1ef889cd5529dd176593f5338a1"
 
 [[package]]
 name = "heck"
@@ -2122,7 +2122,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ctrader-fix"
-version = "0.1.251"
+version = "0.1.252"
 dependencies = [
  "env_logger",
  "log",
@@ -2138,7 +2138,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ecb"
-version = "0.1.251"
+version = "0.1.252"
 dependencies = [
  "chrono",
  "env_logger",
@@ -2157,7 +2157,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-iss"
-version = "0.1.251"
+version = "0.1.252"
 dependencies = [
  "anyhow",
  "env_logger",
@@ -2175,7 +2175,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-pinger"
-version = "0.1.251"
+version = "0.1.252"
 dependencies = [
  "dns-lookup",
  "env_logger",
@@ -2191,7 +2191,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-rss"
-version = "0.1.251"
+version = "0.1.252"
 dependencies = [
  "chrono",
  "env_logger",
@@ -2210,7 +2210,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ticker"
-version = "0.1.251"
+version = "0.1.252"
 dependencies = [
  "env_logger",
  "log",
@@ -2224,7 +2224,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-yahoo"
-version = "0.1.251"
+version = "0.1.252"
 dependencies = [
  "base64",
  "futures",
@@ -2240,7 +2240,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producers"
-version = "0.1.251"
+version = "0.1.252"
 dependencies = [
  "axum",
  "env_logger",
