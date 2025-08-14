@@ -15,5 +15,5 @@ serde_json = { workspace = true }
 env_logger = { workspace = true }
 log = { workspace = true }
 prometheus = { workspace = true }
-quickfix = "0.1"
+quickfix = "0.2"
 quickfix-msg44 = "0.1"
