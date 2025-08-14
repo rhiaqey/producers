@@ -382,9 +382,9 @@ checksum = "0dabb6555f92fb9ee4140454eb5dcd14c7960e1225c6d1a6cc361f032947713e"
 
 [[package]]
 name = "convert_case"
-version = "0.7.1"
+version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bb402b8d4c85569410425650ce3eddc7d698ed96d39a73f941b08fb63082f1e7"
+checksum = "baaaa0ecca5b51987b9423ccdc971514dd8b0bb7b4060b983d3664dad3f1f89f"
 dependencies = [
  "unicode-segmentation",
 ]
@@ -1901,7 +1901,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8ed11054a60348a64b57b012c14fdb92ae7c413950e9d57e5506c10f1177038e"
 dependencies = [
  "log",
- "quickfix-ffi",
+ "quickfix-ffi 0.1.6",
+ "thiserror 2.0.14",
+]
+
+[[package]]
+name = "quickfix"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d72e3a57f01920ddb3b4f63c43f16b0a2ad9a52d51eecfc0bd791e0210f6a29f"
+dependencies = [
+ "log",
+ "quickfix-ffi 0.2.0",
  "thiserror 2.0.14",
 ]
 
@@ -1916,35 +1927,42 @@ dependencies = [
 ]
 
 [[package]]
-name = "quickfix-msg-gen"
-version = "0.1.6"
+name = "quickfix-ffi"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8365701fd111d6751c76212c090792616cf3e7dab867c3fa5a0622a702aaa44d"
+checksum = "5417118594eba110e2da72890bee2b427dc87bfed75730b554800f040493f06b"
 dependencies = [
- "bytes",
+ "cmake",
+ "fs_extra",
+]
+
+[[package]]
+name = "quickfix-msg-gen"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bbb810b413834eed8e962c70dbfe142d79f0b5cec99928126a23ef7c78ca2913"
+dependencies = [
  "convert_case",
- "itertools",
- "quickfix",
+ "quickfix 0.2.0",
  "quickfix-spec-parser",
 ]
 
 [[package]]
 name = "quickfix-msg44"
-version = "0.1.6"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "366c11246c582393d6e4cb2e0b059bb7c3841b7dc88c06d40daf3d24a6610518"
+checksum = "712cb40511ce2f0df649a073ca0be37a02a8a5581f1c02df212cdedf00316b7e"
 dependencies = [
- "quickfix",
+ "quickfix 0.2.0",
  "quickfix-msg-gen",
 ]
 
 [[package]]
 name = "quickfix-spec-parser"
-version = "0.1.6"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3b524385aef22ee6fbf95bf6b5c7c23d97bad8a8b147acc66c38fbbf8f40ea1a"
+checksum = "e09d8c03f07820b5c8556aba95b484905d2af6deec265b585696e6cdfe9bfd4d"
 dependencies = [
- "bytes",
  "quick-xml 0.37.5",
  "thiserror 2.0.14",
 ]
@@ -2153,7 +2171,7 @@ dependencies = [
  "env_logger",
  "log",
  "prometheus",
- "quickfix",
+ "quickfix 0.1.6",
  "quickfix-msg44",
  "rhiaqey-common",
  "rhiaqey-sdk-rs",
