@@ -134,9 +134,9 @@ checksum = "b0674a1ddeecb70197781e945de4b3b8ffb61fa939a5597bcf48503737663100"
 
 [[package]]
 name = "async-trait"
-version = "0.1.88"
+version = "0.1.89"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e539d3fca749fcee5236ab05e93a52867dd549cc157c8cb7f99595f3cedffdb5"
+checksum = "9035ad2d096bed7955a320ee7e2230574d28fd3c3a0f186cbea1ff3c7eed5dbb"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -346,15 +346,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "cmake"
-version = "0.1.54"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e7caa3f9de89ddbe2c607f4101924c5abec803763ae9534e4f4d7d8f84aa81f0"
-dependencies = [
- "cc",
-]
-
-[[package]]
 name = "colorchoice"
 version = "1.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -379,15 +370,6 @@ name = "const-oid"
 version = "0.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0dabb6555f92fb9ee4140454eb5dcd14c7960e1225c6d1a6cc361f032947713e"
-
-[[package]]
-name = "convert_case"
-version = "0.7.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bb402b8d4c85569410425650ce3eddc7d698ed96d39a73f941b08fb63082f1e7"
-dependencies = [
- "unicode-segmentation",
-]
 
 [[package]]
 name = "core-foundation"
@@ -746,12 +728,6 @@ checksum = "e13624c2627564efccf4934284bdd98cbaa14e79b0b5a141218e507b3a823456"
 dependencies = [
  "percent-encoding",
 ]
-
-[[package]]
-name = "fs_extra"
-version = "1.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "42703706b716c37f96a77aea830392ad231f44c9e9a67872fa5548707e11b11c"
 
 [[package]]
 name = "futures"
@@ -1895,61 +1871,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "quickfix"
-version = "0.1.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8ed11054a60348a64b57b012c14fdb92ae7c413950e9d57e5506c10f1177038e"
-dependencies = [
- "log",
- "quickfix-ffi",
- "thiserror 2.0.14",
-]
-
-[[package]]
-name = "quickfix-ffi"
-version = "0.1.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "23cfe1932dbf9aefd3d5cff167899e0bfb53bee9249d7cb9b7453245dad1003e"
-dependencies = [
- "cmake",
- "fs_extra",
-]
-
-[[package]]
-name = "quickfix-msg-gen"
-version = "0.1.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8365701fd111d6751c76212c090792616cf3e7dab867c3fa5a0622a702aaa44d"
-dependencies = [
- "bytes",
- "convert_case",
- "itertools",
- "quickfix",
- "quickfix-spec-parser",
-]
-
-[[package]]
-name = "quickfix-msg44"
-version = "0.1.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "366c11246c582393d6e4cb2e0b059bb7c3841b7dc88c06d40daf3d24a6610518"
-dependencies = [
- "quickfix",
- "quickfix-msg-gen",
-]
-
-[[package]]
-name = "quickfix-spec-parser"
-version = "0.1.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3b524385aef22ee6fbf95bf6b5c7c23d97bad8a8b147acc66c38fbbf8f40ea1a"
-dependencies = [
- "bytes",
- "quick-xml 0.37.5",
- "thiserror 2.0.14",
-]
-
-[[package]]
 name = "quote"
 version = "1.0.40"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2147,22 +2068,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "rhiaqey-producer-ctrader-fix"
-version = "0.1.256"
-dependencies = [
- "env_logger",
- "log",
- "prometheus",
- "quickfix",
- "quickfix-msg44",
- "rhiaqey-common",
- "rhiaqey-sdk-rs",
- "serde",
- "serde_json",
- "tokio",
-]
-
-[[package]]
 name = "rhiaqey-producer-ecb"
 version = "0.1.256"
 dependencies = [
@@ -2277,7 +2182,6 @@ dependencies = [
  "openssl",
  "prometheus",
  "rhiaqey-common",
- "rhiaqey-producer-ctrader-fix",
  "rhiaqey-producer-ecb",
  "rhiaqey-producer-iss",
  "rhiaqey-producer-pinger",
@@ -2700,9 +2604,9 @@ checksum = "13c2bddecc57b384dee18652358fb23172facb8a2c51ccc10d74c157bdea3292"
 
 [[package]]
 name = "syn"
-version = "2.0.104"
+version = "2.0.105"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "17b6f705963418cdb9927482fa304bc562ece2fdd4f616084c50b7023b435a40"
+checksum = "7bc3fcb250e53458e712715cf74285c1f889686520d79294a9ef3bd7aa1fc619"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -3023,12 +2927,6 @@ name = "unicode-ident"
 version = "1.0.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5a5f39404a5da50712a4c1eecf25e90dd62b613502b7e925fd4e4d19b5c96512"
-
-[[package]]
-name = "unicode-segmentation"
-version = "1.12.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f6ccf251212114b54433ec949fd6a7841275f9ada20dddd2f29e9ceea4501493"
 
 [[package]]
 name = "universal-hash"

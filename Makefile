@@ -174,14 +174,6 @@ ecb-prod:
     PUBLIC_PORT=3012 \
 		cargo run --release --bin ecb-daily --features ecb-daily
 
-.PHONY: ctrader
-ctrader:
-	ID=ctrader1 \
-	NAME=ctrader-1 \
-	PRIVATE_PORT=3013 \
-    PUBLIC_PORT=3014 \
-		cargo run --bin ctrader-fix --features ctrader-fix
-
 .PHONY: build
 build: prod
 
