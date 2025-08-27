@@ -2050,7 +2050,7 @@ dependencies = [
 [[package]]
 name = "rhiaqey-common"
 version = "0.3.0"
-source = "git+https://github.com/rhiaqey/common.git#728583766fcbf9997c2a8074fa4ced62893f74ad"
+source = "git+https://github.com/rhiaqey/common.git#22189dba6bee0a1fd52e1b64efe7da05db935d42"
 dependencies = [
  "aes-gcm-siv",
  "anyhow",
@@ -2071,7 +2071,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ecb"
-version = "0.1.258"
+version = "0.1.259"
 dependencies = [
  "chrono",
  "env_logger",
@@ -2090,7 +2090,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-iss"
-version = "0.1.258"
+version = "0.1.259"
 dependencies = [
  "anyhow",
  "env_logger",
@@ -2108,7 +2108,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-pinger"
-version = "0.1.258"
+version = "0.1.259"
 dependencies = [
  "dns-lookup",
  "env_logger",
@@ -2124,7 +2124,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-rss"
-version = "0.1.258"
+version = "0.1.259"
 dependencies = [
  "chrono",
  "env_logger",
@@ -2143,7 +2143,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ticker"
-version = "0.1.258"
+version = "0.1.259"
 dependencies = [
  "env_logger",
  "log",
@@ -2157,7 +2157,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-yahoo"
-version = "0.1.258"
+version = "0.1.259"
 dependencies = [
  "base64",
  "futures",
@@ -2173,7 +2173,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producers"
-version = "0.1.258"
+version = "0.1.259"
 dependencies = [
  "axum",
  "env_logger",
