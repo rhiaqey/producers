@@ -378,9 +378,9 @@ checksum = "338089f42c427b86394a5ee60ff321da23a5c89c9d89514c829687b26359fcff"
 
 [[package]]
 name = "crypto-bigint"
-version = "0.7.0-rc.8"
+version = "0.7.0-rc.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4113edbc9f68c0a64d5b911f803eb245d04bb812680fd56776411f69c670f3e0"
+checksum = "7f4b0fda9462026d53a3ef37c5ec283639ee8494a1a5401109c0e2a3fb4d490c"
 dependencies = [
  "num-traits",
  "rand_core 0.9.3",
@@ -2025,7 +2025,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ecb"
-version = "0.1.276"
+version = "0.1.277"
 dependencies = [
  "chrono",
  "env_logger",
@@ -2044,7 +2044,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-iss"
-version = "0.1.276"
+version = "0.1.277"
 dependencies = [
  "anyhow",
  "env_logger",
@@ -2062,7 +2062,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-pinger"
-version = "0.1.276"
+version = "0.1.277"
 dependencies = [
  "dns-lookup",
  "env_logger",
@@ -2078,7 +2078,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-rss"
-version = "0.1.276"
+version = "0.1.277"
 dependencies = [
  "chrono",
  "env_logger",
@@ -2097,7 +2097,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ticker"
-version = "0.1.276"
+version = "0.1.277"
 dependencies = [
  "env_logger",
  "log",
@@ -2111,7 +2111,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-yahoo"
-version = "0.1.276"
+version = "0.1.277"
 dependencies = [
  "base64",
  "futures",
@@ -2127,7 +2127,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producers"
-version = "0.1.276"
+version = "0.1.277"
 dependencies = [
  "axum",
  "env_logger",
