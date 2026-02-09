@@ -21,5 +21,5 @@ log = { workspace = true }
 anyhow = { workspace = true }
 prometheus = { workspace = true }
 sha256 = { version = "1.6" }
-reqwest = { version = "0.12" }
+reqwest = { version = "0.13" }
 futures = { version = "0.3" }

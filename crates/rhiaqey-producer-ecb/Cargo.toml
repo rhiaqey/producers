@@ -19,8 +19,8 @@ serde_json = { workspace = true }
 env_logger = { workspace = true }
 log = { workspace = true }
 prometheus = { workspace = true }
-reqwest = { version = "0.12" }
+reqwest = { version = "0.13" }
 sha256 = { version = "1.6" }
 chrono = { version = "0.4" }
-quick-xml = { version = "0.38", features = ["async-tokio", "serialize", "encoding"] }
+quick-xml = { version = "0.39", features = ["async-tokio", "serialize", "encoding"] }
 futures = { version = "0.3" }
