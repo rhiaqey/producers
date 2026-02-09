@@ -1,4 +1,4 @@
-use anyhow::{bail, Context};
+use anyhow::{Context, bail};
 use log::{debug, info, trace, warn};
 use reqwest::Response;
 use rhiaqey_sdk_rs::message::MessageValue;
@@ -7,12 +7,12 @@ use rhiaqey_sdk_rs::producer::{
 };
 use rhiaqey_sdk_rs::settings::Settings;
 use serde::{Deserialize, Serialize};
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 use sha256::digest;
 use std::sync::Arc;
 use std::time::Duration;
-use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
 use tokio::sync::Mutex;
+use tokio::sync::mpsc::{UnboundedSender, unbounded_channel};
 
 fn default_interval() -> Option<u64> {
     Some(15000)

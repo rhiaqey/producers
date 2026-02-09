@@ -6,13 +6,13 @@ use rhiaqey_sdk_rs::producer::{
 };
 use rhiaqey_sdk_rs::settings::Settings;
 use serde::{Deserialize, Serialize};
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 use std::collections::HashMap;
 use std::net::IpAddr;
 use std::sync::Arc;
 use std::time::{Duration, SystemTime};
-use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
 use tokio::sync::Mutex;
+use tokio::sync::mpsc::{UnboundedSender, unbounded_channel};
 
 fn default_interval() -> Option<u64> {
     Some(30_000) // 30 seconds

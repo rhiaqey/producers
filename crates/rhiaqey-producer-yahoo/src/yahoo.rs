@@ -1,7 +1,7 @@
-use base64::{engine::general_purpose, Engine as _};
-use futures::stream::SplitSink;
+use base64::{Engine as _, engine::general_purpose};
 use futures::SinkExt;
 use futures::StreamExt;
+use futures::stream::SplitSink;
 use log::{debug, info, trace, warn};
 use rhiaqey_sdk_rs::message::MessageValue;
 use rhiaqey_sdk_rs::producer::{
@@ -9,15 +9,15 @@ use rhiaqey_sdk_rs::producer::{
 };
 use rhiaqey_sdk_rs::settings::Settings;
 use serde::{Deserialize, Serialize};
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 use std::collections::HashSet;
 use std::sync::Arc;
 use std::time::SystemTime;
 use tokio::net::TcpStream;
-use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
 use tokio::sync::Mutex;
+use tokio::sync::mpsc::{UnboundedSender, unbounded_channel};
 use tokio_tungstenite::{
-    connect_async, tungstenite::protocol::Message, MaybeTlsStream, WebSocketStream,
+    MaybeTlsStream, WebSocketStream, connect_async, tungstenite::protocol::Message,
 };
 use yahoo_definitions::PricingData;
 

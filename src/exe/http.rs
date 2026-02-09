@@ -1,5 +1,5 @@
-use axum::routing::get;
 use axum::Router;
+use axum::routing::get;
 use axum::{http::StatusCode, response::IntoResponse};
 use log::{debug, info};
 use prometheus::{Encoder, TextEncoder};

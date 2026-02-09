@@ -8,12 +8,12 @@ use rhiaqey_sdk_rs::producer::{
 };
 use rhiaqey_sdk_rs::settings::Settings;
 use serde::{Deserialize, Serialize};
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 use std::cmp::Ordering;
 use std::sync::Arc;
 use std::time::Duration;
-use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
 use tokio::sync::RwLock;
+use tokio::sync::mpsc::{UnboundedSender, unbounded_channel};
 
 fn default_url() -> Option<String> {
     None
