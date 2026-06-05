@@ -1502,9 +1502,9 @@ dependencies = [
 
 [[package]]
 name = "log"
-version = "0.4.31"
+version = "0.4.32"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "113b30b4cd05f7c06868fdb2854f66a7b9fece9a48425351cd532e810d74024f"
+checksum = "953f07c43838f8e6f9758cab68bf5bed85465e7587ebe0b823f1bcd81978ad3a"
 
 [[package]]
 name = "lru-slab"
@@ -2283,7 +2283,7 @@ dependencies = [
 [[package]]
 name = "rhiaqey-common"
 version = "0.3.0"
-source = "git+https://github.com/rhiaqey/common.git#da449ee09134ed94cc7bc5a3639615a877f79c15"
+source = "git+https://github.com/rhiaqey/common.git#6b8a98e698f01b44d3bc9294b6097015b10bccf6"
 dependencies = [
  "aes-gcm-siv",
  "anyhow",
@@ -2304,7 +2304,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ecb"
-version = "0.1.314"
+version = "0.1.315"
 dependencies = [
  "chrono",
  "env_logger",
@@ -2323,7 +2323,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-iss"
-version = "0.1.314"
+version = "0.1.315"
 dependencies = [
  "anyhow",
  "env_logger",
@@ -2341,7 +2341,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-pinger"
-version = "0.1.314"
+version = "0.1.315"
 dependencies = [
  "dns-lookup",
  "env_logger",
@@ -2357,7 +2357,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-rss"
-version = "0.1.314"
+version = "0.1.315"
 dependencies = [
  "chrono",
  "env_logger",
@@ -2376,7 +2376,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ticker"
-version = "0.1.314"
+version = "0.1.315"
 dependencies = [
  "env_logger",
  "log",
@@ -2390,7 +2390,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-yahoo"
-version = "0.1.314"
+version = "0.1.315"
 dependencies = [
  "base64",
  "futures",
@@ -2406,7 +2406,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producers"
-version = "0.1.314"
+version = "0.1.315"
 dependencies = [
  "axum",
  "env_logger",
@@ -3849,9 +3849,9 @@ checksum = "fdd20c5420375476fbd4394763288da7eb0cc0b8c11deed431a91562af7335d3"
 
 [[package]]
 name = "yoke"
-version = "0.8.2"
+version = "0.8.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "abe8c5fda708d9ca3df187cae8bfb9ceda00dd96231bed36e445a1a48e66f9ca"
+checksum = "709fe23a0424b6a435d82152b1bd3fdfb0833487d5fa90d05d42762a9891fef5"
 dependencies = [
  "stable_deref_trait",
  "yoke-derive",
