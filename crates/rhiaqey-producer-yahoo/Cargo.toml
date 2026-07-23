@@ -17,7 +17,7 @@ serde = { workspace = true }
 serde_json = { workspace = true }
 log = { workspace = true }
 futures = { version = "0.3" }
-base64 = { version = "0.22" }
+base64 = { version = "0.23" }
 tokio-tungstenite = { version = "0.30", features = ["native-tls"] }
 prost = "0.14"
 
