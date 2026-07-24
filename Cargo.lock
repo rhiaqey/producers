@@ -2333,7 +2333,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ecb"
-version = "0.1.328"
+version = "0.1.329"
 dependencies = [
  "chrono",
  "env_logger",
@@ -2352,7 +2352,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-iss"
-version = "0.1.328"
+version = "0.1.329"
 dependencies = [
  "anyhow",
  "env_logger",
@@ -2370,7 +2370,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-pinger"
-version = "0.1.328"
+version = "0.1.329"
 dependencies = [
  "dns-lookup",
  "env_logger",
@@ -2386,7 +2386,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-rss"
-version = "0.1.328"
+version = "0.1.329"
 dependencies = [
  "chrono",
  "env_logger",
@@ -2405,7 +2405,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ticker"
-version = "0.1.328"
+version = "0.1.329"
 dependencies = [
  "env_logger",
  "log",
@@ -2419,7 +2419,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-yahoo"
-version = "0.1.328"
+version = "0.1.329"
 dependencies = [
  "base64 0.23.0",
  "futures",
@@ -2435,7 +2435,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producers"
-version = "0.1.328"
+version = "0.1.329"
 dependencies = [
  "axum",
  "env_logger",
@@ -2611,9 +2611,9 @@ dependencies = [
 
 [[package]]
 name = "rustls-pki-types"
-version = "1.15.0"
+version = "1.15.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "764899a24af3980067ee14bc143654f297b22eaebfe3c7b6b211920a5a59b046"
+checksum = "2f4925028c7eb5d1fcdaf196971378ed9d2c1c4efc7dc5d011256f76c99c0a96"
 dependencies = [
  "web-time",
  "zeroize",
