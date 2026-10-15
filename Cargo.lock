@@ -800,7 +800,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "39cab71617ae0d63f51a36d69f866391735b51691dbda63cf6f96d042b63efeb"
 dependencies = [
  "libc",
- "windows-sys 0.52.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -1341,9 +1341,9 @@ dependencies = [
 
 [[package]]
 name = "inout"
-version = "0.2.2"
+version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4250ce6452e92010fdf7268ccc5d14faa80bb12fc741938534c58f16804e03c7"
+checksum = "d8c0d789294fb457b791f7797a04478704788f30b407e5d0b01deaa846572d9f"
 dependencies = [
  "hybrid-array",
 ]
@@ -2108,7 +2108,7 @@ dependencies = [
  "once_cell",
  "socket2",
  "tracing",
- "windows-sys 0.52.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -2288,7 +2288,7 @@ dependencies = [
 [[package]]
 name = "rhiaqey-common"
 version = "0.3.0"
-source = "git+https://github.com/rhiaqey/common.git#3a8d99cdcef9273257919cc5d5a92dea97d70d4e"
+source = "git+https://github.com/rhiaqey/common.git#1a0a054fa5d2911c1bc8654c06532c01728592a3"
 dependencies = [
  "aes-gcm-siv",
  "anyhow",
@@ -2309,7 +2309,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ecb"
-version = "0.1.350"
+version = "0.1.351"
 dependencies = [
  "chrono",
  "env_logger",
@@ -2328,7 +2328,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-iss"
-version = "0.1.350"
+version = "0.1.351"
 dependencies = [
  "anyhow",
  "env_logger",
@@ -2346,7 +2346,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-pinger"
-version = "0.1.350"
+version = "0.1.351"
 dependencies = [
  "dns-lookup",
  "env_logger",
@@ -2362,7 +2362,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-rss"
-version = "0.1.350"
+version = "0.1.351"
 dependencies = [
  "chrono",
  "env_logger",
@@ -2381,7 +2381,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-ticker"
-version = "0.1.350"
+version = "0.1.351"
 dependencies = [
  "env_logger",
  "log",
@@ -2395,7 +2395,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producer-yahoo"
-version = "0.1.350"
+version = "0.1.351"
 dependencies = [
  "base64",
  "futures",
@@ -2411,7 +2411,7 @@ dependencies = [
 
 [[package]]
 name = "rhiaqey-producers"
-version = "0.1.350"
+version = "0.1.351"
 dependencies = [
  "axum",
  "env_logger",
@@ -2558,14 +2558,14 @@ dependencies = [
  "errno",
  "libc",
  "linux-raw-sys",
- "windows-sys 0.52.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
 name = "rustls"
-version = "0.23.45"
+version = "0.23.46"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0d41d731c7d2f962d1ccc364cec258de3c0e93b38c2fb3ba97ac74513048d634"
+checksum = "48e13bd8c0e9365c43cfa5c9e8f9ad49d3c8444926c9aac819e0e4dc503c8fdf"
 dependencies = [
  "aws-lc-rs",
  "once_cell",
@@ -2615,7 +2615,7 @@ dependencies = [
  "security-framework",
  "security-framework-sys",
  "webpki-root-certs",
- "windows-sys 0.52.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -3008,7 +3008,7 @@ dependencies = [
  "getrandom 0.4.3",
  "once_cell",
  "rustix",
- "windows-sys 0.52.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -3470,7 +3470,7 @@ version = "0.1.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c2a7b1c03c876122aa43f3020e6c3c3ee5c05081c9a00739faf7503aeba10d22"
 dependencies = [
- "windows-sys 0.52.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
